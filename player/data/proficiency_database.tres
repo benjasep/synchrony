@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="ProficiencyDatabase" load_steps=8 format=3]
+
+[ext_resource type="Script" uid="uid://cmrsj7pfi0x2" path="res://player/data/proficiency/proficiency_database.gd" id="1_database"]
+[ext_resource type="Script" uid="uid://c1yf5s1f2j0kv" path="res://player/data/proficiency/proficiency_profile.gd" id="2_base"]
+[ext_resource type="Script" uid="uid://o403x7pceeaa" path="res://player/data/proficiency/firearm_proficiency.gd" id="3_firearm"]
+[ext_resource type="Script" uid="uid://bh8ge4hiqwe3h" path="res://player/data/proficiency/light_proficiency.gd" id="4_light"]
+
+[sub_resource type="Resource" id="Resource_firearm_untrained"]
+script = ExtResource("3_firearm")
+tag = 1
+display_name = "Sin entrenamiento"
+usable = true
+equip_time_multiplier = 1.4
+sway_amplitude = 0.035
+sway_frequency = 2.5
+spread_multiplier = 2.2
+recoil_multiplier = 1.8
+reload_time_multiplier = 1.9
+
+[sub_resource type="Resource" id="Resource_light_untrained"]
+script = ExtResource("4_light")
+tag = 2
+display_name = "Sin entrenamiento"
+usable = true
+equip_time_multiplier = 1.2
+range_multiplier = 0.75
+energy_multiplier = 0.8
+flicker_chance = 0.15
+drain_multiplier = 1.5
+
+[sub_resource type="Resource" id="Resource_fallback"]
+script = ExtResource("2_base")
+tag = 0
+display_name = "Sin entrenamiento"
+usable = true
+equip_time_multiplier = 1.3
+
+[resource]
+script = ExtResource("1_database")
+defaults = Array[ExtResource("2_base")]([SubResource("Resource_firearm_untrained"), SubResource("Resource_light_untrained")])
+fallback = SubResource("Resource_fallback")

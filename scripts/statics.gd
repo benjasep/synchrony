@@ -4,27 +4,38 @@ extends Node
 
 const MAX_CLIENTS: int = 3
 const PORT: int = 5409 # Number between 1024 and 65535.
+## Peer id del servidor. Autoridad de todo lo que es estado del mundo.
+const SERVER_ID: int = 1
 
 
+## Statics no depende de nada a propósito: RoleProfile y RoleDatabase la
+## referencian, así que si ella los referenciara de vuelta habría dependencia
+## cíclica. Por eso get_role_name() vive ahora en RoleDatabase.
 enum Role {
 	NONE,
-	ROLE_A,
-	ROLE_B,
-	ROLE_C,
+	SEER,        ## Vidente: ciego al mundo físico, ve entidades etéreas.
+	TECHNICIAN,  ## Técnico: linterna, y a futuro mapa y ganzúas.
+	SOLDIER,     ## Militar: armas contra enemigos físicos y etéreos.
 }
 
 
-static func get_role_name(role: Role) -> String:
-	match role:
-		Role.NONE:
-			return "None"
-		Role.ROLE_A:
-			return "Role A"
-		Role.ROLE_B:
-			return "Role B"
-		Role.ROLE_C:
-			return "Role C"
-	return "Unknown"
+## Familia de equipamiento. Un item declara su tag; un rol declara su
+## competencia por tag. Ninguno de los dos conoce al otro.
+enum EquipmentTag {
+	NONE,
+	FIREARM,
+	LIGHT_SOURCE,
+	LOCKPICK,     ## Fuera de scope por ahora; el tag no cuesta nada.
+	MAP,          ## Idem.
+	RITUAL_TOOL,
+}
+
+
+## Flags, no enum secuencial: un arma puede dañar a ambos tipos a la vez.
+enum DamageType {
+	PHYSICAL = 1,
+	ETHEREAL = 2,
+}
 
 
 class PlayerData:
@@ -42,7 +53,7 @@ class PlayerData:
 		role = new_role
 	
 	func _to_string() -> String:
-		return "Player: {id: %d, name: %s, index: %d, role: %d}" % [id, name, index, Statics.get_role_name(role)]
+		return "Player: {id: %d, name: %s, index: %d, role: %d}" % [id, name, index, role]
 	
 	func to_dict() -> Dictionary:
 		return {

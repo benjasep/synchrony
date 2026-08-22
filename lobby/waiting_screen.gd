@@ -39,7 +39,7 @@ func _ready() -> void:
 	if Game.instance.use_roles:
 		_fill_role_container()
 		var role: Statics.Role = Game.instance.get_current_player().role
-		role_button.text = Statics.get_role_name(role)
+		role_button.text = RoleDatabase.get_role_name(role)
 		if role == Statics.Role.NONE:
 			role_button.text = "Role?"
 
@@ -85,17 +85,18 @@ func _handle_role_pressed() -> void:
 
 
 func _fill_role_container() -> void:
-	# Skip Role.NONE
-	for i: int in Statics.Role.size() - 1:
+	# Los roles salen de RoleDatabase, no del orden del enum: añadir un rol es
+	# registrar un .tres, sin tocar esta UI.
+	for role: Statics.Role in RoleDatabase.get_selectable_roles():
 		var button: Button = Button.new()
-		button.text = Statics.get_role_name(i + 1)
-		button.pressed.connect(func() -> void: _update_role(i + 1))
+		button.text = RoleDatabase.get_role_name(role)
+		button.pressed.connect(func() -> void: _update_role(role))
 		role_list.add_child(button)
 
 
 func _update_role(role: Statics.Role) -> void:
 	Game.instance.set_current_player_role(role)
-	role_button.text = Statics.get_role_name(role)
+	role_button.text = RoleDatabase.get_role_name(role)
 	role_container.hide()
 
 
@@ -144,18 +145,14 @@ func _update_ready_button() -> void:
 
 
 func _are_all_roles_selected() -> bool:
-	var roles: Array = Statics.Role.values()
-	# remove NONE
-	roles.pop_front()
+	var roles: Array[Statics.Role] = RoleDatabase.get_selectable_roles()
 	for player: Statics.PlayerData in Game.instance.players:
 		roles.erase(player.role)
 	return roles.is_empty()
 
 
 func _are_all_roles_unique() -> bool:
-	var roles: Array = Statics.Role.values()
-	# remove NONE
-	roles.pop_front()
+	var roles: Array[Statics.Role] = RoleDatabase.get_selectable_roles()
 	for player: Statics.PlayerData in Game.instance.players:
 		if roles.has(player.role):
 			roles.erase(player.role)

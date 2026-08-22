@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bkgvvuovx6w4t"]
+
+[ext_resource type="Script" uid="uid://k13s3gvar3mf" path="res://player/player_spawner.gd" id="1_spawner"]
+[ext_resource type="PackedScene" path="res://player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://equipment/equipment_pickup.tscn" id="3_pickup"]
+
+[node name="PlayerSpawner" type="Node3D" unique_id=1546021913 node_paths=PackedStringArray("players_container", "players_spawner", "pickups_container", "pickups_spawner")]
+script = ExtResource("1_spawner")
+player_scene = ExtResource("2_player")
+pickup_scene = ExtResource("3_pickup")
+players_container = NodePath("Players")
+players_spawner = NodePath("PlayersSpawner")
+pickups_container = NodePath("Pickups")
+pickups_spawner = NodePath("PickupsSpawner")
+
+[node name="Players" type="Node3D" parent="." unique_id=2035696897]
+
+[node name="PlayersSpawner" type="MultiplayerSpawner" parent="." unique_id=406391425]
+spawn_path = NodePath("../Players")
+
+[node name="Pickups" type="Node3D" parent="." unique_id=629701047]
+
+[node name="PickupsSpawner" type="MultiplayerSpawner" parent="." unique_id=1591697247]
+spawn_path = NodePath("../Pickups")

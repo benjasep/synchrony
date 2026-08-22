@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://c84y26ux4uybr" path="res://equipment/flashlight.gd" id="1_flashlight"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_body"]
+top_radius = 0.03
+bottom_radius = 0.04
+height = 0.18
+
+[node name="Flashlight" type="Node3D" node_paths=PackedStringArray("model", "light")]
+script = ExtResource("1_flashlight")
+tag = 2
+display_name = "Linterna"
+model = NodePath("Model")
+light = NodePath("Light")
+base_range = 12.0
+base_energy = 4.0
+max_battery = 300.0
+base_drain = 1.0
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, -0.09)
+mesh = SubResource("CylinderMesh_body")
+
+[node name="Light" type="SpotLight3D" parent="."]
+visible = false
+light_energy = 4.0
+spot_range = 12.0
+spot_angle = 32.0
