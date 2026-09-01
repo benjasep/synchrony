@@ -41,7 +41,21 @@ static var instance: PlayerSpawner
 ## negativo, así que ningún peer puede ser su autoridad.
 @export_range(1, 8) var debug_player_count: int = 1
 
+@export_group("Sincronización de carga")
+## Cada cuánto reintenta un cliente avisar de que ya tiene el nivel cargado.
+## Se reintenta porque si el nivel del cliente carga ANTES que el del servidor,
+## el aviso viaja a una ruta que todavía no existe allí y se pierde en silencio.
+@export var ready_report_interval: float = 0.25
+## Red de seguridad: si alguien no avisa nunca (se cayó justo al cambiar de
+## escena), el nivel arranca igual en vez de quedarse esperando para siempre.
+@export var spawn_ready_timeout: float = 10.0
+
 var players: Dictionary[int, Player] = {}
+
+## Peers que ya tienen el nivel en el árbol. Solo lo usa el servidor.
+var _peers_with_level: Dictionary[int, bool] = {}
+var _has_spawned: bool = false
+var _level_ready_acknowledged: bool = false
 
 ## Cuántos jugadores generó este spawner. Solo lo usa el reparto en círculo
 ## cuando no hay sesión de lobby de la que sacar el total.
@@ -64,18 +78,80 @@ func _ready() -> void:
 	if not multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	if multiplayer.is_server():
+		_peers_with_level[Statics.SERVER_ID] = true
+		# Sin clientes conectados (nivel suelto con F6) esto genera ya, dentro
+		# del propio _ready(): las pruebas cuentan con que al frame siguiente
+		# los jugadores ya existan.
 		spawn_all_players()
+		_spawn_when_timeout_expires()
+	else:
+		_report_level_ready_until_acknowledged()
 
 
-## Solo servidor. El MultiplayerSpawner replica cada instancia a los clientes.
-func spawn_all_players() -> void:
-	if not multiplayer.is_server():
+## Solo servidor. Espera a que todos los peers tengan el nivel cargado; si el
+## servidor generase antes, los paquetes de spawn llegarían a un cliente cuyo
+## PlayerSpawner aún no existe y ese cliente se quedaría sin jugadores en el
+## mapa ("Node not found: .../PlayersSpawner"). Cuando todos están listos, el
+## MultiplayerSpawner replica cada instancia.
+func spawn_all_players(force: bool = false) -> void:
+	if not multiplayer.is_server() or _has_spawned:
 		return
+	if not force and not _is_everyone_ready():
+		return
+	_has_spawned = true
 	var roster: Array[Statics.PlayerData] = _get_roster()
 	_roster_size = roster.size()
 	for player_data: Statics.PlayerData in roster:
 		players_spawner.spawn(player_data.to_dict())
 	all_players_spawned.emit()
+
+
+func _is_everyone_ready() -> bool:
+	# multiplayer.get_peers() y no la lista del lobby: si alguien se desconecta
+	# mientras se carga el nivel, desaparece de aquí y dejamos de esperarle.
+	for id: int in multiplayer.get_peers():
+		if not _peers_with_level.get(id, false):
+			return false
+	return true
+
+
+## Solo cliente. Reintenta hasta que el servidor confirme, porque el aviso se
+## pierde si su PlayerSpawner todavía no está en el árbol cuando llega.
+func _report_level_ready_until_acknowledged() -> void:
+	while is_inside_tree() and not _level_ready_acknowledged:
+		_report_level_ready.rpc_id(Statics.SERVER_ID)
+		await get_tree().create_timer(ready_report_interval).timeout
+
+
+func _spawn_when_timeout_expires() -> void:
+	if _has_spawned or spawn_ready_timeout <= 0.0:
+		return
+	await get_tree().create_timer(spawn_ready_timeout).timeout
+	if _has_spawned or not is_inside_tree():
+		return
+	push_warning("PlayerSpawner: alguien no avisó de tener el nivel cargado en %.1f s; se genera igualmente." % spawn_ready_timeout)
+	spawn_all_players(true)
+
+
+## call_local por la regla del proyecto para todo rpc_id(SERVER_ID, …): el host
+## se lo enviaría a sí mismo y sin él Godot lo rechaza. get_remote_sender_id()
+## devuelve 0 en esa llamada local.
+@rpc("any_peer", "call_local", "reliable")
+func _report_level_ready() -> void:
+	if not multiplayer.is_server():
+		return
+	var sender_id: int = multiplayer.get_remote_sender_id()
+	if sender_id == 0:
+		sender_id = Statics.SERVER_ID
+	_peers_with_level[sender_id] = true
+	if sender_id != Statics.SERVER_ID:
+		_acknowledge_level_ready.rpc_id(sender_id)
+	spawn_all_players()
+
+
+@rpc("authority", "reliable")
+func _acknowledge_level_ready() -> void:
+	_level_ready_acknowledged = true
 
 
 func _get_roster() -> Array[Statics.PlayerData]:
