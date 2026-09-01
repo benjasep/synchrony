@@ -20,8 +20,13 @@ func _ready() -> void:
 	_check("PlayerSpawner.instance se registra", PlayerSpawner.instance != null)
 
 	var spawner: PlayerSpawner = PlayerSpawner.instance
-	_check("aparece exactamente 1 jugador", spawner.players_container.get_child_count() == 1)
+	# Contra lo que el nivel pide, no contra un 1 fijo: el nivel de pruebas puede
+	# generar maniquíes de relleno, y el invariante es que salgan tantos como
+	# debug_player_count, ni uno más.
+	_check("aparecen los %d jugadores configurados" % spawner.debug_player_count,
+		spawner.players_container.get_child_count() == spawner.debug_player_count)
 
+	# El índice 0 es siempre el jugador local; el resto son maniquíes inertes.
 	var player: Player = spawner.players_container.get_child(0) as Player
 	_check("el hijo es un Player", player != null)
 	if not player:
