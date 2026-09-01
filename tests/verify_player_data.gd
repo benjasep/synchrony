@@ -138,6 +138,18 @@ func _verify_runtime() -> void:
 	_check("el item se libera (no huérfano)", not is_instance_valid(dropped) \
 		or dropped.is_queued_for_deletion())
 
+	print("--- Recoger deja el item en la mano ---")
+	# Con las manos vacías y sin acción de cambio de slot, un item recogido que
+	# no se equipa solo queda invisible e inservible para siempre.
+	p.inventory.add_item_from_scene("res://equipment/firearm.tscn", {"in_magazine": 3})
+	_check("el item recogido entra al inventario", p.inventory.items.size() == 1)
+	_check("y queda activo", p.inventory.active_item != null)
+	var picked: Firearm = p.inventory.active_item as Firearm
+	_check("el item recogido está equipado", picked != null and picked.is_equipped())
+	_check("su modelo se ve", picked != null \
+		and (picked.model == null or picked.model.visible))
+	_check("conserva la munición al recogerlo", picked != null and picked.in_magazine == 3)
+
 	print("--- Reanimar devuelve el control ---")
 	_check("Player conecta health.revived", p.health.revived.is_connected(p._handle_revived))
 	p.health.max_health = 10.0

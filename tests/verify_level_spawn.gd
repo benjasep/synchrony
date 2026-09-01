@@ -97,6 +97,11 @@ func _ready() -> void:
 		_check("recogerlo lo devuelve al inventario", player.inventory.items.size() == 1)
 		_check("el pickup desaparece del mundo", not is_instance_valid(pickup) \
 			or pickup.is_queued_for_deletion())
+		# Sin esto el item volvía al inventario pero guardado: invisible y sin
+		# poder usarlo, porque no hay acción para cambiar de slot.
+		_check("y vuelve a la mano, no al fondo del inventario",
+			player.inventory.active_item != null \
+			and player.inventory.active_item.is_equipped())
 
 	print("--- Disparar siendo el host ---")
 	# Independiente de debug_role: metemos un arma a mano para cubrir siempre
