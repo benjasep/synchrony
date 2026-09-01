@@ -132,8 +132,12 @@ func _apply_add(scene_path: String, state: Dictionary) -> void:
 	var item: Equipment = scene.instantiate() as Equipment
 	if not item:
 		return
-	item.set_state(state)
-	_attach_item(item)
+	_attach_item(item, state)
+
+	# Sin esto el item recogido se queda guardado y sin forma de sacarlo: no hay
+	# acción de cambio de slot, así que con las manos vacías hay que equiparlo.
+	if not active_item:
+		_apply_equip(items.size() - 1)
 
 
 @rpc("authority", "call_local", "reliable")
@@ -173,10 +177,15 @@ func _apply_drop(index: int, drop_transform: Transform3D) -> void:
 		_apply_equip(0)
 
 
-func _attach_item(item: Equipment) -> void:
+func _attach_item(item: Equipment, state: Dictionary = {}) -> void:
 	items.append(item)
 	if hand_anchor:
 		hand_anchor.add_child(item)
+	# set_state DESPUÉS de add_child: el _ready() del item inicializa su munición
+	# o su batería, así que aplicarlo antes de entrar al árbol se pierde y el
+	# arma recogida volvía siempre con el cargador lleno.
+	if not state.is_empty():
+		item.set_state(state)
 	item.stow()
 	item_added.emit(item)
 
