@@ -37,6 +37,7 @@ var ability: PlayerAbility
 var hud: Node
 
 var _is_configured: bool = false
+var _authority_assigned: bool = false
 
 
 ## Llamado por PlayerSpawner antes o después de entrar al árbol. Sigue el mismo
@@ -44,8 +45,15 @@ var _is_configured: bool = false
 func setup(player_data: Statics.PlayerData) -> void:
 	data = player_data
 	profile = RoleDatabase.get_profile(player_data.role)
-	# No recursivo: cada nodo recibe la autoridad de quien manda sobre él.
-	set_multiplayer_authority(data.id, false)
+	# La autoridad se reparte AQUÍ y no en _apply_setup(): el MultiplayerSpawner
+	# procesa el spawn al añadir el nodo al árbol, y un MultiplayerSynchronizer
+	# cuya autoridad cambie después (o sea, desde _ready) se queda sin network id
+	# —"unable to process the pending spawn"— y pierde el estado inicial marcado
+	# `spawn = true` en su SceneReplicationConfig.
+	#
+	# Es seguro hacerlo antes de entrar al árbol: las referencias @export
+	# declaradas con node_paths= ya están resueltas al salir de instantiate().
+	_assign_authority()
 	if is_node_ready():
 		_apply_setup()
 
@@ -100,7 +108,18 @@ func _apply_setup() -> void:
 ##
 ##   cliente dueño -> transform, mirada, interacción, percepción, synchronizer
 ##   servidor      -> salud, inventario y el equipamiento que cuelga del anchor
+##
+## Idempotente: la llama setup() (antes del árbol) y también _apply_setup(), que
+## puede ejecutarse un frame más tarde desde _ready(). Reasignar la autoridad de
+## un MultiplayerSynchronizer ya sincronizando es justo lo que rompe su spawn.
 func _assign_authority() -> void:
+	if _authority_assigned:
+		return
+	_authority_assigned = true
+
+	# No recursivo: cada nodo recibe la autoridad de quien manda sobre él.
+	set_multiplayer_authority(data.id, false)
+
 	var client_owned: Array[Node] = [movement, view, interaction, perception, synchronizer]
 	for node: Node in client_owned:
 		if node:
