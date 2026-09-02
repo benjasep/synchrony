@@ -13,7 +13,7 @@ signal landed
 
 @export var acceleration: float = 60.0
 @export var friction: float = 120.0
-@export var air_control: float = 0.3
+@export var air_control: float = 1
 
 var move_speed: float = 4.0
 var sprint_speed: float = 6.5
@@ -75,7 +75,7 @@ func apply_motion(delta: float) -> void:
 		return
 
 	if not player.is_on_floor():
-		player.velocity += player.get_gravity() * delta
+		player.velocity += player.get_gravity() * (delta+0.00675)
 
 	var direction: Vector3 = player.global_basis * Vector3(input_direction.x, 0.0, input_direction.y)
 	var target: Vector2 = Vector2(direction.x, direction.z) * get_current_speed()
