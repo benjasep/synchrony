@@ -11,7 +11,8 @@ extends PlayerComponent
 signal jumped
 signal landed
 
-@export var acceleration: float = 12.0
+@export var acceleration: float = 60.0
+@export var friction: float = 120.0
 @export var air_control: float = 0.3
 
 var move_speed: float = 4.0
@@ -76,12 +77,22 @@ func apply_motion(delta: float) -> void:
 	if not player.is_on_floor():
 		player.velocity += player.get_gravity() * delta
 
-	var direction: Vector3 = (player.global_basis * Vector3(input_direction.x, 0.0, input_direction.y)).normalized()
-	var target: Vector3 = direction * get_current_speed()
-	var control: float = acceleration if player.is_on_floor() else acceleration * air_control
-
-	player.velocity.x = move_toward(player.velocity.x, target.x, control * delta)
-	player.velocity.z = move_toward(player.velocity.z, target.z, control * delta)
+	var direction: Vector3 = player.global_basis * Vector3(input_direction.x, 0.0, input_direction.y)
+	var target: Vector2 = Vector2(direction.x, direction.z) * get_current_speed()
+	var current: Vector2 = Vector2(player.velocity.x, player.velocity.z)
+	var control: float
+	if not player.is_on_floor():
+		control = acceleration * air_control
+	elif direction.is_zero_approx():
+		control = friction
+	else:
+		control = acceleration
+	
+	#player.velocity.x = move_toward(player.velocity.x, target.x, control * delta)
+	#player.velocity.z = move_toward(player.velocity.z, target.z, control * delta)
+	var result: Vector2 = current.move_toward(target, control * delta)
+	player.velocity.x = result.x
+	player.velocity.z = result.y
 
 	if Input.is_action_just_pressed(&"jump") and player.is_on_floor():
 		player.velocity.y = jump_velocity * _get_jump_multiplier()

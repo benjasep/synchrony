@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene format=3 uid="uid://dpoljythbv1gq"]
 
 [ext_resource type="Script" uid="uid://b6bc2dfk7racl" path="res://player/player.gd" id="1_player"]
 [ext_resource type="Script" uid="uid://g4m2lrssb5t2" path="res://player/components/movement_component.gd" id="2_movement"]
@@ -27,9 +27,8 @@ properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera", "hand_anchor", "body", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
+[node name="Player" type="CharacterBody3D" unique_id=50683130 node_paths=PackedStringArray("head", "camera", "hand_anchor", "body", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
 collision_layer = 2
-collision_mask = 1
 script = ExtResource("1_player")
 head = NodePath("Head")
 camera = NodePath("Head/Camera")
@@ -44,71 +43,62 @@ inventory = NodePath("Components/Inventory")
 health = NodePath("Components/Health")
 perception = NodePath("Components/Perception")
 
-[node name="Collision" type="CollisionShape3D" parent="."]
+[node name="Collision" type="CollisionShape3D" parent="." unique_id=2067758514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_body")
 
-[node name="Body" type="Node3D" parent="."]
+[node name="Body" type="Node3D" parent="." unique_id=1019901037]
 
-[node name="Mesh" type="MeshInstance3D" parent="Body"]
+[node name="Mesh" type="MeshInstance3D" parent="Body" unique_id=923601599]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 layers = 8
 mesh = SubResource("CapsuleMesh_body")
 
-[node name="Head" type="Node3D" parent="."]
+[node name="Head" type="Node3D" parent="." unique_id=693140130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
-[node name="Camera" type="Camera3D" parent="Head"]
-current = false
+[node name="Camera" type="Camera3D" parent="Head" unique_id=1273114185]
 
-[node name="HandAnchor" type="Node3D" parent="Head/Camera"]
+[node name="HandAnchor" type="Node3D" parent="Head/Camera" unique_id=46293243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.2, -0.3)
 
-[node name="InteractionRay" type="RayCast3D" parent="Head/Camera"]
+[node name="InteractionRay" type="RayCast3D" parent="Head/Camera" unique_id=1556193340]
 target_position = Vector3(0, 0, -2.5)
 collision_mask = 4
 
-[node name="Components" type="Node" parent="."]
+[node name="Components" type="Node" parent="." unique_id=474155410]
 
-[node name="Movement" type="Node" parent="Components" node_paths=PackedStringArray("player")]
+[node name="Movement" type="Node" parent="Components" unique_id=299349287 node_paths=PackedStringArray("player")]
 script = ExtResource("2_movement")
 player = NodePath("../..")
-acceleration = 12.0
-air_control = 0.3
 
-[node name="View" type="Node" parent="Components" node_paths=PackedStringArray("player", "head")]
+[node name="View" type="Node" parent="Components" unique_id=1822255101 node_paths=PackedStringArray("head", "player")]
 script = ExtResource("3_view")
-player = NodePath("../..")
 head = NodePath("../../Head")
-mouse_sensitivity = 0.003
+player = NodePath("../..")
 
-[node name="Interaction" type="Node" parent="Components" node_paths=PackedStringArray("player", "ray")]
+[node name="Interaction" type="Node" parent="Components" unique_id=1598634054 node_paths=PackedStringArray("ray", "player")]
 script = ExtResource("4_interaction")
-player = NodePath("../..")
 ray = NodePath("../../Head/Camera/InteractionRay")
-max_distance = 2.5
+player = NodePath("../..")
 
-[node name="Inventory" type="Node" parent="Components" node_paths=PackedStringArray("player", "hand_anchor")]
+[node name="Inventory" type="Node" parent="Components" unique_id=42186122 node_paths=PackedStringArray("hand_anchor", "player")]
 script = ExtResource("5_inventory")
-player = NodePath("../..")
 hand_anchor = NodePath("../../Head/Camera/HandAnchor")
-max_slots = 4
-
-[node name="Health" type="Node" parent="Components"]
-script = ExtResource("6_health")
-max_health = 100.0
-can_be_downed = true
-downed_health = 25.0
-
-[node name="Perception" type="Node" parent="Components" node_paths=PackedStringArray("player", "camera", "post_process")]
-script = ExtResource("7_perception")
 player = NodePath("../..")
+
+[node name="Health" type="Node" parent="Components" unique_id=686717425]
+script = ExtResource("6_health")
+
+[node name="Perception" type="Node" parent="Components" unique_id=262456711 node_paths=PackedStringArray("camera", "post_process", "player")]
+script = ExtResource("7_perception")
 camera = NodePath("../../Head/Camera")
 post_process = NodePath("../../HUD/PostProcess")
+player = NodePath("../..")
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=46801409]
 
-[node name="PostProcess" type="ColorRect" parent="HUD"]
+[node name="PostProcess" type="ColorRect" parent="HUD" unique_id=381802065]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -117,5 +107,5 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Synchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="Synchronizer" type="MultiplayerSynchronizer" parent="." unique_id=555776291]
 replication_config = SubResource("SceneReplicationConfig_player")
