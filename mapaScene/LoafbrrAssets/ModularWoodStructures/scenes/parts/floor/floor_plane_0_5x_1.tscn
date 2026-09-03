@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://dy81g1ljndfld"]
+
+[ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="1_jfbhe"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ybmod"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 0.5),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(1, 0, 2, 0, 3, 0, 1, 0, 0, 0, 2, 0),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1ju3x"]
+resource_name = "ModularWoodenStructures_Floor_Plane_0_5x1"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1e-05, 0.5),
+"attribute_data": PackedByteArray(255, 255, 169, 170, 170, 170, 170, 170, 255, 255, 84, 213, 170, 170, 84, 213),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(1, 0, 2, 0, 3, 0, 1, 0, 0, 0, 2, 0),
+"material": ExtResource("1_jfbhe"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 255, 255, 0, 0, 255, 255, 255, 191, 0, 0, 0, 0, 255, 255, 255, 191, 254, 255, 255, 127, 254, 255, 255, 127, 254, 255, 255, 127, 254, 255, 255, 127)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ybmod")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_6wuqx"]
+data = PackedVector3Array(-0.5, 0, -0.5, 0.5, 0, 0, -0.5, 0, 0, -0.5, 0, -0.5, 0.5, 0, -0.5, 0.5, 0, 0)
+
+[node name="Floor_Plane_0_5x1" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_1ju3x")
+skeleton = NodePath("")
+
+[node name="Floor_Plane_0_5x1" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor_Plane_0_5x1"]
+shape = SubResource("ConcavePolygonShape3D_6wuqx")

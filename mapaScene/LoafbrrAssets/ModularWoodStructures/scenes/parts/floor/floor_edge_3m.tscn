@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=4 uid="uid://cx4i7hwnstifn"]
+
+[ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="1_ru075"]
+[ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="2_6ptyh"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2qexb"]
+_surfaces = [{
+"aabb": AABB(-1.5, -0.1, -1.63918e-08, 3, 0.1, 0.05),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("CQAFAAMACQALAAUABwADAAEABwAJAAMAAAAIAAYAAAACAAgABgAJAAcABgAIAAkAAgAKAAgAAgAEAAoACAALAAkACAAKAAsA"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("/////wAAAAAAAP//AAAAAP/////+/wAAAAD/////AAD//wAA/v8AAAAAAAD//wAAqqr//wAAAABVVf//AAAAAKqq///+/wAAVVX///7/AACqqgAA/v8AAFVVAAD+/wAA")
+}, {
+"aabb": AABB(-1.5, -0.1, -1.63918e-08, 3, 1e-05, 0.05),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BwABAAMABwAFAAEAAgAEAAYAAgAAAAQABgAFAAcABgAEAAUA"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAAAAAAAAAAAAAAAAAP//AAD+/wAAAAAAAP//AACqqgAAAAAAAFVVAAAAAAAAqqoAAP7/AABVVQAA/v8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_18a38"]
+resource_name = "ModularWoodenStructures_Floor_Edge_3m"
+_surfaces = [{
+"aabb": AABB(-1.5, -0.1, -1.63918e-08, 3, 0.1, 0.05),
+"attribute_data": PackedByteArray("/3/+//7/////f/7//39l9f///////2X1/39l9f//ZfWpqv7/VNX+/6mq/v+pqmX1VNX+/1TVZfWpqmX1VNVl9Q=="),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("DAAHAAQADAAPAAcACQAFAAEACQANAAUAAAALAAgAAAADAAsACAANAAkACAALAA0AAgAOAAoAAgAGAA4ACgAPAAwACgAOAA8A"),
+"material": ExtResource("1_ru075"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(2, 2, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("/////wAA//8AAP//AAD////////+//////////7///8AAP///////wAA//////////8AAP7///8AAAAA/////6qq//8AAP//VVX//wAA//+qqv///v///6qq///+////VVX///7///9VVf///v///6qqAAD+////VVUAAP7/////f/+//3//v/9//3//f/+//3//f/9//7//f/9//3//f/9//7//f/+//3//f/9//7//f/9//3//v/9//3//f/9/")
+}, {
+"aabb": AABB(-1.5, -0.1, -1.63918e-08, 3, 1e-05, 0.05),
+"attribute_data": PackedByteArray("/3/+//7/////f2X1//9l9amq/v9U1f7/qapl9VTVZfU="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BwABAAMABwAFAAEAAgAEAAYAAgAAAAQABgAFAAcABgAEAAUA"),
+"material": ExtResource("2_6ptyh"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(2, 2, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAAAAAAAAAAAAAAAAAP//AAD+/wAAAAAAAP//AACqqgAAAAAAAFVVAAAAAAAAqqoAAP7/AABVVQAA/v8AAP9//z//f/8//3//P/9//z//f/8//3//P/9//z//f/8/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_2qexb")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kevce"]
+data = PackedVector3Array(1.5, 0, 0.05, -1.5, -0.1, 0.05, -1.5, 0, 0.05, 1.5, 0, 0.05, 1.5, -0.1, 0.05, -1.5, -0.1, 0.05, 1.5, 0, -1.63918e-08, -1.5, 0, 0.05, -1.5, 0, 1.63918e-08, 1.5, 0, -1.63918e-08, 1.5, 0, 0.05, -1.5, 0, 0.05, 1.5, -0.1, 0.05, -1.5, -0.1, 1.63918e-08, -1.5, -0.1, 0.05, 1.5, -0.1, 0.05, 1.5, -0.1, -1.63918e-08, -1.5, -0.1, 1.63918e-08)
+
+[node name="Floor_Edge_3m" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_18a38")
+skeleton = NodePath("")
+
+[node name="Floor_Edge_3m" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor_Edge_3m"]
+shape = SubResource("ConcavePolygonShape3D_kevce")

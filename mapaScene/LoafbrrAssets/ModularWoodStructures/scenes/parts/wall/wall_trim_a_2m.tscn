@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://cvwjh23c2lvt7"]
+
+[ext_resource type="Material" uid="uid://dj3ao63cfysdy" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/GeneralWoodTrim_A.material" id="1_q62j0"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_pe7nq"]
+_surfaces = [{
+"aabb": AABB(-1, -0.25, 1.86265e-09, 2, 0.25, 0.0661499),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AwAEAAIAAwAFAAQAAwAAAAEAAwACAAAA"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAD///7/AAD//////v8AAAAAAAD//wAA//8AAP7/AAAAAAAAAAAAAP//AAAAAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2btfe"]
+resource_name = "ModularWoodenStructures_Wall_Trim_A_2m"
+_surfaces = [{
+"aabb": AABB(-1, -0.25, 1.86265e-09, 2, 0.25, 0.0661499),
+"attribute_data": PackedByteArray("Wv5xYeFVcWFa/o1+Wv7pH+FVjX7hVekfWv5xGeFVcRk="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("BQAGAAMABQAHAAYABAAAAAEABAACAAAA"),
+"material": ExtResource("1_q62j0"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAD///7/AAD//////v8AAAAAAAD//wAAAAAAAP///////wAA/v8AAP//AAD+////AAAAAAAA/////wAAAAD///9//3//f/9//3//f/9//z//f/9//3//P/9//z//f/8/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_pe7nq")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_0u7j5"]
+data = PackedVector3Array(1, -0.25, 0.0661493, -1, -0.25, 6.53788e-07, -1, -0.25, 0.0661499, 1, -0.25, 0.0661493, 1, -0.25, 1.86265e-09, -1, -0.25, 6.53788e-07, 1, -0.25, 0.0661493, -1, 0, 0.0661499, 1, 0, 0.0661493, 1, -0.25, 0.0661493, -1, -0.25, 0.0661499, -1, 0, 0.0661499)
+
+[node name="Wall_Trim_A_2m" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_2btfe")
+skeleton = NodePath("")
+
+[node name="Wall_Trim_A_2m" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall_Trim_A_2m"]
+shape = SubResource("ConcavePolygonShape3D_0u7j5")
