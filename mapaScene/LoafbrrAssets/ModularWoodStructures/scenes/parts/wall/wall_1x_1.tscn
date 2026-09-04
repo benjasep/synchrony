@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3 uid="uid://bpni7gdp88wvy"]
+
+[ext_resource type="Material" uid="uid://doefotjvkvoid" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodSiding_B_A.material" id="1_6l28c"]
+[ext_resource type="Material" uid="uid://d0empcc3xyq" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_B.material" id="2_x0c1s"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cgdaq"]
+_surfaces = [{
+"aabb": AABB(-0.5, -2.18557e-09, 0.0499999, 1, 1, 1e-05),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 2, 0, 0, 0, 1, 0, 3, 0),
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 36, 1, 0, 0, 0, 0, 255, 255, 36, 1, 0, 0)
+}, {
+"aabb": AABB(-0.5, 2.18557e-09, -0.0500001, 1, 1, 1e-05),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"name": "WallInterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 36, 1, 0, 0, 0, 0, 255, 255, 36, 1, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_k4xfh"]
+resource_name = "ModularWoodenStructures_Wall_1x1"
+_surfaces = [{
+"aabb": AABB(-0.5, -2.18557e-09, 0.0499999, 1, 1, 1e-05),
+"attribute_data": PackedByteArray(255, 255, 255, 255, 170, 170, 255, 255, 255, 255, 169, 170, 169, 170, 169, 170),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 2, 0, 0, 0, 1, 0, 3, 0),
+"material": ExtResource("1_6l28c"),
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 0, 128, 0, 0, 0, 0, 0, 0, 0, 128, 255, 255, 255, 255, 36, 1, 0, 128, 0, 0, 255, 255, 36, 1, 0, 128, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255)
+}, {
+"aabb": AABB(-0.5, 2.18557e-09, -0.0500001, 1, 1, 1e-05),
+"attribute_data": PackedByteArray(255, 255, 255, 255, 170, 170, 255, 255, 255, 255, 169, 170, 169, 170, 169, 170),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 2, 0, 3, 0),
+"material": ExtResource("2_x0c1s"),
+"name": "WallInterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 36, 1, 0, 0, 0, 0, 255, 255, 36, 1, 0, 0, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127, 255, 255, 255, 127)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_cgdaq")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_duewb"]
+data = PackedVector3Array(0.5, -2.18557e-09, 0.0499999, -0.5, 1, 0.05, 0.5, 1, 0.05, 0.5, -2.18557e-09, 0.0499999, -0.5, -2.18557e-09, 0.0499999, -0.5, 1, 0.05, 0.5, 2.18557e-09, -0.0500001, -0.5, 1, -0.05, -0.5, 2.18557e-09, -0.0500001, 0.5, 2.18557e-09, -0.0500001, 0.5, 1, -0.05, -0.5, 1, -0.05)
+
+[node name="Wall_1x1" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_k4xfh")
+skeleton = NodePath("")
+
+[node name="Wall_1x1" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall_1x1"]
+shape = SubResource("ConcavePolygonShape3D_duewb")

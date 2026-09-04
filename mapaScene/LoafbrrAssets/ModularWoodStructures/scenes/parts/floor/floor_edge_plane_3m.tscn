@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://d27so1j1eq3qy"]
+
+[ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="1_0q5yu"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rixf8"]
+_surfaces = [{
+"aabb": AABB(-1.5, -0.1, -6.55671e-08, 3, 0.1, 1e-05),
+"format": 34359742465,
+"index_count": 18,
+"index_data": PackedByteArray("BQADAAEABQAHAAMAAAAGAAQAAAACAAYABAAHAAUABAAGAAcA"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AADAPwAAAADizYyzAADAvwAAAADizYwzAADAP83MzL3izYyzAADAv83MzL3izYwzAAAAPwAAAAAsvbuyAAAAvwAAAAAuvbsyAAAAP83MzL0svbuyAAAAv83MzL0uvbsy")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1tww6"]
+resource_name = "ModularWoodenStructures_Floor_Edge_Plane_3m"
+_surfaces = [{
+"aabb": AABB(-1.5, -0.1, -6.55671e-08, 3, 0.1, 1e-05),
+"attribute_data": PackedByteArray("AADgtQ0AgD/k/38/DwCAPwAA8LWwzGo/5P9/P7PMaj9zqqo+DgCAP4+qKj8OAIA/cKqqPrDMaj+Oqio/ssxqPw=="),
+"format": 34359742487,
+"index_count": 18,
+"index_data": PackedByteArray("BQADAAEABQAHAAMAAAAGAAQAAAACAAYABAAHAAUABAAGAAcA"),
+"material": ExtResource("1_0q5yu"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AADAPwAAAADizYyzAADAvwAAAADizYwzAADAP83MzL3izYyzAADAv83MzL3izYwzAAAAPwAAAAAsvbuyAAAAvwAAAAAuvbsyAAAAP83MzL0svbuyAAAAv83MzL0uvbsy/3//fwAA/7//f/9/AAD/v/9//38AAP+//3//fwAA/7//f/9/AAD/v/9//38AAP+//3//fwAA/7//f/9/AAD/vw==")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rixf8")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_w88h2"]
+data = PackedVector3Array(1.5, 0, -6.55671e-08, -1.5, -0.1, 6.55671e-08, -1.5, 0, 6.55671e-08, 1.5, 0, -6.55671e-08, 1.5, -0.1, -6.55671e-08, -1.5, -0.1, 6.55671e-08)
+
+[node name="Floor_Edge_Plane_3m" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_1tww6")
+skeleton = NodePath("")
+
+[node name="Floor_Edge_Plane_3m" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor_Edge_Plane_3m"]
+shape = SubResource("ConcavePolygonShape3D_w88h2")

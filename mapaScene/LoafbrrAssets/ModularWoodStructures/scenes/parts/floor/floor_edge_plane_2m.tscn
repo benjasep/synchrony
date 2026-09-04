@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://djs75lkfnrhw"]
+
+[ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="1_xawa3"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_vb710"]
+_surfaces = [{
+"aabb": AABB(-1, -0.1, -2.18557e-08, 2, 0.1, 1e-05),
+"format": 34359742465,
+"index_count": 12,
+"index_data": PackedByteArray("BAACAAAABAAFAAIAAQAFAAQAAQADAAUA"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AACAvwAAAADizYwzAACAPwAAAAAuvbuyAACAv83MzL3izYwzAACAP83MzL0uvbuyAAAAAAAAAAAuvbsyAAAAAM3MzL0uvbsy")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_r6eg6"]
+resource_name = "ModularWoodenStructures_Floor_Edge_Plane_2m"
+_surfaces = [{
+"aabb": AABB(-1, -0.1, -2.18557e-08, 2, 0.1, 1e-05),
+"attribute_data": PackedByteArray("5P9/Pw8AgD9vqqo+DgCAP+T/fz/GzGo/b6qqPsTMaj+Oqio/DgCAP46qKj/FzGo/"),
+"format": 34359742487,
+"index_count": 12,
+"index_data": PackedByteArray("BAACAAAABAAFAAIAAQAFAAQAAQADAAUA"),
+"material": ExtResource("1_xawa3"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AACAvwAAAADizYwzAACAPwAAAAAuvbuyAACAv83MzL3izYwzAACAP83MzL0uvbuyAAAAAAAAAAAuvbsyAAAAAM3MzL0uvbsy/3//fwAA/7//f/9/AAD/v/9//38AAP+//3//fwAA/7//f/9/AAD/v/9//38AAP+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_vb710")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_36mku"]
+data = PackedVector3Array(1, 0, -2.18557e-08, -1, -0.1, 6.55671e-08, -1, 0, 6.55671e-08, 1, 0, -2.18557e-08, 1, -0.1, -2.18557e-08, -1, -0.1, 6.55671e-08)
+
+[node name="Floor_Edge_Plane_2m" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_r6eg6")
+skeleton = NodePath("")
+
+[node name="Floor_Edge_Plane_2m" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor_Edge_Plane_2m"]
+shape = SubResource("ConcavePolygonShape3D_36mku")

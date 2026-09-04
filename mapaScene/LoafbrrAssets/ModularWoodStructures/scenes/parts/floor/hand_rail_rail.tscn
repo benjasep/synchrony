@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://47hd3kiejhe6"]
+
+[ext_resource type="Material" uid="uid://dj3ao63cfysdy" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/GeneralWoodTrim_A.material" id="1_3pjlj"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_dfxr1"]
+_surfaces = [{
+"aabb": AABB(-0.0299982, -6.33299e-08, -0.029998, 0.06, 0.968, 0.06),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("AAADAAEAAAACAAMAAgAHAAMAAgAGAAcABgAFAAcABgAEAAUABAABAAUABAAAAAEA"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP////8AAAAAAAAAAAAAAAD//wAAAAD//wAA//8AAP7//////wAA//8AAAAAAAD+////AAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_05d1c"]
+resource_name = "ModularWoodenStructures_HandRail_Rail"
+_surfaces = [{
+"aabb": AABB(-0.0299982, -6.33299e-08, -0.029998, 0.06, 0.968, 0.06),
+"attribute_data": PackedByteArray("jX6OFo1+cRFxQY4WcUFxEY1+cRGNfo4WcUFxEXFBjhaNfnERjX6OFnFBcRFxQY4WjX6OFo1+cRFxQY4WcUFxEQ=="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("AQAHAAMAAQAFAAcABAAOAAYABAAMAA4ADQALAA8ADQAJAAsACAACAAoACAAAAAIA"),
+"material": ExtResource("1_3pjlj"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("AAAAAP///78AAAAA//9U1QAA//////+/AAD/////VNUAAAAAAAD//wAAAAAAAFTVAAD//wAA//8AAP//AABU1f//AAD///+///8AAP//VNX+////////v/7//////1TV//8AAAAA/////wAAAABU1f7///8AAP///v///wAAVNX/f/9/VFWqqv9//39UVaqq/z//v1RVqqr/P/+/VFWqqv9//3+qqlRV/3//f6qqVFX/P/+/qqpUVf8//7+qqlRV")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_dfxr1")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_flrgj"]
+data = PackedVector3Array(-0.0299982, -6.33299e-08, 0.030002, -0.0299981, 0.968, -0.029998, -0.0299981, 0.968, 0.030002, -0.0299982, -6.33299e-08, 0.030002, -0.0299982, -6.33299e-08, -0.029998, -0.0299981, 0.968, -0.029998, -0.0299982, -6.33299e-08, -0.029998, 0.0300018, 0.968, -0.029998, -0.0299981, 0.968, -0.029998, -0.0299982, -6.33299e-08, -0.029998, 0.0300018, -5.58794e-08, -0.029998, 0.0300018, 0.968, -0.029998, 0.0300018, -5.58794e-08, -0.029998, 0.0300018, 0.968, 0.030002, 0.0300018, 0.968, -0.029998, 0.0300018, -5.58794e-08, -0.029998, 0.0300018, -5.58794e-08, 0.030002, 0.0300018, 0.968, 0.030002, 0.0300018, -5.58794e-08, 0.030002, -0.0299981, 0.968, 0.030002, 0.0300018, 0.968, 0.030002, 0.0300018, -5.58794e-08, 0.030002, -0.0299982, -6.33299e-08, 0.030002, -0.0299981, 0.968, 0.030002)
+
+[node name="HandRail_Rail" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_05d1c")
+skeleton = NodePath("")
+
+[node name="HandRail_Rail" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HandRail_Rail"]
+shape = SubResource("ConcavePolygonShape3D_flrgj")

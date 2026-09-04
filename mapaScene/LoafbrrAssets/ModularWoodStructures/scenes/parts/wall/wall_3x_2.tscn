@@ -1,0 +1,74 @@
+[gd_scene load_steps=6 format=4 uid="uid://c1ygjsxgllrmm"]
+
+[ext_resource type="Material" uid="uid://doefotjvkvoid" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodSiding_B_A.material" id="1_6eyq0"]
+[ext_resource type="Material" uid="uid://d0empcc3xyq" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_B.material" id="2_tc2d6"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_qrqn6"]
+_surfaces = [{
+"aabb": AABB(-1, -2.18557e-09, 0.0499999, 2, 3, 1e-05),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("BgAFAAkABgABAAUACQAEAAsACQAFAAQACAALAAoACAAJAAsAAwAIAAoAAwACAAgABwAJAAgABwAGAAkAAgAHAAgAAgAAAAcA"),
+"lods": [1e-10, PackedByteArray("BgAFAAcABgABAAUABwAFAAQABwAEAAsACgAHAAsAAgAHAAoAAgAAAAcAAwACAAoA")],
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAP//bgMAAP9/AAAAAAAA//8AAAAAAAD/////bgMAAP9///9uAwAAAACqqkkCAAAAAFVVJAEAAP9/VVUkAQAA/3+qqkkCAAD//1VVJAEAAP//qqpJAgAA")
+}, {
+"aabb": AABB(-1, 2.18557e-09, -0.0500001, 2, 3, 1e-05),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("BgAFAAEABgAJAAUACQAEAAUACQALAAQACAALAAkACAAKAAsAAwAIAAIAAwAKAAgABwAJAAYABwAIAAkAAgAHAAAAAgAIAAcA"),
+"lods": [1e-10, PackedByteArray("BgAFAAEABwAFAAYAAgAHAAAAAgAFAAcAAwAFAAIAAwAKAAUABQAKAAsABQALAAQA")],
+"name": "WallInterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAP//bgMAAP9/AAAAAAAA//8AAAAAAAD/////bgMAAP9///9uAwAAAACqqkkCAAAAAFVVJAEAAP9/VVUkAQAA/3+qqkkCAAD//1VVJAEAAP//qqpJAgAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_v58br"]
+resource_name = "ModularWoodenStructures_Wall_3x2"
+_surfaces = [{
+"aabb": AABB(-1, -2.18557e-09, 0.0499999, 2, 3, 1e-05),
+"attribute_data": PackedByteArray("AAD//wAAAABVVf//qqr//6mqAABUVQAAAABVVQAAqqpUVamqVFVUVamqqaqpqlRV"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("BgAFAAkABgABAAUACQAEAAsACQAFAAQACAALAAoACAAJAAsAAwAIAAoAAwACAAgABwAJAAgABwAGAAkAAgAHAAgAAgAAAAcA"),
+"lods": [1e-10, PackedByteArray("BgAFAAcABgABAAUABwAFAAQABwAEAAsACgAHAAsAAgAHAAoAAgAAAAcAAwACAAoA")],
+"material": ExtResource("1_6eyq0"),
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAAAAAAAAIAAAP//bgMAgP9/AAAAAACA//8AAAAAAID/////bgMAgP9///9uAwCAAACqqkkCAIAAAFVVJAEAgP9/VVUkAQCA/3+qqkkCAID//1VVJAEAgP//qqpJAgCA/3////9/////f////3////9/////f////3////9/////f////3////9/////f///")
+}, {
+"aabb": AABB(-1, 2.18557e-09, -0.0500001, 2, 3, 1e-05),
+"attribute_data": PackedByteArray("AAD//wAAAABVVf//qqr//6mqAABUVQAAAABVVQAAqqpUVamqVFVUVamqqaqpqlRV"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("BgAFAAEABgAJAAUACQAEAAUACQALAAQACAALAAkACAAKAAsAAwAIAAIAAwAKAAgABwAJAAYABwAIAAkAAgAHAAAAAgAIAAcA"),
+"lods": [1e-10, PackedByteArray("BgAFAAEABwAFAAYAAgAHAAAAAgAFAAcAAwAFAAIAAwAKAAUABQAKAAsABQALAAQA")],
+"material": ExtResource("2_tc2d6"),
+"name": "WallInterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AAAAAAAAAAAAAP//bgMAAP9/AAAAAAAA//8AAAAAAAD/////bgMAAP9///9uAwAAAACqqkkCAAAAAFVVJAEAAP9/VVUkAQAA/3+qqkkCAAD//1VVJAEAAP//qqpJAgAA////f////3////9/////f////3////9//v//f/7//3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_qrqn6")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_lfscy"]
+data = PackedVector3Array(-1, 3, -0.0499999, 1, 2.18557e-09, -0.0500001, 1, 3, -0.0499999, -1, 3, -0.0499999, -1, 2.18557e-09, -0.0500001, 1, 2.18557e-09, -0.0500001, 1, 3, 0.0500001, -1, -2.18557e-09, 0.0499999, -1, 3, 0.0500001, 1, 3, 0.0500001, 1, -2.18557e-09, 0.0499999, -1, -2.18557e-09, 0.0499999)
+
+[node name="Wall_3x2" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_v58br")
+skeleton = NodePath("")
+
+[node name="Wall_3x2" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall_3x2"]
+shape = SubResource("ConcavePolygonShape3D_lfscy")

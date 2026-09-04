@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://cw1yoe0bn4f5s"]
+
+[ext_resource type="Material" uid="uid://doefotjvkvoid" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodSiding_B_A.material" id="1_fitsx"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6u4rw"]
+_surfaces = [{
+"aabb": AABB(-1, -2.18557e-09, 0.0499999, 2, 1, 1e-05),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("AgAEAAUAAgABAAQAAQADAAQAAQAAAAMA"),
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAAAAAAAAD/fwAAAAAAAP//AAAAAAAAAAD//yQBAAD/f///JAEAAP////8kAQAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_uqvwy"]
+resource_name = "ModularWoodenStructures_Wall_Plane_1x2"
+_surfaces = [{
+"aabb": AABB(-1, -2.18557e-09, 0.0499999, 2, 1, 1e-05),
+"attribute_data": PackedByteArray("AAD//1VV//+qqv//AACqqlRVqaqpqqmq"),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("AgAEAAUAAgABAAQAAQADAAQAAQAAAAMA"),
+"material": ExtResource("1_fitsx"),
+"name": "WallExterior",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("AAAAAAAAAID/fwAAAAAAgP//AAAAAACAAAD//yQBAID/f///JAEAgP////8kAQCA/3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_6u4rw")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_46foa"]
+data = PackedVector3Array(1, 1, 0.05, -1, -2.18557e-09, 0.0499999, -1, 1, 0.05, 1, 1, 0.05, 1, -2.18557e-09, 0.0499999, -1, -2.18557e-09, 0.0499999)
+
+[node name="Wall_Plane_1x2" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_uqvwy")
+skeleton = NodePath("")
+
+[node name="Wall_Plane_1x2" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall_Plane_1x2"]
+shape = SubResource("ConcavePolygonShape3D_46foa")

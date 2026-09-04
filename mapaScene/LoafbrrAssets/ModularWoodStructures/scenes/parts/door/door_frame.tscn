@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://do648poiph34u"]
+
+[ext_resource type="Material" uid="uid://dc8hpgmfkdvka" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/DoorAtlas_A.material" id="1_k27ks"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_v478n"]
+_surfaces = [{
+"aabb": AABB(-0.390503, 0, -0.0922509, 0.781006, 1.9642, 0.1845),
+"format": 34896654337,
+"index_count": 72,
+"index_data": PackedByteArray("AQAOAAYAAQAJAA4ABQAIAAAABQANAAgABAABAAYABAACAAEADQAPAAwADQAOAA8ABAAKAAIABAAPAAoACQAPAA4ACQAKAA8AAwAMAAcAAwALAAwABwAPAAQABwAMAA8ABQAEAAYABQAHAAQADAAIAA0ADAALAAgABQAOAA0ABQAGAA4AAAAHAAUAAAADAAcA"),
+"name": "DoorAtlas",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("//8AAP7/AAAAAAAA/v8AAOQYAAD+/wAAGucAAP7/AADkGMfz//8AAP///////wAAAAD/////AAAa58fz//8AAP//AAAAAAAAAAAAAAAAAADkGAAAAAAAABrnAAAAAAAAGufH8wAAAAD/////AAAAAAAA//8AAAAA5BjH8wAAAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_j1c58"]
+resource_name = "ModularWoodenStructures_Door_Frame"
+_surfaces = [{
+"aabb": AABB(-0.390503, 0, -0.0922509, 0.781006, 1.9642, 0.1845),
+"attribute_data": PackedByteArray("/////8uS9KERpxM++M2ePsfz///LkvShEacTPvjNnj5Ugv//t64ENXB8tz6cVC+/jI7//7euBDVwfLc+nFQvv4yO//+3rnA4bHy3PpxUJ79Ugv//t65wOGx8tz6cVCe/x/P//8uSiJ4ZpxM++M2OPoyO///LkoieGacTPvjNjj6Mjravln3//+yJl7yappU///+2r5Z9///siZe8mqaVP1SCtq///3A461p7P3RUJ7///7CraaOT/AsWiz6appE/VIKwq2mjk/wLFos+mqaRP8fzsKtpo5P8CxaLPpqmkT9UgrCrg3mT/PbES72appE///+wq4N5k/z2xEu9mqaRP4yOsKuDeZP89sRLvZqmkT/H87avVp///xYsdj6appU/x/O2rxPkiJ57hkQ/RM6OPlSCtq9Wn///Fix2PpqmlT+MjravE+SInnuGRD9Ezo4+/////8uS9KERpxM++M2ePv7////LkvShEacTPvjNnj5Ugv//t64ENXB8tz6cVC+/VIL//7euBDVwfLc+nFQvv4yO//+3rnA4bHy3PpxUJ7+Mjv//t65wOGx8tz6cVCe/x/P//8uSiJ4ZpxM++M2OPlSC///LkoieGacTPvjNjj7H87avVp///xYsdj6appU/VIKwq1af//8WLHY+mqaVP1SCtq8T5Iiee4ZEP0TOjj7//7CraaOT/AsWiz6appE/VIK2r2mjk/wLFos+mqaRP///sKtpo5P8CxaLPpqmkT9UgrCrg3mT/PbES72appE///+2r4N5k/z2xEu9mqaRP1SCsKuDeZP89sRLvZqmkT+Mjrav//9wOOtaez90VCe/jI62r5Z9///siZe8mqaVP///sKuWff//7ImXvJqmlT+Mjrav//9wOOtaez90VCe/"),
+"format": 34896654455,
+"index_count": 72,
+"index_data": PackedByteArray("AwAlABAAAwAYACUADQAWAAEADQAiABYACAACAA4ACAAEAAIAIAAnAB0AIAAjACcACgAaAAUACgApABoAFwAmACMAFwAZACYABwAfABQABwAcAB8AEwAoAAkAEwAeACgACwAIAA4ACwARAAgAHQAVACAAHQAbABUADAAkACEADAAPACQAAAASAAsAAAAGABIA"),
+"material": ExtResource("1_k27ks"),
+"name": "DoorAtlas",
+"primitive": 3,
+"uv_scale": Vector4(0.654734, 1.98807, 1.96371, 2.33829),
+"vertex_count": 42,
+"vertex_data": PackedByteArray("//8AAP7/AID//wAA/v//vwAAAAD+/wCAAAAAAP7//7/kGAAA/v8AgOQYAAD+//+/GucAAP7/AIAa5wAA/v//v+QYx/P//wCA5BjH8//////kGMfz////v////////wCA////////////////////vwAA/////wCAAAD///////8AAP//////vxrnx/P//wCAGufH8///AIAa58fz/////xrnx/P///+///8AAAAAAAD//wAAAAD/vwAAAAAAAAAAAAAAAAAA/7/kGAAAAAAAAOQYAAAAAP+/GucAAAAAAAAa5wAAAAD/vxrnx/MAAAAAGufH8wAA//8a58fzAAD/v/////8AAAAA/////wAA////////AAD/vwAA//8AAAAAAAD//wAA//8AAP//AAD/v+QYx/MAAAAA5BjH8wAAAADkGMfzAAD//+QYx/MAAP+//3////9/AAD/f////3/+//9/////fwAA/3////9//v//f////3//P/9/AAD/f////3//v/9/AAD/f////3//v/9//v//f////3////9//z//f///////f/9/AAD///9//3/+/////3//fwAA////f/9//v////9//3//P/9///////9//3//v/9/AAD///9//3//v/9//v////9/////f/9//z//fwAA")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_v478n")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_uur3k"]
+data = PackedVector3Array(-0.390503, 0, 0.0922491, -0.390503, 1.9642, -0.0922508, -0.390503, 1.9642, 0.0922492, -0.390503, 0, 0.0922491, -0.390503, 0, -0.0922509, -0.390503, 1.9642, -0.0922508, 0.390503, 1.9642, 0.0922492, 0.390503, 0, -0.0922509, 0.390503, 0, 0.0922491, 0.390503, 1.9642, 0.0922492, 0.390503, 1.9642, -0.0922508, 0.390503, 0, -0.0922509, -0.314565, 1.87045, 0.0922492, -0.390503, 0, 0.0922491, -0.390503, 1.9642, 0.0922492, -0.314565, 1.87045, 0.0922492, -0.314565, 0, 0.0922491, -0.390503, 0, 0.0922491, 0.390503, 1.9642, -0.0922508, -0.314565, 1.87045, -0.0922508, 0.314565, 1.87045, -0.0922508, 0.390503, 1.9642, -0.0922508, -0.390503, 1.9642, -0.0922508, -0.314565, 1.87045, -0.0922508, -0.314565, 1.87045, 0.0922492, -0.314565, 0, -0.0922509, -0.314565, 0, 0.0922491, -0.314565, 1.87045, 0.0922492, -0.314565, 1.87045, -0.0922508, -0.314565, 0, -0.0922509, -0.390503, 0, -0.0922509, -0.314565, 1.87045, -0.0922508, -0.390503, 1.9642, -0.0922508, -0.390503, 0, -0.0922509, -0.314565, 0, -0.0922509, -0.314565, 1.87045, -0.0922508, 0.314565, 0, 0.0922491, 0.314565, 1.87045, -0.0922508, 0.314565, 1.87045, 0.0922492, 0.314565, 0, 0.0922491, 0.314565, 0, -0.0922509, 0.314565, 1.87045, -0.0922508, 0.314565, 1.87045, 0.0922492, -0.314565, 1.87045, -0.0922508, -0.314565, 1.87045, 0.0922492, 0.314565, 1.87045, 0.0922492, 0.314565, 1.87045, -0.0922508, -0.314565, 1.87045, -0.0922508, 0.390503, 1.9642, 0.0922492, -0.314565, 1.87045, 0.0922492, -0.390503, 1.9642, 0.0922492, 0.390503, 1.9642, 0.0922492, 0.314565, 1.87045, 0.0922492, -0.314565, 1.87045, 0.0922492, 0.314565, 1.87045, -0.0922508, 0.390503, 0, -0.0922509, 0.390503, 1.9642, -0.0922508, 0.314565, 1.87045, -0.0922508, 0.314565, 0, -0.0922509, 0.390503, 0, -0.0922509, 0.390503, 1.9642, 0.0922492, -0.390503, 1.9642, -0.0922508, 0.390503, 1.9642, -0.0922508, 0.390503, 1.9642, 0.0922492, -0.390503, 1.9642, 0.0922492, -0.390503, 1.9642, -0.0922508, 0.390503, 0, 0.0922491, 0.314565, 1.87045, 0.0922492, 0.390503, 1.9642, 0.0922492, 0.390503, 0, 0.0922491, 0.314565, 0, 0.0922491, 0.314565, 1.87045, 0.0922492)
+
+[node name="Door_Frame" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_j1c58")
+skeleton = NodePath("")
+
+[node name="Door_Frame" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Door_Frame"]
+shape = SubResource("ConcavePolygonShape3D_uur3k")

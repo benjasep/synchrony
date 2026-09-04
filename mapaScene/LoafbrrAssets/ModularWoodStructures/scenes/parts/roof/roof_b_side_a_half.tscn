@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=4 uid="uid://b50tdp5k4747s"]
+
+[ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="1_0fgp0"]
+[ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="2_wtd3n"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3jdsh"]
+_surfaces = [{
+"aabb": AABB(-0.250001, 0.0892298, -1.5, 0.250001, 0.58923, 1.5),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BgABAAUABgACAAEABAABAAAABAAFAAEABwACAAYABwADAAIA"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/v///wAAAAAAAP//AAAAAAAAOtkAAAAA/z862QAAAAD//8Qm/v8AAAAAxCb//wAAAAAAAP//AAD/PwAA/v8AAA==")
+}, {
+"aabb": AABB(-0.187501, 0, -1.5, 0.187501, 0.58923, 1.5),
+"format": 34896613377,
+"index_count": 12,
+"index_data": PackedByteArray("BQAAAAEABQADAAAABQACAAQABQABAAIA"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 6,
+"vertex_data": PackedByteArray("/v862QAAAAAAADrZAAAAAAAA//8AAAAA//8AAP7/AAAAAMQm//8AAAAAAAD//wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_5c55y"]
+resource_name = "ModularWoodenStructures_Roof_B_Side_A_Half"
+_surfaces = [{
+"aabb": AABB(-0.250001, 0.0892298, -1.5, 0.250001, 0.58923, 1.5),
+"attribute_data": PackedByteArray("///iFKnq4RSo6uEUqerhFEby4RRH8uEU/v9wiqnqcIqp6nCKqepwikbycIpG8nCK"),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("CgACAAgACgAEAAIABgABAAAABgAHAAEACwADAAkACwAFAAMA"),
+"material": ExtResource("1_0fgp0"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("/v///wAA47IAAP//AADjsgAA//8AAKoqAAA62QAA5DIAADrZAACqKv8/OtkAAOQy///EJv7/47IAAMQm///jsgAAxCb//6oqAAAAAP//5DIAAAAA//+qKv8/AAD+/+Qy/v/+f/7//n9VVaqqAAD/f1VVqqoAAP9//v/+f/7//n9VVaqqAAD/f1VVqqoAAP9/")
+}, {
+"aabb": AABB(-0.187501, 0, -1.5, 0.187501, 0.58923, 1.5),
+"attribute_data": PackedByteArray("2v7b/tr+2+7a/tvu2v4+59p+2v7bfj3n237b7tt+2+4="),
+"format": 34896613399,
+"index_count": 12,
+"index_data": PackedByteArray("BgAAAAEABgAEAAAABwADAAUABwACAAMA"),
+"material": ExtResource("2_wtd3n"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/v862QAAuyIAADrZAAC7IgAAOtkAAD8JAAD//wAAPwn//wAA/v+7IgAAxCb//z8JAAAAAP//uyIAAAAA//8/CfRQ9FD0UPRQY/bMxGP2zMT0UPRQY/bMxPRQ9FBj9szE")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_3jdsh")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_3s01q"]
+data = PackedVector3Array(-0.1875, 0, -1.75461e-06, -1.22191e-06, 0.5, -1.5, -0.187501, 0.5, -1.5, -0.1875, 0, -1.75461e-06, -1.55373e-12, 0, -1.90735e-06, -1.22191e-06, 0.5, -1.5, -0.25, 0.0892299, -1.7037e-06, -0.250001, 0.67846, -1.5, -0.25, 0.17846, -1.7037e-06, -0.25, 0.0892299, -1.7037e-06, -0.250001, 0.58923, -1.5, -0.250001, 0.67846, -1.5, -1.55373e-12, 0.17846, -1.90735e-06, -0.250001, 0.67846, -1.5, -1.22191e-06, 0.67846, -1.5, -1.55373e-12, 0.17846, -1.90735e-06, -0.25, 0.17846, -1.7037e-06, -0.250001, 0.67846, -1.5, -0.1875, 0, -1.75461e-06, -0.187501, 0.58923, -1.5, -0.1875, 0.0892298, -1.75461e-06, -0.1875, 0, -1.75461e-06, -0.187501, 0.5, -1.5, -0.187501, 0.58923, -1.5, -0.1875, 0.0892298, -1.75461e-06, -0.250001, 0.58923, -1.5, -0.25, 0.0892299, -1.7037e-06, -0.1875, 0.0892298, -1.75461e-06, -0.187501, 0.58923, -1.5, -0.250001, 0.58923, -1.5)
+
+[node name="Roof_B_Side_A_Half" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_5c55y")
+skeleton = NodePath("")
+
+[node name="Roof_B_Side_A_Half" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roof_B_Side_A_Half"]
+shape = SubResource("ConcavePolygonShape3D_3s01q")

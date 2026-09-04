@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://d2wmus8qrrdtq"]
+
+[ext_resource type="Material" uid="uid://dj3ao63cfysdy" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/GeneralWoodTrim_A.material" id="1_6fcex"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rn13c"]
+_surfaces = [{
+"aabb": AABB(-1.5, 0, -0.0699997, 3, 0.333842, 0.139999),
+"format": 34896613377,
+"index_count": 24,
+"index_data": PackedByteArray("BgADAAIABgAHAAMAAQAEAAAAAQAFAAQAAwAAAAIAAwABAAAABwAEAAUABwAGAAQA"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAA//8AAAAA/////wAA////////AAAAAAAAAAAAAP//AAAAAAAAAAD//wAAAAD/////AAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_navl0"]
+resource_name = "ModularWoodenStructures_Wall_Beam_D_3m"
+_surfaces = [{
+"aabb": AABB(-1.5, 0, -0.0699997, 3, 0.333842, 0.139999),
+"attribute_data": PackedByteArray("Wv6Nflr+jj6kAY1+pAGOPlr+cWFa/o4+pAFxYaQBjj5a/o1+Wv5xMaQBjX6kAXExWv5xYVr+cTGkAXFhpAFxMQ=="),
+"format": 34896613399,
+"index_count": 24,
+"index_data": PackedByteArray("DQAHAAUADQAPAAcAAwAJAAEAAwALAAkABgAAAAQABgACAAAADgAIAAoADgAMAAgA"),
+"material": ExtResource("1_6fcex"),
+"name": "GenericWoodTrim",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAAAA////////AAD//wAA//8AAP////8AAP////8AAAAA/////wAA////////AAD///////8AAAAAAAAAAP//AAAAAAAA/////wAAAAD/////AAAAAP//AAD//wAA//8AAP//AAAAAP////8AAP///////wAAAAD/f/9//3//P/9//3//f/8//3//f/9//7//f/9//3//v/9/////f/8//3////9//z//f////3//v/9/////f/+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_rn13c")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_s8bm4"]
+data = PackedVector3Array(-1.5, 0.333842, -0.0699997, 1.5, 0.333842, 0.0699997, -1.5, 0.333842, 0.0699997, -1.5, 0.333842, -0.0699997, 1.5, 0.333842, -0.0699997, 1.5, 0.333842, 0.0699997, 1.5, 0, 0.0699997, -1.5, 0, -0.0699997, -1.5, 0, 0.0699997, 1.5, 0, 0.0699997, 1.5, 0, -0.0699997, -1.5, 0, -0.0699997, 1.5, 0.333842, 0.0699997, -1.5, 0, 0.0699997, -1.5, 0.333842, 0.0699997, 1.5, 0.333842, 0.0699997, 1.5, 0, 0.0699997, -1.5, 0, 0.0699997, 1.5, 0.333842, -0.0699997, -1.5, 0, -0.0699997, 1.5, 0, -0.0699997, 1.5, 0.333842, -0.0699997, -1.5, 0.333842, -0.0699997, -1.5, 0, -0.0699997)
+
+[node name="Wall_Beam_D_3m" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_navl0")
+skeleton = NodePath("")
+
+[node name="Wall_Beam_D_3m" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Wall_Beam_D_3m"]
+shape = SubResource("ConcavePolygonShape3D_s8bm4")
