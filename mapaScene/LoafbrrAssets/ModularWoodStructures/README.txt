@@ -11,5 +11,3 @@ hdri is from polyhaven
 check for updates here https://twitter.com/TheLoafbrr ; https://mastodon.gamedev.place/@loafbrr  and https://loafbrr.itch.io/
 
 or support by buying my other assets, giving a tip on loafbrr.itch.io or https://ko-fi.com/loafbrrrrrr001
-
-
