@@ -15,3 +15,5 @@ data_*/
 mono_crash.*.json
 
 builds/
+# Instrucciones para Claude Code: son locales, nunca se comitean.
+CLAUDE.md

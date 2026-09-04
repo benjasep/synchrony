@@ -16,6 +16,9 @@ height = 1.8
 radius = 0.4
 height = 1.8
 
+[sub_resource type="QuadMesh" id="QuadMesh_echo"]
+size = Vector2(2, 2)
+
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_player"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
@@ -27,13 +30,15 @@ properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D" unique_id=50683130 node_paths=PackedStringArray("head", "camera", "hand_anchor", "body", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
+[node name="Player" type="CharacterBody3D" unique_id=50683130 node_paths=PackedStringArray("head", "camera", "hand_anchor", "collision", "body", "body_placeholder", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
 collision_layer = 2
 script = ExtResource("1_player")
 head = NodePath("Head")
 camera = NodePath("Head/Camera")
 hand_anchor = NodePath("Head/Camera/HandAnchor")
+collision = NodePath("Collision")
 body = NodePath("Body")
+body_placeholder = NodePath("Body/Mesh")
 hud_layer = NodePath("HUD")
 synchronizer = NodePath("Synchronizer")
 movement = NodePath("Components/Movement")
@@ -61,6 +66,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 
 [node name="HandAnchor" type="Node3D" parent="Head/Camera" unique_id=46293243]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.2, -0.3)
+
+[node name="EchoQuad" type="MeshInstance3D" parent="Head/Camera" unique_id=1556193341]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+visible = false
+extra_cull_margin = 16384.0
+cast_shadow = 0
+mesh = SubResource("QuadMesh_echo")
 
 [node name="InteractionRay" type="RayCast3D" parent="Head/Camera" unique_id=1556193340]
 target_position = Vector3(0, 0, -2.5)
@@ -90,15 +102,27 @@ player = NodePath("../..")
 [node name="Health" type="Node" parent="Components" unique_id=686717425]
 script = ExtResource("6_health")
 
-[node name="Perception" type="Node" parent="Components" unique_id=262456711 node_paths=PackedStringArray("camera", "post_process", "player")]
+[node name="Perception" type="Node" parent="Components" unique_id=262456711 node_paths=PackedStringArray("camera", "echo_quad", "ethereal_viewport", "ethereal_camera", "ethereal_view", "player")]
 script = ExtResource("7_perception")
 camera = NodePath("../../Head/Camera")
-post_process = NodePath("../../HUD/PostProcess")
+echo_quad = NodePath("../../Head/Camera/EchoQuad")
+ethereal_viewport = NodePath("../../EtherealViewport")
+ethereal_camera = NodePath("../../EtherealViewport/EtherealCamera")
+ethereal_view = NodePath("../../HUD/EtherealView")
 player = NodePath("../..")
+
+[node name="EtherealViewport" type="SubViewport" parent="." unique_id=381802066]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1280, 720)
+render_target_update_mode = 0
+
+[node name="EtherealCamera" type="Camera3D" parent="EtherealViewport" unique_id=381802067]
+cull_mask = 14
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=46801409]
 
-[node name="PostProcess" type="ColorRect" parent="HUD" unique_id=381802065]
+[node name="EtherealView" type="TextureRect" parent="HUD" unique_id=381802065]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -106,6 +130,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+expand_mode = 1
 
 [node name="Synchronizer" type="MultiplayerSynchronizer" parent="." unique_id=555776291]
 replication_config = SubResource("SceneReplicationConfig_player")

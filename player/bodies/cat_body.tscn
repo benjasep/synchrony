@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" uid="uid://dluap0bxf8j8y" path="res://assets/gato_base.glb" id="1_model"]
+
+[node name="CatBody" type="Node3D" unique_id=1]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]

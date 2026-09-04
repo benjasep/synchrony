@@ -1,17 +1,18 @@
-[gd_resource type="Resource" script_class="RoleProfile" load_steps=8 format=3]
+[gd_resource type="Resource" script_class="RoleProfile" load_steps=9 format=3]
 
 [ext_resource type="Script" uid="uid://dncbybw87nx1w" path="res://player/data/role_profile.gd" id="1_role"]
 [ext_resource type="Script" uid="uid://6ts7uquxn7x0" path="res://player/data/vision_mode.gd" id="2_vision"]
 [ext_resource type="Script" uid="uid://c1yf5s1f2j0kv" path="res://player/data/proficiency/proficiency_profile.gd" id="3_base"]
 [ext_resource type="Script" uid="uid://o403x7pceeaa" path="res://player/data/proficiency/firearm_proficiency.gd" id="4_firearm"]
 [ext_resource type="PackedScene" path="res://equipment/firearm.tscn" id="5_firearm_scene"]
+[ext_resource type="PackedScene" path="res://player/bodies/cat_body.tscn" id="6_body"]
 
 [sub_resource type="Resource" id="Resource_normal_vision"]
 script = ExtResource("2_vision")
 cull_mask = 13
+ethereal_cull_mask = 0
 shader_parameters = {}
 perception_radius = 0.0
-ambient_energy = 1.0
 
 [sub_resource type="Resource" id="Resource_firearm_expert"]
 script = ExtResource("4_firearm")
@@ -36,3 +37,7 @@ max_health = 120.0
 vision_mode = SubResource("Resource_normal_vision")
 starting_equipment = Array[PackedScene]([ExtResource("5_firearm_scene")])
 proficiencies = Array[ExtResource("3_base")]([SubResource("Resource_firearm_expert")])
+body_scene = ExtResource("6_body")
+eye_height = 0.9
+body_height = 1.1
+body_radius = 0.4

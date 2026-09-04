@@ -1,0 +1,117 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_spawner"]
+[ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="2_enemy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(0.5, 3, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(0.5, 3, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_crate"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_crate"]
+size = Vector3(1.2, 1.2, 1.2)
+
+[node name="TestSeerLevel" type="Node3D"]
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.6, 0.8, 0, -0.8, 0.6, 0, 8, 0)
+light_energy = 0.6
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="Mesh" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="Left" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1.5, -2)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Left"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Left"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="Right" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, -2)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Right"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Right"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="Back" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 1.5, -7)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Back"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Back"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="Crates" type="Node3D" parent="."]
+
+[node name="Near" type="StaticBody3D" parent="Crates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0.6, -1)
+
+[node name="Collision" type="CollisionShape3D" parent="Crates/Near"]
+shape = SubResource("BoxShape3D_crate")
+
+[node name="Mesh" type="MeshInstance3D" parent="Crates/Near"]
+mesh = SubResource("BoxMesh_crate")
+
+[node name="Mid" type="StaticBody3D" parent="Crates"]
+transform = Transform3D(0.87, 0, 0.5, 0, 1, 0, -0.5, 0, 0.87, 2, 0.6, -4)
+
+[node name="Collision" type="CollisionShape3D" parent="Crates/Mid"]
+shape = SubResource("BoxShape3D_crate")
+
+[node name="Mesh" type="MeshInstance3D" parent="Crates/Mid"]
+mesh = SubResource("BoxMesh_crate")
+
+[node name="Far" type="StaticBody3D" parent="Crates"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.6, -9)
+
+[node name="Collision" type="CollisionShape3D" parent="Crates/Far"]
+shape = SubResource("BoxShape3D_crate")
+
+[node name="Mesh" type="MeshInstance3D" parent="Crates/Far"]
+mesh = SubResource("BoxMesh_crate")
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Ghost1" parent="Enemies" instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -3)
+
+[node name="Ghost2" parent="Enemies" instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -6)
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="A" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+
+[node name="B" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -1)
+
+[node name="PlayerSpawner" parent="." node_paths=PackedStringArray("spawn_points") instance=ExtResource("1_spawner")]
+spawn_points = [NodePath("../SpawnPoints/A"), NodePath("../SpawnPoints/B")]
+debug_role = 1
+debug_player_count = 2
