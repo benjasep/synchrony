@@ -1,45 +1,17 @@
 [gd_scene format=3 uid="uid://cfgh1er0gla8c"]
 
+[ext_resource type="PackedScene" uid="uid://bfwdd6qlbx4jt" path="res://mapaScene/nivel1.tscn" id="1_exgmp"]
 [ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_spawner"]
 [ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="2_enemy"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
-size = Vector3(40, 1, 40)
-
-[sub_resource type="BoxMesh" id="BoxMesh_floor"]
-size = Vector3(40, 1, 40)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
-size = Vector3(1, 3, 12)
-
-[sub_resource type="BoxMesh" id="BoxMesh_wall"]
-size = Vector3(1, 3, 12)
-
 [node name="TestLevel" type="Node3D" unique_id=548314514]
+
+[node name="StaticBody3D" parent="." unique_id=494792580 instance=ExtResource("1_exgmp")]
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=183609652]
 transform = Transform3D(1, 0, 0, 0, 0.6, 0.8, 0, -0.8, 0.6, 0, 8, 0)
 light_energy = 0.6
 shadow_enabled = true
-
-[node name="Floor" type="StaticBody3D" parent="." unique_id=1284723809]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-
-[node name="Collision" type="CollisionShape3D" parent="Floor" unique_id=1345615570]
-shape = SubResource("BoxShape3D_floor")
-
-[node name="Mesh" type="MeshInstance3D" parent="Floor" unique_id=412068781]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.106933594, 0.056360245, -0.06793022)
-mesh = SubResource("BoxMesh_floor")
-
-[node name="Wall" type="StaticBody3D" parent="." unique_id=1591180337]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.5, 0)
-
-[node name="Collision" type="CollisionShape3D" parent="Wall" unique_id=1659252049]
-shape = SubResource("BoxShape3D_wall")
-
-[node name="Mesh" type="MeshInstance3D" parent="Wall" unique_id=1697113345]
-mesh = SubResource("BoxMesh_wall")
 
 [node name="Enemies" type="Node3D" parent="." unique_id=795720703]
 
