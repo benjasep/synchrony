@@ -34,7 +34,7 @@ static var instance: PlayerSpawner
 ## Permite ejecutar un nivel directamente (F6) sin pasar por el lobby: si no hay
 ## jugadores en la sesión, aparece uno local con debug_role.
 @export var spawn_local_player_without_lobby: bool = true
-@export var debug_role: Statics.Role = Statics.Role.TECHNICIAN
+@export var debug_role: Statics.Role = Statics.Role.SEER
 ## Cuántos jugadores aparecen al probar el nivel en solitario. El primero eres
 ## tú; el resto son maniquíes inertes para ver la escena poblada y comprobar
 ## puntos de aparición, colisiones y siluetas. Nadie los controla: su id es

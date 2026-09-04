@@ -41,6 +41,10 @@ func equip(player: Player) -> bool:
 	proficiency = player.profile.get_proficiency(tag)
 	if model:
 		model.show()
+	# En la mano de alguien el item deja de ser geometría del mundo y pasa a ser
+	# viewmodel (capa 3). El vidente compone esa capa por encima de su eco; en la
+	# capa 1 se lo tragaría el post-proceso y empuñaría un item invisible.
+	Statics.force_visual_layer(self, Statics.VIEWMODEL_VISUAL_LAYER)
 	_on_equipped()
 	equipped.emit(player)
 	return true

@@ -7,6 +7,40 @@ const PORT: int = 5409 # Number between 1024 and 65535.
 ## Peer id del servidor. Autoridad de todo lo que es estado del mundo.
 const SERVER_ID: int = 1
 
+## Presupuesto de capas visuales. Son MÁSCARAS, no índices: la capa N de Godot
+## vale 1 << (N - 1).
+##
+## Existe porque el vidente no ve el mundo como los demás: su cámara dibuja solo
+## la capa 1 para llenar el depth buffer del que sale el eco, y una segunda
+## pasada compone las capas 2, 3 y 4 por encima. Todo lo que tenga que verse
+## "bien" para él tiene que caer fuera de la capa 1.
+##
+## Un .glb recién importado llega siempre en la capa 1, así que los modelos se
+## reubican en código con force_visual_layer().
+const WORLD_VISUAL_LAYER: int = 1      ## Capa 1: geometría del nivel.
+const ETHEREAL_VISUAL_LAYER: int = 2   ## Capa 2: enemigos etéreos.
+const VIEWMODEL_VISUAL_LAYER: int = 4  ## Capa 3: item empuñado.
+const BODY_VISUAL_LAYER: int = 8       ## Capa 4: cuerpos de otros jugadores.
+
+
+## Mueve un nodo y toda su descendencia a una capa visual.
+##
+## Se hace en código y no marcando "Editable Children" en el editor porque
+## reexportar el modelo desde Blender reimporta la escena y deshace cualquier
+## cambio hecho sobre sus nodos.
+##
+## Toca GeometryInstance3D y no VisualInstance3D a propósito: la capa de una
+## Light3D decide a QUÉ ilumina, así que mover la de la linterna la dejaría
+## alumbrando solo al viewmodel.
+static func force_visual_layer(node: Node, layer: int) -> void:
+	if not node:
+		return
+	var geometry: GeometryInstance3D = node as GeometryInstance3D
+	if geometry:
+		geometry.layers = layer
+	for child: Node in node.get_children():
+		force_visual_layer(child, layer)
+
 
 ## Statics no depende de nada a propósito: RoleProfile y RoleDatabase la
 ## referencian, así que si ella los referenciara de vuelta habría dependencia

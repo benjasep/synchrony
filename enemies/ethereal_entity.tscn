@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://enemies/ethereal_entity.gd" id="1_entity"]
+[ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="2_health"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(0.8, 1.8, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+size = Vector3(0.8, 1.8, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ghost"]
+shading_mode = 0
+albedo_color = Color(0.55, 1, 0.75, 1)
+
+[node name="EtherealEntity" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "health")]
+collision_layer = 8
+collision_mask = 1
+script = ExtResource("1_entity")
+model = NodePath("Model")
+model_placeholder = NodePath("Model/Placeholder")
+health = NodePath("Health")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Placeholder" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+layers = 2
+cast_shadow = 0
+mesh = SubResource("BoxMesh_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_ghost")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 60.0
+can_be_downed = false

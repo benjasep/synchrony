@@ -19,7 +19,10 @@ signal equipment_changed(item: Equipment)
 @export var head: Node3D
 @export var camera: Camera3D
 @export var hand_anchor: Node3D
+@export var collision: CollisionShape3D
 @export var body: Node3D
+## Cápsula gris de referencia. Solo se ve si el rol no trae body_scene.
+@export var body_placeholder: MeshInstance3D
 @export var hud_layer: CanvasLayer
 @export var synchronizer: MultiplayerSynchronizer
 
@@ -92,6 +95,8 @@ func _apply_setup() -> void:
 
 	_assign_authority()
 	_configure_components()
+	_apply_body_dimensions()
+	_spawn_body()
 	_configure_local_only()
 	_spawn_ability()
 	_spawn_hud()
@@ -149,6 +154,57 @@ func _configure_local_only() -> void:
 	# En primera persona el dueño no debe ver su propio cuerpo.
 	if body:
 		body.visible = not is_owner
+
+
+## Ajusta cámara y cápsula a la altura del modelo del rol.
+##
+## Las medidas viven en el RoleProfile porque player.tscn es una sola escena
+## compartida: en cuanto dos roles tengan modelos de distinta altura, cablearlas
+## en la escena obligaría a un if sobre el rol, que es justo lo que el diseño
+## prohíbe.
+func _apply_body_dimensions() -> void:
+	if head:
+		head.position.y = profile.eye_height
+
+	# duplicate() obligatorio: los sub-recursos de un .tscn se COMPARTEN entre
+	# todas las instancias de esa escena, así que redimensionar la cápsula de un
+	# jugador se la redimensionaría a los tres.
+	var height: float = maxf(profile.body_height, profile.body_radius * 2.0)
+	if collision:
+		var shape: CapsuleShape3D = collision.shape.duplicate() as CapsuleShape3D
+		if shape:
+			shape.height = height
+			shape.radius = profile.body_radius
+			collision.shape = shape
+			collision.position.y = height * 0.5
+
+	# El placeholder solo se ve si el rol no trae modelo, pero si se ve tiene
+	# que medir lo que mide la colisión.
+	if body_placeholder:
+		var mesh: CapsuleMesh = body_placeholder.mesh.duplicate() as CapsuleMesh
+		if mesh:
+			mesh.height = height
+			mesh.radius = profile.body_radius
+			body_placeholder.mesh = mesh
+			body_placeholder.position.y = height * 0.5
+
+
+## Instancia el modelo del rol. Cuelga de Body y no del Player porque
+## _configure_local_only() apaga Body entero: en primera persona el dueño no
+## debe verse a sí mismo, pero los demás peers sí tienen que verlo.
+func _spawn_body() -> void:
+	if not body or not profile.body_scene:
+		return
+	var model: Node3D = profile.body_scene.instantiate() as Node3D
+	if not model:
+		push_error("body_scene de %s no es un Node3D" % profile.display_name)
+		return
+	body.add_child(model)
+	# El vidente no dibuja la capa del mundo: en la 1 sus compañeros serían
+	# invisibles para él.
+	Statics.force_visual_layer(model, Statics.BODY_VISUAL_LAYER)
+	if body_placeholder:
+		body_placeholder.hide()
 
 
 func _spawn_ability() -> void:

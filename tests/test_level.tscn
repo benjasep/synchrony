@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://cfgh1er0gla8c"]
 
 [ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_spawner"]
+[ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="2_enemy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(40, 1, 40)
@@ -39,6 +40,11 @@ shape = SubResource("BoxShape3D_wall")
 
 [node name="Mesh" type="MeshInstance3D" parent="Wall" unique_id=1697113345]
 mesh = SubResource("BoxMesh_wall")
+
+[node name="Enemies" type="Node3D" parent="." unique_id=795720703]
+
+[node name="Ghost1" parent="Enemies" unique_id=1467113271 instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -4)
 
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=795720702]
 

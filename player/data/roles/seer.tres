@@ -1,15 +1,24 @@
-[gd_resource type="Resource" script_class="RoleProfile" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="RoleProfile" load_steps=7 format=3]
 
 [ext_resource type="Script" uid="uid://dncbybw87nx1w" path="res://player/data/role_profile.gd" id="1_role"]
 [ext_resource type="Script" uid="uid://6ts7uquxn7x0" path="res://player/data/vision_mode.gd" id="2_vision"]
 [ext_resource type="PackedScene" path="res://player/abilities/seer_echo_ability.tscn" id="3_ability"]
+[ext_resource type="PackedScene" path="res://player/bodies/cat_body.tscn" id="4_body"]
+[ext_resource type="Shader" path="res://player/data/echo_vision.gdshader" id="5_echo"]
 
 [sub_resource type="Resource" id="Resource_seer_vision"]
 script = ExtResource("2_vision")
-cull_mask = 14
-shader_parameters = {}
+cull_mask = 1
+ethereal_cull_mask = 14
+post_process_shader = ExtResource("5_echo")
+shader_parameters = {
+&"dot_energy": 1.0,
+&"dot_spacing": 0.22,
+&"outline_energy": 1.6
+}
 perception_radius = 12.0
-ambient_energy = 0.0
+ethereal_ambient_color = Color(0.75, 0.88, 1, 1)
+ethereal_ambient_energy = 1.4
 
 [resource]
 script = ExtResource("1_role")
@@ -21,3 +30,7 @@ jump_velocity = 4.5
 max_health = 90.0
 vision_mode = SubResource("Resource_seer_vision")
 ability_scene = ExtResource("3_ability")
+body_scene = ExtResource("4_body")
+eye_height = 0.9
+body_height = 1.1
+body_radius = 0.4
