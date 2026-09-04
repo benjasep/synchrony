@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://ddj7ckw31gr0y"]
+
+[ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="1_0b8k6"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_s5li7"]
+_surfaces = [{
+"aabb": AABB(2.74181e-06, 0.131585, -0.140624, 0.25, 0.0902668, 0.281247),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAAHAAIAAAAEAAcAAAADAAEAAAACAAMAAgAJAAMAAgAHAAkABQAHAAQABQAIAAcABQAKAAgABQAGAAoACAAJAAcACAAKAAkA"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 11,
+"vertex_data": PackedByteArray("AAAPe///AAAAAAAA//8AAP//D3v+/wAA//8AAP7/AAAAAP///38AAAAAD3sAAAAAAAAAAAAAAAD+/////38AAP//D3sAAAAA/v/whP9/AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_sedf3"]
+resource_name = "ModularWoodenStructures_Roof_B_Ridge_Side_B"
+_surfaces = [{
+"aabb": AABB(2.74181e-06, 0.131585, -0.140624, 0.25, 0.0902668, 0.281247),
+"attribute_data": PackedByteArray("/3/eo/9/9HT/f1i8bNveo2zb9HQg8O+DbNtYvP//74P/fwPx/38D8f9/3qP/f/R0/39YvGzbA/Fs2wPxIPD//2zb3qNs2/R0IPDvg/////9s21i8///vgw=="),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AQANAAQAAQAIAA0AAAAGAAIAAAADAAYABQATAAcABQAPABMACwAOAAkACwARAA4ACgAUABAACgAMABQAEgATAA8AEgAVABMA"),
+"material": ExtResource("1_0b8k6"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0.233332, 0.158255, 0, 0),
+"vertex_count": 22,
+"vertex_data": PackedByteArray("AAAPe///AIAAAA97//8bTQAAAAD//wCA//8Pe/7/AID//w97/v8bTf//D3v+/6oq//8AAP7/AID//wAA/v+qKgAA////fxtNAAD///9/Gs0AAA97AAAAAAAAD3sAABrNAAAAAAAAAAD+/////38bTf7/////fxrN/v////9/VNX//w97AAAAAP//D3sAABrN//8PewAAVNX+//CE/39U1f//AAAAAAAA//8AAAAAVNX/f////v//f/9/////f////v//f6qqVFX/f///qqpUVf7//3/+//9//v//f/7//3/+//9//v//f/7//3+qqlRV////f/7//3+qqlRVqqpUVf///3+qqlRV")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_s5li7")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_p1fxd"]
+data = PackedVector3Array(2.83178e-06, 0.174977, 0.140624, 0.250003, 0.221852, 1.47124e-06, 0.250003, 0.174977, 0.140624, 2.83178e-06, 0.174977, 0.140624, 2.74181e-06, 0.221852, 1.3113e-06, 0.250003, 0.221852, 1.47124e-06, 2.83178e-06, 0.174977, 0.140624, 0.250003, 0.131585, 0.140624, 2.83178e-06, 0.131585, 0.140624, 2.83178e-06, 0.174977, 0.140624, 0.250003, 0.174977, 0.140624, 0.250003, 0.131585, 0.140624, 0.250003, 0.174977, 0.140624, 0.250003, 0.17846, 1.47124e-06, 0.250003, 0.131585, 0.140624, 0.250003, 0.174977, 0.140624, 0.250003, 0.221852, 1.47124e-06, 0.250003, 0.17846, 1.47124e-06, 2.83178e-06, 0.174977, -0.140624, 0.250003, 0.221852, 1.47124e-06, 2.74181e-06, 0.221852, 1.3113e-06, 2.83178e-06, 0.174977, -0.140624, 0.250003, 0.174977, -0.140624, 0.250003, 0.221852, 1.47124e-06, 2.83178e-06, 0.174977, -0.140624, 0.250003, 0.131585, -0.140624, 0.250003, 0.174977, -0.140624, 2.83178e-06, 0.174977, -0.140624, 2.83178e-06, 0.131585, -0.140624, 0.250003, 0.131585, -0.140624, 0.250003, 0.174977, -0.140624, 0.250003, 0.17846, 1.47124e-06, 0.250003, 0.221852, 1.47124e-06, 0.250003, 0.174977, -0.140624, 0.250003, 0.131585, -0.140624, 0.250003, 0.17846, 1.47124e-06)
+
+[node name="Roof_B_Ridge_Side_B" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_sedf3")
+skeleton = NodePath("")
+
+[node name="Roof_B_Ridge_Side_B" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roof_B_Ridge_Side_B"]
+shape = SubResource("ConcavePolygonShape3D_p1fxd")

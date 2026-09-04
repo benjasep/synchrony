@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=3 uid="uid://cblu44blh46s0"]
+
+[ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="1_s8rox"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_clc37"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0.17846, -2.98023e-08, 1, 1, 1),
+"format": 34896613377,
+"index_count": 6,
+"index_data": PackedByteArray(1, 0, 3, 0, 2, 0, 1, 0, 0, 0, 3, 0),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_n712d"]
+resource_name = "ModularWoodenStructures_Roof_A_Plane_1x1"
+_surfaces = [{
+"aabb": AABB(-0.5, 0.17846, -2.98023e-08, 1, 1, 1),
+"attribute_data": PackedByteArray(84, 85, 255, 255, 0, 0, 255, 255, 0, 0, 159, 177, 85, 85, 159, 177),
+"format": 34896613399,
+"index_count": 6,
+"index_data": PackedByteArray(1, 0, 3, 0, 2, 0, 1, 0, 0, 0, 3, 0),
+"material": ExtResource("1_s8rox"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 0, 0, 255, 255, 255, 255, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 255, 127, 124, 165, 255, 127, 124, 165, 255, 127, 124, 165, 255, 127, 124, 165)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_clc37")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_fnrid"]
+data = PackedVector3Array(0.5, 0.17846, 1, -0.5, 1.17846, 0, 0.5, 1.17846, -2.98023e-08, 0.5, 0.17846, 1, -0.5, 0.17846, 1, -0.5, 1.17846, 0)
+
+[node name="Roof_A_Plane_1x1" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_n712d")
+skeleton = NodePath("")
+
+[node name="Roof_A_Plane_1x1" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roof_A_Plane_1x1"]
+shape = SubResource("ConcavePolygonShape3D_fnrid")

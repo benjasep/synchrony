@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=4 uid="uid://qmefr5tkfnoc"]
+
+[ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="1_cdrb6"]
+[ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="2_gcndr"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ubd6t"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0.17846, -1.5, 1, 3, 3),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BAAHAAIABAAGAAcAAQAGAAQAAQAAAAYAAgAFAAMAAgAHAAUA"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAA//8AAP7/qqpVVQAA/v///wAAAAD+/1VVqqoAAAAA//8AAAAAAABVVaqqAAAAAKqqVVUAAA==")
+}, {
+"aabb": AABB(-0.5, 0, -1.5, 1, 3, 3),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("AgAHAAYAAgADAAcAAAAGAAQAAAACAAYAAwAFAAcAAwABAAUA"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAP//AAD+////AAAAAP7/VVWqqgAA/v+qqlVVAAAAAAAA//8AAAAA//8AAAAAAABVVaqqAAAAAKqqVVUAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_xtphg"]
+resource_name = "ModularWoodenStructures_Roof_A_3x1"
+_surfaces = [{
+"aabb": AABB(-0.5, 0.17846, -1.5, 1, 3, 3),
+"attribute_data": PackedByteArray("VFX//wAA//8AAEBjAADhFAAAn7FUVeEUVVWfsVVVQGM="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BAAHAAIABAAGAAcAAQAGAAQAAQAAAAYAAgAFAAMAAgAHAAUA"),
+"material": ExtResource("1_cdrb6"),
+"name": "Roof",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAD//wAA//8AAP7/qqpVVQAA/v///wAAAAD+/1VVqqoAAAAA//8AAAAAAABVVaqqAAAAAKqqVVUAAP9/fKX/f3yl/398pf9/fKX/f3yl/398pf9/fKX/f3yl")
+}, {
+"aabb": AABB(-0.5, 0, -1.5, 1, 3, 3),
+"attribute_data": PackedByteArray("AAD///////9UVf//qqr//wAAqqr//6qqVFWpqqmqqao="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("AgAHAAYAAgADAAcAAAAGAAQAAAACAAYAAwAFAAcAAwABAAUA"),
+"material": ExtResource("2_gcndr"),
+"name": "Ceiling",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAP//VBb+////AABUFv7/VVWqqlQW/v+qqlVVVBYAAAAA//9UFgAA//8AAFQWAABVVaqqVBYAAKqqVVVUFvpK+kr6SvpK+kr6SvpK+kr6SvpK+kr6SvpK+kr6SvpK")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_ubd6t")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_nbh7i"]
+data = PackedVector3Array(-0.5, 0, 1.5, 0.5, 3, -1.5, -0.5, 3, -1.5, -0.5, 0, 1.5, 0.5, 0, 1.5, 0.5, 3, -1.5, 0.5, 0.17846, 1.5, -0.5, 3.17846, -1.5, 0.5, 3.17846, -1.5, 0.5, 0.17846, 1.5, -0.5, 0.17846, 1.5, -0.5, 3.17846, -1.5)
+
+[node name="Roof_A_3x1" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_xtphg")
+skeleton = NodePath("")
+
+[node name="Roof_A_3x1" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roof_A_3x1"]
+shape = SubResource("ConcavePolygonShape3D_nbh7i")

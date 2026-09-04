@@ -1,0 +1,47 @@
+[gd_scene load_steps=5 format=4 uid="uid://ghgegrivmq5t"]
+
+[ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="1_4t1oq"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tjen8"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -1.5, 1, 1e-05, 3),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray("BQADAAQABQACAAMABAAAAAYABAADAAAABwACAAUABwABAAIA"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAP//AAD//wAAAAAAAP//AABVVQAA//8AAKqqAAAAAAAAqqoAAAAAAABVVQAAAAAAAP//AAAAAAAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_pkum7"]
+resource_name = "ModularWoodenStructures_Floor_Plane_3x1"
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -1.5, 1, 1e-05, 3),
+"attribute_data": PackedByteArray("////////AAD//1RV//+pqqqqqqqqqlVVqqr//6mqAAA="),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray("BQADAAQABQACAAMABAAAAAYABAADAAAABwACAAUABwABAAIA"),
+"material": ExtResource("1_4t1oq"),
+"name": "Floor",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("//8AAP///7///wAAAAD/v///AABVVf+///8AAKqq/78AAAAAqqr/vwAAAABVVf+/AAAAAP///78AAAAAAAD/v////3////9//v//f/7//3/+//9//v//f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_tjen8")
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_4o0db"]
+data = PackedVector3Array(-0.5, 0, -1.5, 0.5, 0, 1.5, -0.5, 0, 1.5, -0.5, 0, -1.5, 0.5, 0, -1.5, 0.5, 0, 1.5)
+
+[node name="Floor_Plane_3x1" type="MeshInstance3D"]
+mesh = SubResource("ArrayMesh_pkum7")
+skeleton = NodePath("")
+
+[node name="Floor_Plane_3x1" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor_Plane_3x1"]
+shape = SubResource("ConcavePolygonShape3D_4o0db")
