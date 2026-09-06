@@ -11,8 +11,8 @@ extends PlayerComponent
 ##
 ##   cámara principal (cull_mask = capa 1) dibuja el mundo, que el quad de eco
 ##       tapa entero. Solo está ahí para llenar el DEPTH BUFFER.
-##   quad de eco (spatial, pantalla completa) reconstruye puntos y contornos
-##       desde ese depth. Tiene que ser un quad 3D y no un ColorRect: un shader
+##   quad de eco (spatial, pantalla completa) reconstruye los contornos desde
+##       ese depth y deja el resto en negro. Tiene que ser un quad 3D y no un ColorRect: un shader
 ##       canvas_item no tiene acceso al depth texture.
 ##   SubViewport etéreo (cull_mask = capas 2, 3 y 4) es una segunda cámara sobre
 ##       el MISMO World3D, con fondo transparente, compuesta encima en 2D.

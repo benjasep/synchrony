@@ -12,8 +12,6 @@ cull_mask = 1
 ethereal_cull_mask = 14
 post_process_shader = ExtResource("5_echo")
 shader_parameters = {
-&"dot_energy": 1.0,
-&"dot_spacing": 0.22,
 &"outline_energy": 1.6
 }
 perception_radius = 12.0

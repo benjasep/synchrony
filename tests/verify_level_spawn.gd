@@ -12,6 +12,13 @@ var completed: bool = false
 func _ready() -> void:
 	_start_watchdog()
 	var level: Node3D = load("res://tests/test_level.tscn").instantiate() as Node3D
+	# El rol lo declara la PRUEBA, no el nivel. Esta batería ejercita soltar,
+	# recoger y disparar, así que necesita un rol CON equipo; dejarlo al
+	# debug_role del nivel hizo que cambiar el default del export tumbara cuatro
+	# comprobaciones sin tocar una línea de código. Se asigna antes de entrar al
+	# árbol porque PlayerSpawner._ready() genera ya, dentro de sí mismo.
+	var level_spawner: PlayerSpawner = level.get_node("PlayerSpawner") as PlayerSpawner
+	level_spawner.debug_role = Statics.Role.SOLDIER
 	# add_child() directo desde _ready() falla: el padre está ocupado.
 	get_tree().root.add_child.call_deferred(level)
 	await get_tree().process_frame
