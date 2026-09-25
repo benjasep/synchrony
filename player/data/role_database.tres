@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="RoleDatabase" load_steps=6 format=3]
+
+[ext_resource type="Script" uid="uid://bkwgtjd8f5beh" path="res://player/data/role_database.gd" id="1_database"]
+[ext_resource type="Script" uid="uid://dncbybw87nx1w" path="res://player/data/role_profile.gd" id="2_role"]
+[ext_resource type="Resource" path="res://player/data/roles/seer.tres" id="3_seer"]
+[ext_resource type="Resource" path="res://player/data/roles/technician.tres" id="4_technician"]
+[ext_resource type="Resource" path="res://player/data/roles/soldier.tres" id="5_soldier"]
+
+[resource]
+script = ExtResource("1_database")
+profiles = Array[ExtResource("2_role")]([ExtResource("3_seer"), ExtResource("4_technician"), ExtResource("5_soldier")])

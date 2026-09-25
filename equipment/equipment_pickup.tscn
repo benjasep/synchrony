@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://equipment/equipment_pickup.gd" id="1_pickup"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 0.35
+
+[node name="EquipmentPickup" type="Area3D"]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_pickup")
+prompt = "Recoger"
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_pickup")

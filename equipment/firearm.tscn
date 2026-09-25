@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" uid="uid://tg4txojnkp5n" path="res://equipment/firearm.gd" id="1_firearm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+size = Vector3(0.06, 0.12, 0.3)
+
+[node name="Firearm" type="Node3D" node_paths=PackedStringArray("model")]
+script = ExtResource("1_firearm")
+tag = 1
+display_name = "Revólver"
+model = NodePath("Model")
+damage = 25.0
+range_meters = 60.0
+base_spread = 0.01
+base_recoil = 0.03
+fire_rate = 4.0
+magazine_size = 8
+base_reload_time = 2.0
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
+mesh = SubResource("BoxMesh_body")

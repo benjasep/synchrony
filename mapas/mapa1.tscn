@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dobuh7k0gbb2d"]
+
+[ext_resource type="Texture2D" uid="uid://tw8t38ns0seh" path="res://icon.svg" id="1_qf177"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_qe4n8"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_60fcs"]
+albedo_texture = ExtResource("1_qf177")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qe4n8"]
+
+[node name="Mapa1" type="Node3D" unique_id=2143024071]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=366701506]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1310030902]
+shape = SubResource("WorldBoundaryShape3D_qe4n8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=16971331]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_60fcs")
+mesh = SubResource("PlaneMesh_qe4n8")

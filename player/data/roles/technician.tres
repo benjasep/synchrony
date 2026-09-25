@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="RoleProfile" load_steps=8 format=3]
+
+[ext_resource type="Script" uid="uid://dncbybw87nx1w" path="res://player/data/role_profile.gd" id="1_role"]
+[ext_resource type="Script" uid="uid://6ts7uquxn7x0" path="res://player/data/vision_mode.gd" id="2_vision"]
+[ext_resource type="Script" uid="uid://c1yf5s1f2j0kv" path="res://player/data/proficiency/proficiency_profile.gd" id="3_base"]
+[ext_resource type="Script" uid="uid://bh8ge4hiqwe3h" path="res://player/data/proficiency/light_proficiency.gd" id="4_light"]
+[ext_resource type="PackedScene" path="res://equipment/flashlight.tscn" id="5_flashlight"]
+
+[sub_resource type="Resource" id="Resource_normal_vision"]
+script = ExtResource("2_vision")
+cull_mask = 13
+shader_parameters = {}
+perception_radius = 0.0
+ambient_energy = 1.0
+
+[sub_resource type="Resource" id="Resource_light_expert"]
+script = ExtResource("4_light")
+tag = 2
+display_name = "Experto"
+usable = true
+equip_time_multiplier = 0.8
+range_multiplier = 1.0
+energy_multiplier = 1.0
+flicker_chance = 0.0
+drain_multiplier = 1.0
+
+[resource]
+script = ExtResource("1_role")
+role = 2
+display_name = "Técnico"
+move_speed = 4.0
+sprint_speed = 6.5
+jump_velocity = 4.5
+max_health = 100.0
+vision_mode = SubResource("Resource_normal_vision")
+starting_equipment = Array[PackedScene]([ExtResource("5_flashlight")])
+proficiencies = Array[ExtResource("3_base")]([SubResource("Resource_light_expert")])

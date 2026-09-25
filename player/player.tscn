@@ -1,0 +1,121 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" uid="uid://b6bc2dfk7racl" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://g4m2lrssb5t2" path="res://player/components/movement_component.gd" id="2_movement"]
+[ext_resource type="Script" uid="uid://b8qogrys7ni1k" path="res://player/components/view_component.gd" id="3_view"]
+[ext_resource type="Script" uid="uid://culxrf5y8boij" path="res://player/components/interaction_component.gd" id="4_interaction"]
+[ext_resource type="Script" uid="uid://bjgvc47nqm8wb" path="res://player/components/inventory_component.gd" id="5_inventory"]
+[ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="6_health"]
+[ext_resource type="Script" uid="uid://cm0huseiov012" path="res://player/components/perception_component.gd" id="7_perception"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_player"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("Head:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("head", "camera", "hand_anchor", "body", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+head = NodePath("Head")
+camera = NodePath("Head/Camera")
+hand_anchor = NodePath("Head/Camera/HandAnchor")
+body = NodePath("Body")
+hud_layer = NodePath("HUD")
+synchronizer = NodePath("Synchronizer")
+movement = NodePath("Components/Movement")
+view = NodePath("Components/View")
+interaction = NodePath("Components/Interaction")
+inventory = NodePath("Components/Inventory")
+health = NodePath("Components/Health")
+perception = NodePath("Components/Perception")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_body")
+
+[node name="Body" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Body"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+layers = 8
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+
+[node name="Camera" type="Camera3D" parent="Head"]
+current = false
+
+[node name="HandAnchor" type="Node3D" parent="Head/Camera"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.2, -0.3)
+
+[node name="InteractionRay" type="RayCast3D" parent="Head/Camera"]
+target_position = Vector3(0, 0, -2.5)
+collision_mask = 4
+
+[node name="Components" type="Node" parent="."]
+
+[node name="Movement" type="Node" parent="Components" node_paths=PackedStringArray("player")]
+script = ExtResource("2_movement")
+player = NodePath("../..")
+acceleration = 12.0
+air_control = 0.3
+
+[node name="View" type="Node" parent="Components" node_paths=PackedStringArray("player", "head")]
+script = ExtResource("3_view")
+player = NodePath("../..")
+head = NodePath("../../Head")
+mouse_sensitivity = 0.003
+
+[node name="Interaction" type="Node" parent="Components" node_paths=PackedStringArray("player", "ray")]
+script = ExtResource("4_interaction")
+player = NodePath("../..")
+ray = NodePath("../../Head/Camera/InteractionRay")
+max_distance = 2.5
+
+[node name="Inventory" type="Node" parent="Components" node_paths=PackedStringArray("player", "hand_anchor")]
+script = ExtResource("5_inventory")
+player = NodePath("../..")
+hand_anchor = NodePath("../../Head/Camera/HandAnchor")
+max_slots = 4
+
+[node name="Health" type="Node" parent="Components"]
+script = ExtResource("6_health")
+max_health = 100.0
+can_be_downed = true
+downed_health = 25.0
+
+[node name="Perception" type="Node" parent="Components" node_paths=PackedStringArray("player", "camera", "post_process")]
+script = ExtResource("7_perception")
+player = NodePath("../..")
+camera = NodePath("../../Head/Camera")
+post_process = NodePath("../../HUD/PostProcess")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="PostProcess" type="ColorRect" parent="HUD"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Synchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_player")
