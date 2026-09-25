@@ -9,21 +9,6 @@
 [ext_resource type="PackedScene" uid="uid://yh31e6yg426s" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/Picture_01/Picture_01.fbx" id="7_of5fk"]
 [ext_resource type="PackedScene" uid="uid://bu6ahqx3oqyk4" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/WheelChair/WheelChair.fbx" id="8_hd7no"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_qe4n8"]
-size = Vector3(0.13476563, 2.3706665, 7.8836346)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_sau36"]
-size = Vector3(6.020935, 1, 17.816154)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_b2hyj"]
-size = Vector3(5.012888, 2.3202515, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_4jwhw"]
-size = Vector3(1, 3.208496, 18.620865)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_u51vd"]
-size = Vector3(5.359253, 0.24121094, 18.322937)
-
 [node name="HospitalScene" type="Node3D" unique_id=1912447450]
 
 [node name="Bucket" parent="." unique_id=1409246584 instance=ExtResource("1_w3h3u")]
@@ -144,33 +129,3 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2
 
 [node name="WheelChair5" parent="." unique_id=33834134 instance=ExtResource("8_hd7no")]
 transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, -5.5325327)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1011599779]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1388878808]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.096232, 1.3509369, 4.5244627)
-shape = SubResource("BoxShape3D_qe4n8")
-
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" unique_id=551979564]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.096232, 1.3552796, -4.5054355)
-shape = SubResource("BoxShape3D_qe4n8")
-
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D" unique_id=939253072]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.67788696, 3.0007782, 0.21429062)
-shape = SubResource("BoxShape3D_sau36")
-
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D" unique_id=648403207]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.77406883, 0.9828491, -8.707218)
-shape = SubResource("BoxShape3D_b2hyj")
-
-[node name="CollisionShape3D5" type="CollisionShape3D" parent="StaticBody3D" unique_id=849638607]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.85361385, 1.3055725, 8.91377)
-shape = SubResource("BoxShape3D_b2hyj")
-
-[node name="CollisionShape3D6" type="CollisionShape3D" parent="StaticBody3D" unique_id=272863530]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8920157, 1.104248, 0.039741516)
-shape = SubResource("BoxShape3D_4jwhw")
-
-[node name="CollisionShape3D7" type="CollisionShape3D" parent="StaticBody3D" unique_id=704776367]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4262085, -0.0550344, 0.23007202)
-shape = SubResource("BoxShape3D_u51vd")
