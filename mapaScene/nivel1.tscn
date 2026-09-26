@@ -1,15 +1,17 @@
 [gd_scene format=3 uid="uid://bfwdd6qlbx4jt"]
 
+[ext_resource type="PackedScene" uid="uid://3y6s62of233c" path="res://objetos/hospital_scene.tscn" id="1_hymea"]
 [ext_resource type="PackedScene" uid="uid://c0y61nd1aforj" path="res://mapaScene/casa.tscn" id="1_swmnm"]
-[ext_resource type="PackedScene" uid="uid://ch4qq4e3bm5j5" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_7.tscn" id="2_hymea"]
-[ext_resource type="PackedScene" uid="uid://cs5w1gtvfwxoj" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_5.tscn" id="3_v13m4"]
-[ext_resource type="PackedScene" uid="uid://d2oqg5qytcbaf" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_6.tscn" id="4_o0nf2"]
+[ext_resource type="Texture2D" uid="uid://dp68ker5hvwi5" path="res://assets/suelo.jpg" id="4_o0nf2"]
+[ext_resource type="PackedScene" uid="uid://dxa306jcbwo8t" path="res://objetos/iglesia.tscn" id="4_v13m4"]
 [ext_resource type="PackedScene" uid="uid://ci5jsl6im2els" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/roof/roof_a_1x_3.tscn" id="5_v13m4"]
+[ext_resource type="PackedScene" uid="uid://b2yb7oauhm2sv" path="res://assets/MuscleCar_Asset_LightsOut/MuscleCar_Asset_LightsOut/muscle_car_lowpoly_lightsout_GLB.glb" id="6_vxgx3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
-albedo_color = Color(0.75686276, 0.4117647, 0.22745098, 1)
+albedo_texture = ExtResource("4_o0nf2")
 metallic = 0.4
 metallic_specular = 0.37
+uv1_scale = Vector3(50, 50, 50)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yf5fn"]
 
@@ -17,6 +19,9 @@ metallic_specular = 0.37
 
 [node name="StaticBody3D" type="StaticBody3D" unique_id=494792580]
 metadata/_edit_lock_ = true
+
+[node name="HospitalScene" parent="." unique_id=1912447450 instance=ExtResource("1_hymea")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 61.05441, 0, -26.844618)
 
 [node name="Nivel" type="Node3D" parent="." unique_id=1546576008]
 
@@ -155,23 +160,23 @@ transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524,
 [node name="root_casa10" parent="Nivel/RootNivel4" unique_id=1184741598 instance=ExtResource("1_swmnm")]
 transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524, 0.9999941, 3.6376783e-12, -0.0047791917, -1.668259e-05, -0.99998873, 7.0175495, -0.004531324, -18.461147)
 
-[node name="Build_7" parent="Nivel" unique_id=1289637446 instance=ExtResource("2_hymea")]
+[node name="Build_7" parent="Nivel" unique_id=1289637446]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1267881, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_8" parent="Nivel" unique_id=1172872012 instance=ExtResource("2_hymea")]
+[node name="Build_8" parent="Nivel" unique_id=1172872012]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.952491, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_9" parent="Nivel" unique_id=758022318 instance=ExtResource("2_hymea")]
+[node name="Build_9" parent="Nivel" unique_id=758022318]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.244586, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_5" parent="Nivel" unique_id=1072212382 instance=ExtResource("3_v13m4")]
+[node name="Build_5" parent="Nivel" unique_id=1072212382]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.34367, 1, 43.773006)
 metadata/_edit_lock_ = true
 
-[node name="Build_6" parent="Nivel" unique_id=803163406 instance=ExtResource("4_o0nf2")]
+[node name="Build_6" parent="Nivel" unique_id=803163406]
 transform = Transform3D(0.007093326, 0, -0.99997485, 0, 1, 0, 0.99997485, 0, 0.007093326, -26.695702, 1, 39.984917)
 metadata/_edit_lock_ = true
 
@@ -406,3 +411,78 @@ metadata/_edit_lock_ = true
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_57qmd")
 metadata/_edit_lock_ = true
+
+[node name="Iglesia" parent="." unique_id=1925671312 instance=ExtResource("4_v13m4")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -63.875, 0, 4.837)
+
+[node name="muscle_car_lowpoly_lightsout_GLB9" parent="." unique_id=1546944336 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, 7.012401)
+
+[node name="muscle_car_lowpoly_lightsout_GLB14" parent="." unique_id=838298869 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, 2.2167263)
+
+[node name="muscle_car_lowpoly_lightsout_GLB" parent="." unique_id=1192176392 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, 3.5535803)
+
+[node name="muscle_car_lowpoly_lightsout_GLB3" parent="." unique_id=135543993 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, 3.5535803)
+
+[node name="muscle_car_lowpoly_lightsout_GLB4" parent="." unique_id=536958939 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, 7.012401)
+
+[node name="muscle_car_lowpoly_lightsout_GLB5" parent="." unique_id=1835540603 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, -25.94141)
+
+[node name="muscle_car_lowpoly_lightsout_GLB6" parent="." unique_id=272096392 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, -22.48259)
+
+[node name="muscle_car_lowpoly_lightsout_GLB7" parent="." unique_id=599451193 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, -25.94141)
+
+[node name="muscle_car_lowpoly_lightsout_GLB8" parent="." unique_id=561510871 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, -22.48259)
+
+[node name="muscle_car_lowpoly_lightsout_GLB10" parent="." unique_id=667746936 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -47.1531, 0, -19.23755)
+
+[node name="muscle_car_lowpoly_lightsout_GLB11" parent="." unique_id=304958620 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.52991927, 0, -0.8480481, 0, 1, 0, 0.8480481, 0, 0.52991927, -55.646267, 0, -31.161608)
+
+[node name="muscle_car_lowpoly_lightsout_GLB12" parent="." unique_id=1299513335 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 46.000114, 0, -9.264309)
+
+[node name="muscle_car_lowpoly_lightsout_GLB13" parent="." unique_id=1490031656 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 43.32282, 0, 18.464352)
+
+[node name="muscle_car_lowpoly_lightsout_GLB2" parent="." unique_id=1494305596 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -47.1531, 0, 26.997824)
+
+[node name="muscle_car_lowpoly_lightsout_GLB15" parent="." unique_id=245340973 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, -50.086586)
+
+[node name="muscle_car_lowpoly_lightsout_GLB16" parent="." unique_id=1036461347 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, -54.882263)
+
+[node name="muscle_car_lowpoly_lightsout_GLB17" parent="." unique_id=480084383 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, -53.545406)
+
+[node name="muscle_car_lowpoly_lightsout_GLB18" parent="." unique_id=48147757 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, -53.545406)
+
+[node name="muscle_car_lowpoly_lightsout_GLB19" parent="." unique_id=1081724467 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, -50.086586)
+
+[node name="muscle_car_lowpoly_lightsout_GLB20" parent="." unique_id=392408190 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, 38.37948)
+
+[node name="muscle_car_lowpoly_lightsout_GLB21" parent="." unique_id=549963862 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, 33.5838)
+
+[node name="muscle_car_lowpoly_lightsout_GLB22" parent="." unique_id=766557262 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, 34.92066)
+
+[node name="muscle_car_lowpoly_lightsout_GLB23" parent="." unique_id=702101751 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, 34.92066)
+
+[node name="muscle_car_lowpoly_lightsout_GLB24" parent="." unique_id=2004723838 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, 38.37948)
