@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dglkputjuqyv"]
+
+[ext_resource type="PackedScene" uid="uid://djbfyuhvlowv7" path="res://assets/pesadilla.glb" id="1_40x0k"]
+
+[node name="Pesadilla" type="Node3D" unique_id=1920190203]
+
+[node name="mano_left" type="Marker3D" parent="." unique_id=185666032]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5086741, 0.32724774, 0.62471366)
+top_level = true
+
+[node name="polL" type="Marker3D" parent="mano_left" unique_id=2040750000]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0166118, -0.31005132, 0.37680387)
+
+[node name="pesadilla" parent="." unique_id=1575842656 instance=ExtResource("1_40x0k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.041482687, 0, 0.26910472)
+
+[node name="TwoBoneIK3D" type="TwoBoneIK3D" parent="pesadilla/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1575842656, 1744475155) index="1" unique_id=1150168918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28469193, -0.45043218, -0.4179473)
+setting_count = 1
+settings/0/target_node = NodePath("../../../../mano_left")
+settings/0/pole_node = NodePath("../../../../mano_left/polL")
+settings/0/root_bone_name = "brazo.L"
+settings/0/root_bone = 59
+settings/0/middle_bone_name = "antebrazo.L"
+settings/0/middle_bone = 60
+settings/0/pole_direction = 0
+settings/0/end_bone_name = "muneca.L"
+settings/0/end_bone = 65
+settings/0/use_virtual_end = false
+settings/0/extend_end_bone = false
+
+[node name="codoL" type="Marker3D" parent="." unique_id=1367085503]
+
+[editable path="pesadilla"]
