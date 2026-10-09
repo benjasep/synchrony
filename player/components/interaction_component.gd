@@ -1,22 +1,21 @@
 class_name InteractionComponent
 extends PlayerComponent
 
-## Detecta el Interactable al que apunta el jugador y solicita la interacción.
-##
-## Regla de autoridad: el cliente detecta y pide, el SERVIDOR valida y ejecuta.
-## Nunca ejecutar el efecto localmente, o el estado del mundo se desincroniza.
+## Detecta el [Interactable] al que apunta el jugador y pide al servidor interactuar con él.
+## El efecto nunca se ejecuta en el cliente: lo valida y lo aplica el servidor.
 
 signal target_changed(target: Interactable)
 
 @export var ray: RayCast3D
 @export var max_distance: float = 2.5
-## Muestra el prompt del objetivo con Debug.log mientras no exista el HUD.
-## Apagar cuando el HUD lo dibuje de verdad.
 @export var debug_show_prompt: bool = true
 
 var current_target: Interactable = null
 
 
+## Apunta el rayo hacia delante hasta [code]max_distance[/code], lo activa solo en el dueño y
+## lo hace detectar áreas además de cuerpos. Sin rayo solo aplica el gating de la base.
+## Recibe: [param profile] — perfil del rol, que se pasa a la clase base.
 func configure(profile: RoleProfile) -> void:
 	super(profile)
 	if not ray:
@@ -29,13 +28,16 @@ func configure(profile: RoleProfile) -> void:
 	ray.collide_with_bodies = true
 
 
+## Actualiza el objetivo y pide la interacción al pulsar [code]interact[/code]. Solo corre en
+## el dueño.
 func _physics_process(_delta: float) -> void:
 	_update_target()
 	if Input.is_action_just_pressed(&"interact"):
 		request_interact()
 
 
-## Pide al servidor interactuar con el objetivo actual.
+## Pide al servidor interactuar con el objetivo actual, si lo hay y su
+## [code]can_interact()[/code] lo permite.
 func request_interact() -> void:
 	if not current_target or not player:
 		return
@@ -44,7 +46,10 @@ func request_interact() -> void:
 	_perform_interaction.rpc_id(Statics.SERVER_ID, current_target.get_path())
 
 
-## call_local: el host se dirige esto a sí mismo. Ver Firearm._request_fire.
+## Ejecuta la interacción en el servidor tras comprobar que la pide el dueño de este jugador y
+## que el objetivo existe y la sigue aceptando. [code]call_local[/code] es obligatorio: el host
+## se lo envía a sí mismo y sin él Godot rechaza la llamada.
+## Recibe: [param target_path] — ruta del [Interactable] en el árbol.
 @rpc("any_peer", "call_local", "reliable")
 func _perform_interaction(target_path: NodePath) -> void:
 	if not multiplayer.is_server():
@@ -59,6 +64,9 @@ func _perform_interaction(target_path: NodePath) -> void:
 	target.perform(player)
 
 
+## Toma como objetivo el [Interactable] que toca el rayo ([code]null[/code] si no toca ninguno)
+## y, si cambió, emite [code]target_changed[/code]. Con [code]debug_show_prompt[/code] muestra
+## su prompt por [code]Debug.log[/code] en el dueño, mientras no exista el HUD.
 func _update_target() -> void:
 	var found: Interactable = null
 	if ray and ray.is_colliding():

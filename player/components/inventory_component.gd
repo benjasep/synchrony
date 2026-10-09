@@ -1,30 +1,18 @@
 class_name InventoryComponent
 extends PlayerComponent
 
-## Items que lleva el jugador y cuál tiene en la mano.
-##
-## El equipamiento es transferible por diseño: si muere el militar, su arma cae
-## y cualquiera puede recogerla (con los debuffs de su competencia). Por eso el
-## inventario no sabe nada de roles; solo llama a Equipment.equip(), que resuelve
-## la competencia del portador.
-##
-## AUTORIDAD: este componente pertenece al SERVIDOR, no al cliente dueño. La
-## posesión de items es estado del mundo. El cliente pide (request_*) y el
-## servidor decide y difunde (_apply_*).
-##
-## Los índices de `items` son la identidad de un item en la red. Se mantienen
-## coherentes porque todos los peers aplican las mismas operaciones en el mismo
-## orden, empezando por un loadout inicial determinista.
+## Items que lleva el jugador y cuál empuña. Pertenece al SERVIDOR: el cliente pide
+## ([code]request_*[/code]) y el servidor valida y difunde ([code]_apply_*[/code]). El índice en
+## [code]items[/code] es la identidad del item en la red; cuadra porque todos los peers aplican
+## las mismas operaciones en el mismo orden, desde un loadout inicial determinista.
 
 signal item_added(item: Equipment)
 signal item_removed(item: Equipment)
 signal item_equipped(item: Equipment)
 signal item_dropped(item: Equipment, drop_transform: Transform3D)
 
-## Dónde se monta visualmente el item activo. Compartido por linterna y arma.
 @export var hand_anchor: Node3D
 @export var max_slots: int = 4
-## Dónde cae un item soltado, relativo al jugador.
 @export var drop_distance: float = 1.2
 @export var drop_height: float = 0.6
 
@@ -32,6 +20,10 @@ var items: Array[Equipment] = []
 var active_item: Equipment = null
 
 
+## Activa el input de uso solo en el dueño, entrega el loadout inicial del rol y empuña el
+## primer item si las manos quedan vacías. Corre en todos los peers, en el mismo orden, para
+## que los índices coincidan.
+## Recibe: [param profile] — perfil del rol; con [code]null[/code] no entrega nada.
 func configure(profile: RoleProfile) -> void:
 	super(profile)
 	# El estado del inventario lo necesitan todos los peers; solo el input de
@@ -45,6 +37,9 @@ func configure(profile: RoleProfile) -> void:
 		_apply_equip(0)
 
 
+## Instancia cada escena y la añade guardada al inventario, en orden; salta las nulas y las
+## que no son [Equipment]. Es local y no comprueba [code]max_slots[/code].
+## Recibe: [param scenes] — escenas del loadout inicial.
 func give_starting_equipment(scenes: Array[PackedScene]) -> void:
 	for scene: PackedScene in scenes:
 		if not scene:
@@ -54,14 +49,17 @@ func give_starting_equipment(scenes: Array[PackedScene]) -> void:
 			_attach_item(item)
 
 
+## Devuelve [code]true[/code] si lleva menos items que [code]max_slots[/code].
 func has_free_slot() -> bool:
 	return items.size() < max_slots
 
 
+## Devuelve el índice de [param item] en [code]items[/code], o [code]-1[/code] si no lo lleva.
 func get_item_index(item: Equipment) -> int:
 	return items.find(item)
 
 
+## Devuelve [code]true[/code] si lleva algún item de la familia [param tag].
 func has_tag(tag: Statics.EquipmentTag) -> bool:
 	for item: Equipment in items:
 		if item.tag == tag:
@@ -69,19 +67,26 @@ func has_tag(tag: Statics.EquipmentTag) -> bool:
 	return false
 
 
-## --- Peticiones del cliente dueño ---
-
+## Pide al servidor empuñar un item. Solo tiene efecto en el cliente dueño.
+## Recibe: [param index] — posición del item en [code]items[/code].
 func request_equip(index: int) -> void:
 	if is_owner():
 		_request_equip.rpc_id(Statics.SERVER_ID, index)
 
 
+## Pide al servidor soltar un item. Solo tiene efecto en el cliente dueño.
+## Recibe: [param index] — posición del item en [code]items[/code].
 func request_drop(index: int) -> void:
 	if is_owner():
 		_request_drop.rpc_id(Statics.SERVER_ID, index)
 
 
-## Recoge un item del mundo. Solo servidor: lo llama EquipmentPickup.perform().
+## Añade en todos los peers un item recogido del mundo, que se empuña si las manos estaban
+## vacías. Solo actúa en el servidor; lo llama [code]EquipmentPickup.perform()[/code].
+## Recibe: [param scene_path] — escena del [Equipment]; [param state] — estado del item
+## (munición, batería) tal como lo devolvió [code]Equipment.get_state()[/code].
+## Devuelve: [code]true[/code] si se añadió; [code]false[/code] fuera del servidor, sin hueco
+## libre o si la escena no existe.
 func add_item_from_scene(scene_path: String, state: Dictionary) -> bool:
 	if not multiplayer.is_server() or not has_free_slot():
 		return false
@@ -91,7 +96,8 @@ func add_item_from_scene(scene_path: String, state: Dictionary) -> bool:
 	return true
 
 
-## Suelta todo. Se llama al morir: los items del muerto siguen siendo jugables.
+## Suelta todos los items, del último al primero para no desplazar los índices pendientes, y
+## los deja en juego como pickups. Solo actúa en el servidor; lo llama [Player] al morir.
 func drop_all() -> void:
 	if not multiplayer.is_server():
 		return
@@ -99,9 +105,10 @@ func drop_all() -> void:
 		_apply_drop.rpc(index, _get_drop_transform())
 
 
-## --- Resolución en el servidor ---
-
-## call_local: el host se dirige estas peticiones a sí mismo. Ver _request_fire.
+## Valida en el servidor que lo pide el dueño, que el índice existe y que el jugador puede usar
+## el item, y difunde [code]_apply_equip[/code]. [code]call_local[/code] es obligatorio: el host
+## se lo envía a sí mismo y sin él Godot rechaza la llamada.
+## Recibe: [param index] — posición del item en [code]items[/code].
 @rpc("any_peer", "call_local", "reliable")
 func _request_equip(index: int) -> void:
 	if not multiplayer.is_server() or not _is_sender_the_owner():
@@ -113,6 +120,10 @@ func _request_equip(index: int) -> void:
 	_apply_equip.rpc(index)
 
 
+## Valida en el servidor que lo pide el dueño y que el índice existe, y difunde
+## [code]_apply_drop[/code] con el punto de caída. [code]call_local[/code] obligatorio por la
+## misma razón que en [code]_request_equip[/code].
+## Recibe: [param index] — posición del item en [code]items[/code].
 @rpc("any_peer", "call_local", "reliable")
 func _request_drop(index: int) -> void:
 	if not multiplayer.is_server() or not _is_sender_the_owner():
@@ -122,8 +133,9 @@ func _request_drop(index: int) -> void:
 	_apply_drop.rpc(index, _get_drop_transform())
 
 
-## --- Aplicación en todos los peers ---
-
+## Instancia el item en todos los peers, le restaura el estado y lo empuña si no había item
+## activo. Lo difunde el servidor desde [code]add_item_from_scene()[/code].
+## Recibe: [param scene_path] — escena del [Equipment]; [param state] — estado del item.
 @rpc("authority", "call_local", "reliable")
 func _apply_add(scene_path: String, state: Dictionary) -> void:
 	var scene: PackedScene = load(scene_path) as PackedScene
@@ -140,6 +152,10 @@ func _apply_add(scene_path: String, state: Dictionary) -> void:
 		_apply_equip(items.size() - 1)
 
 
+## Desequipa el item activo y empuña el indicado; emite [code]item_equipped[/code]. Si
+## [code]Equipment.equip()[/code] lo rechaza, [code]active_item[/code] no cambia aunque el
+## anterior ya quedó desequipado. Lo difunde el servidor y también se llama en local.
+## Recibe: [param index] — posición del item en [code]items[/code]; fuera de rango no hace nada.
 @rpc("authority", "call_local", "reliable")
 func _apply_equip(index: int) -> void:
 	if index < 0 or index >= items.size() or not player:
@@ -153,6 +169,10 @@ func _apply_equip(index: int) -> void:
 	item_equipped.emit(item)
 
 
+## Quita el item del inventario en todos los peers (desequipándolo si era el activo), emite
+## [code]item_removed[/code] e [code]item_dropped[/code], libera el nodo y empuña el primero si
+## las manos quedan vacías. Solo el servidor crea el pickup, vía [PlayerSpawner].
+## Recibe: [param index] — posición del item; [param drop_transform] — dónde cae el pickup.
 @rpc("authority", "call_local", "reliable")
 func _apply_drop(index: int, drop_transform: Transform3D) -> void:
 	if index < 0 or index >= items.size():
@@ -177,6 +197,10 @@ func _apply_drop(index: int, drop_transform: Transform3D) -> void:
 		_apply_equip(0)
 
 
+## Añade el item al final de [code]items[/code], lo cuelga de [code]hand_anchor[/code], le
+## restaura el estado y lo guarda oculto; emite [code]item_added[/code].
+## Recibe: [param item] — item recién instanciado; [param state] — estado a restaurar, vacío
+## para quedarse con el que inicializa su [code]_ready()[/code].
 func _attach_item(item: Equipment, state: Dictionary = {}) -> void:
 	items.append(item)
 	if hand_anchor:
@@ -190,9 +214,9 @@ func _attach_item(item: Equipment, state: Dictionary = {}) -> void:
 	item_added.emit(item)
 
 
-## Delante del jugador y a media altura, no en la mano: el HandAnchor cuelga de
-## la cámara y está desplazado, así que el item quedaba flotando fuera del punto
-## de mira y era imposible volver a señalarlo.
+## Calcula dónde cae un item soltado: delante del jugador y elevado sobre sus pies, no en la
+## mano, que cuelga desplazada de la cámara y lo dejaría fuera del punto de mira.
+## Devuelve: un transform sin rotación; [code]IDENTITY[/code] si el jugador no está en el árbol.
 func _get_drop_transform() -> Transform3D:
 	if not player or not player.is_inside_tree():
 		return Transform3D.IDENTITY
@@ -201,11 +225,15 @@ func _get_drop_transform() -> Transform3D:
 	return Transform3D(Basis.IDENTITY, origin)
 
 
+## Devuelve [code]true[/code] si el RPC en curso lo envió el dueño de este jugador o es una
+## llamada local del host (emisor [code]0[/code]).
 func _is_sender_the_owner() -> bool:
 	var sender_id: int = multiplayer.get_remote_sender_id()
 	return sender_id == 0 or (player.data != null and sender_id == player.data.id)
 
 
+## Con un item activo, traduce [code]use_item[/code], [code]alt_use_item[/code] y
+## [code]drop_item[/code] en usarlo, su uso alternativo o pedir soltarlo. Solo corre en el dueño.
 func _unhandled_input(_event: InputEvent) -> void:
 	if not active_item:
 		return

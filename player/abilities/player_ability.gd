@@ -1,14 +1,8 @@
 class_name PlayerAbility
 extends Node
 
-## Capacidad innata de un rol.
-##
-## Frontera de diseño deliberada: el EQUIPAMIENTO se transfiere, las HABILIDADES
-## no. La visión de eco del vidente es una habilidad porque nadie debe poder
-## heredarla recogiendo un objeto; la linterna es equipamiento porque sí.
-##
-## Se instancia desde RoleProfile.ability_scene, así que añadir un rol con una
-## habilidad nueva no toca ni Player ni los componentes.
+## Capacidad innata de un rol, instanciada desde [code]RoleProfile.ability_scene[/code]. A
+## diferencia del [Equipment], no se transfiere: nadie puede heredarla recogiendo un objeto.
 
 signal activated
 signal deactivated
@@ -23,16 +17,22 @@ var _cooldown_left: float = 0.0
 var _duration_left: float = 0.0
 
 
+## Vincula la habilidad a su jugador, deja el procesado (tiempos e input) activo solo en el
+## peer dueño y llama a [code]_on_setup()[/code].
+## Recibe: [param owner_player] — el [Player] al que pertenece.
 func setup(owner_player: Player) -> void:
 	player = owner_player
 	set_process(player.is_multiplayer_authority())
 	_on_setup()
 
 
+## Devuelve [code]true[/code] si tiene jugador, no está activa y el enfriamiento terminó.
 func can_activate() -> bool:
 	return player != null and not is_active and _cooldown_left <= 0.0
 
 
+## Activa la habilidad si se puede: arranca la duración y el enfriamiento, llama a
+## [code]_on_activated()[/code] y emite [code]activated[/code].
 func activate() -> void:
 	if not can_activate():
 		return
@@ -43,6 +43,8 @@ func activate() -> void:
 	activated.emit()
 
 
+## Desactiva la habilidad si estaba activa, llama a [code]_on_deactivated()[/code] y emite
+## [code]deactivated[/code]. El enfriamiento sigue corriendo desde la activación.
 func deactivate() -> void:
 	if not is_active:
 		return
@@ -52,6 +54,9 @@ func deactivate() -> void:
 	deactivated.emit()
 
 
+## Descuenta enfriamiento y duración (con [code]duration = 0[/code] dura hasta desactivarla)
+## y alterna la habilidad con la acción [code]use_ability[/code]. Solo corre en el dueño.
+## Recibe: [param delta] — segundos del frame.
 func _process(delta: float) -> void:
 	if _cooldown_left > 0.0:
 		_cooldown_left = maxf(_cooldown_left - delta, 0.0)
@@ -66,14 +71,16 @@ func _process(delta: float) -> void:
 			activate()
 
 
-## Puntos de extensión para las subclases.
+## Punto de extensión: se llama al final de [code]setup()[/code], con el jugador asignado.
 func _on_setup() -> void:
 	pass
 
 
+## Punto de extensión: se llama al activarse, antes de emitir [code]activated[/code].
 func _on_activated() -> void:
 	pass
 
 
+## Punto de extensión: se llama al desactivarse, antes de emitir [code]deactivated[/code].
 func _on_deactivated() -> void:
 	pass

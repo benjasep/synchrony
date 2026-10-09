@@ -1,38 +1,17 @@
 class_name PerceptionComponent
 extends PlayerComponent
 
-## Aplica el VisionMode del rol a la cámara del jugador.
-##
-## Es puramente local: la percepción no se replica y no se configura en las
-## copias remotas. El vidente ve fantasmas y contornos de pared porque su
-## cámara y su composición son distintas, no porque el mundo cambie para él.
-##
-## Cómo se arma la vista del vidente, y por qué en tres piezas:
-##
-##   cámara principal (cull_mask = capa 1) dibuja el mundo, que el quad de eco
-##       tapa entero. Solo está ahí para llenar el DEPTH BUFFER.
-##   quad de eco (spatial, pantalla completa) reconstruye los contornos desde
-##       ese depth y deja el resto en negro. Tiene que ser un quad 3D y no un ColorRect: un shader
-##       canvas_item no tiene acceso al depth texture.
-##   SubViewport etéreo (cull_mask = capas 2, 3 y 4) es una segunda cámara sobre
-##       el MISMO World3D, con fondo transparente, compuesta encima en 2D.
-##
-## La segunda pasada es obligatoria, no un adorno: el quad tapa por definición
-## todo lo que la cámara dibujó, así que enemigos, compañeros y viewmodel no
-## sobrevivirían al post-proceso si se dibujaran en la misma pasada. Y el 2D
-## siempre se compone por encima del 3D, que es exactamente el orden que hace
-## falta.
-##
-## Presupuesto de capas visuales: ver Statics.WORLD_VISUAL_LAYER y compañía.
+## Aplica el [VisionMode] del rol a la cámara, solo en el cliente dueño (la percepción no se
+## replica). Para el vidente arma tres piezas: la cámara principal solo llena el depth, el quad
+## de eco lo convierte en contornos y un [SubViewport] etéreo compone encima, en 2D, lo que el
+## quad taparía (enemigos etéreos, compañeros, viewmodel).
 
 @export var camera: Camera3D
-## Quad a pantalla completa donde vive el post-proceso de eco.
 @export var echo_quad: MeshInstance3D
 
 @export_group("Segunda pasada")
 @export var ethereal_viewport: SubViewport
 @export var ethereal_camera: Camera3D
-## Dónde se compone la segunda pasada, en el CanvasLayer del jugador.
 @export var ethereal_view: TextureRect
 
 var vision_mode: VisionMode
@@ -40,6 +19,8 @@ var vision_mode: VisionMode
 var _echo_material: ShaderMaterial
 
 
+## Aplica el [VisionMode] del perfil solo en el dueño; en las copias remotas no toca la vista.
+## Recibe: [param profile] — perfil del rol; con [code]null[/code] no aplica nada.
 func configure(profile: RoleProfile) -> void:
 	super(profile)
 	if not is_owner() or not profile:
@@ -47,8 +28,9 @@ func configure(profile: RoleProfile) -> void:
 	apply_vision_mode(profile.vision_mode)
 
 
-## También la usan items que otorguen percepción (unas gafas espirituales, por
-## ejemplo): el sistema no asume que la visión venga solo del rol.
+## Guarda el modo y aplica su [code]cull_mask[/code] a la cámara, el post-proceso y la segunda
+## pasada. Es pública porque la percepción también podría venir de un item, no solo del rol.
+## Recibe: [param mode] — modo a aplicar; con [code]null[/code] o sin cámara solo se guarda.
 func apply_vision_mode(mode: VisionMode) -> void:
 	vision_mode = mode
 	if not camera or not mode:
@@ -58,18 +40,26 @@ func apply_vision_mode(mode: VisionMode) -> void:
 	_apply_ethereal_pass(mode)
 
 
-## Ajusta un uniform en caliente (el pulso de eco del vidente lo usa).
+## Cambia en caliente un uniform del shader de eco; sin post-proceso activo no hace nada. Lo
+## usa [SeerEchoAbility] para el pulso.
+## Recibe: [param parameter] — nombre del uniform; [param value] — valor nuevo.
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	if _echo_material:
 		_echo_material.set_shader_parameter(parameter, value)
 
 
+## Si el modo tiene segunda pasada, copia cada frame la cámara principal a la etérea. Solo
+## corre en el dueño.
 func _process(_delta: float) -> void:
 	if not vision_mode or vision_mode.ethereal_cull_mask == 0:
 		return
 	_sync_ethereal_camera()
 
 
+## Crea el material de eco con el shader y los uniforms del modo (más
+## [code]perception_radius[/code] si es positivo), lo pone en el quad y muda el quad a las capas
+## de [code]cull_mask[/code] para que la cámara lo dibuje. Sin shader, oculta el quad.
+## Recibe: [param mode] — modo de visión a aplicar.
 func _apply_post_process(mode: VisionMode) -> void:
 	if not echo_quad:
 		return
@@ -92,6 +82,10 @@ func _apply_post_process(mode: VisionMode) -> void:
 	echo_quad.show()
 
 
+## Enciende o apaga la segunda pasada según [code]ethereal_cull_mask[/code]. Al encenderla, el
+## [SubViewport] comparte el [World3D] del jugador, dibuja con fondo transparente y su propio
+## entorno, sigue el tamaño del viewport anfitrión y se muestra en [code]ethereal_view[/code].
+## Recibe: [param mode] — modo de visión a aplicar.
 func _apply_ethereal_pass(mode: VisionMode) -> void:
 	var enabled: bool = mode.ethereal_cull_mask != 0
 	if ethereal_view:
@@ -122,14 +116,11 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 	_sync_ethereal_camera()
 
 
-## Entorno propio de la segunda pasada, no el del nivel.
-##
-## Fondo: si el nivel trae un WorldEnvironment con cielo, la segunda pasada lo
-## dibujaría y le taparía el eco al vidente.
-##
-## Ambiente: es la única luz que llega aquí. Las luces del nivel están en la
-## capa 1 y la capa de una Light3D decide qué cámaras ven su contribución, así
-## que para esta cámara no existen. Ver VisionMode.ethereal_ambient_color.
+## Construye el entorno de la segunda pasada, no el del nivel: fondo transparente, para que un
+## cielo del nivel no tape el eco, y la luz ambiental del modo, que es la única que llega porque
+## las luces del nivel están en la capa 1 y esta cámara no las ve.
+## Recibe: [param mode] — de donde salen el color y la energía ambiental.
+## Devuelve: un [Environment] nuevo.
 func _build_ethereal_environment(mode: VisionMode) -> Environment:
 	var environment: Environment = Environment.new()
 	# BG_CLEAR_COLOR y no BG_COLOR: es el único modo que respeta el
@@ -142,7 +133,9 @@ func _build_ethereal_environment(mode: VisionMode) -> Environment:
 	return environment
 
 
-## Las dos pasadas tienen que encuadrar igual o el eco y lo etéreo no cuadran.
+## Iguala el [SubViewport] etéreo a la resolución de render del viewport anfitrión, para que eco
+## y segunda pasada encuadren igual. También se llama en cada [code]size_changed[/code] del
+## anfitrión.
 func _resize_ethereal_viewport() -> void:
 	if not ethereal_viewport or not camera:
 		return
@@ -156,10 +149,10 @@ func _resize_ethereal_viewport() -> void:
 	ethereal_viewport.size = Vector2i(maxi(render_size.x, 1), maxi(render_size.y, 1))
 
 
-## La segunda cámara cuelga del SubViewport, que no es un Node3D: la cadena de
-## transformadas se corta ahí, así que la de la cámara principal se copia a mano
-## cada frame. Este componente es el último de la lista, así que para cuando le
-## toca ViewComponent ya movió la cabeza.
+## Copia a la cámara etérea el transform, FOV, planos de recorte y aspecto de la principal. Va a
+## mano porque el [SubViewport] no es un [Node3D] y corta la cadena de transformadas; este
+## componente va el último en Components para correr después de que [ViewComponent] mueva la
+## cabeza.
 func _sync_ethereal_camera() -> void:
 	if not ethereal_camera or not camera or not camera.is_inside_tree():
 		return

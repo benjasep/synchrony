@@ -1,12 +1,9 @@
 class_name MovementComponent
 extends PlayerComponent
 
-## Locomoción en primera persona. Idéntica para los tres roles: solo cambian los
-## stats, que vienen del RoleProfile.
-##
-## Autoridad de cliente: solo el dueño simula. Los demás peers reciben el
-## transform por MultiplayerSynchronizer, por eso configure() apaga el
-## _physics_process en las copias remotas.
+## Locomoción en primera persona, idéntica para todos los roles: solo cambian los stats del
+## [RoleProfile]. Solo simula el dueño; las copias remotas reciben el transform por el
+## [MultiplayerSynchronizer].
 
 signal jumped
 signal landed
@@ -26,6 +23,9 @@ var _modifiers: Dictionary[StringName, MovementModifier] = {}
 var _was_on_floor: bool = true
 
 
+## Deja el procesado solo en el dueño (vía la base) y copia del perfil las velocidades de
+## andar, esprintar y saltar.
+## Recibe: [param profile] — perfil del rol; con [code]null[/code] conserva los valores actuales.
 func configure(profile: RoleProfile) -> void:
 	super(profile)
 	if not profile:
@@ -35,15 +35,19 @@ func configure(profile: RoleProfile) -> void:
 	jump_velocity = profile.jump_velocity
 
 
-## Registra un modificador. La misma source sobrescribe el anterior.
+## Registra un modificador de movimiento; si ya había uno con la misma fuente, lo sustituye.
+## Recibe: [param source] — quién aplica el efecto; [param modifier] — multiplicadores a aplicar.
 func add_modifier(source: StringName, modifier: MovementModifier) -> void:
 	_modifiers[source] = modifier
 
 
+## Quita el modificador registrado con [param source]; si no existe, no hace nada.
 func remove_modifier(source: StringName) -> void:
 	_modifiers.erase(source)
 
 
+## Devuelve la velocidad horizontal objetivo en m/s: la de esprint o la normal, multiplicada
+## por el [code]speed_multiplier[/code] de todos los modificadores activos.
 func get_current_speed() -> float:
 	var base: float = sprint_speed if is_sprinting() else move_speed
 	var multiplier: float = 1.0
@@ -52,6 +56,8 @@ func get_current_speed() -> float:
 	return base * multiplier
 
 
+## Devuelve [code]true[/code] si el jugador pide esprintar, se está moviendo y ningún
+## modificador activo bloquea el esprint.
 func is_sprinting() -> bool:
 	if not wants_sprint or input_direction.is_zero_approx():
 		return false
@@ -61,6 +67,8 @@ func is_sprinting() -> bool:
 	return true
 
 
+## Lee el input y aplica el movimiento. Solo corre en el dueño.
+## Recibe: [param delta] — segundos del frame de física.
 func _physics_process(delta: float) -> void:
 	if not player:
 		return
@@ -68,8 +76,12 @@ func _physics_process(delta: float) -> void:
 	apply_motion(delta)
 
 
-## Separado de _physics_process para poder simularlo con input inyectado desde
-## los tests, sin depender del teclado.
+## Aplica gravedad en el aire, acerca la velocidad horizontal a la objetivo (aceleración,
+## fricción sin input o control aéreo), salta si se pulsa [code]jump[/code] en el suelo, mueve
+## el cuerpo y emite [code]jumped[/code] / [code]landed[/code]. Separado de
+## [code]_physics_process[/code] para poder simularlo desde los tests fijando
+## [code]input_direction[/code] a mano.
+## Recibe: [param delta] — segundos del frame de física.
 func apply_motion(delta: float) -> void:
 	if not player:
 		return
@@ -105,11 +117,14 @@ func apply_motion(delta: float) -> void:
 	_was_on_floor = player.is_on_floor()
 
 
+## Lee de las acciones de input la dirección de movimiento y si se mantiene [code]sprint[/code].
 func _read_input() -> void:
 	input_direction = Input.get_vector(&"move_left", &"move_right", &"move_forward", &"move_back")
 	wants_sprint = Input.is_action_pressed(&"sprint")
 
 
+## Devuelve el producto de los [code]jump_multiplier[/code] de los modificadores activos
+## ([code]1.0[/code] si no hay ninguno).
 func _get_jump_multiplier() -> float:
 	var multiplier: float = 1.0
 	for modifier: MovementModifier in _modifiers.values():

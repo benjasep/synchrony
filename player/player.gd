@@ -1,13 +1,9 @@
 class_name Player
 extends CharacterBody3D
 
-## Clase ÚNICA de jugador. No hay subclases por rol: lo que distingue al vidente
-## del técnico y del militar es su RoleProfile (datos) y su PlayerAbility
-## (comportamiento), no su tipo.
-##
-## Player no tiene lógica de juego. Solo cablea componentes y reparte el
-## RoleProfile. Si aparece un if sobre Statics.Role fuera de setup(), el diseño
-## se rompió: eso pertenece a un .tres, a un Equipment o a un PlayerAbility.
+## Jugador único para los tres roles, sin subclases ni lógica de juego: cablea componentes y
+## les reparte el [RoleProfile]. Un [code]if[/code] sobre [code]Statics.Role[/code] fuera de
+## [code]setup()[/code] rompe el diseño: eso va en un .tres, [Equipment] o [PlayerAbility].
 
 signal setup_completed
 signal downed
@@ -21,7 +17,6 @@ signal equipment_changed(item: Equipment)
 @export var hand_anchor: Node3D
 @export var collision: CollisionShape3D
 @export var body: Node3D
-## Cápsula gris de referencia. Solo se ve si el rol no trae body_scene.
 @export var body_placeholder: MeshInstance3D
 @export var hud_layer: CanvasLayer
 @export var synchronizer: MultiplayerSynchronizer
@@ -43,8 +38,10 @@ var _is_configured: bool = false
 var _authority_assigned: bool = false
 
 
-## Llamado por PlayerSpawner antes o después de entrar al árbol. Sigue el mismo
-## patrón que LobbyPlayer.set_player() para tolerar ambos casos.
+## Guarda los datos del jugador, resuelve su [RoleProfile] y reparte la autoridad; aplica la
+## configuración ya si el nodo está listo o, si no, la deja para [code]_ready()[/code]. La
+## llama [PlayerSpawner], antes o después de que el jugador entre al árbol.
+## Recibe: [param player_data] — datos de sesión del jugador (id de peer, rol, índice).
 func setup(player_data: Statics.PlayerData) -> void:
 	data = player_data
 	profile = RoleDatabase.get_profile(player_data.role)
@@ -61,29 +58,38 @@ func setup(player_data: Statics.PlayerData) -> void:
 		_apply_setup()
 
 
+## Aplica la configuración si [code]setup()[/code] se llamó antes de entrar al árbol.
 func _ready() -> void:
 	if data:
 		_apply_setup()
 
 
+## Devuelve [code]true[/code] si este peer controla al jugador (es su autoridad).
 func is_local_player() -> bool:
 	return is_multiplayer_authority()
 
 
+## Devuelve el nombre de sesión del jugador, o cadena vacía si aún no tiene datos.
 func get_display_name() -> String:
 	return data.name if data else ""
 
 
+## Devuelve el origen global del apuntado: la cámara o, si no hay, el propio jugador.
 func get_aim_origin() -> Vector3:
 	return camera.global_position if camera else global_position
 
 
+## Devuelve la dirección global hacia la que apunta el jugador: el -Z de la base de apuntado
+## de [ViewComponent], o el frente del cuerpo si no hay vista.
 func get_aim_direction() -> Vector3:
 	if view:
 		return -view.get_aim_basis().z
 	return -global_basis.z
 
 
+## Configura el jugador una sola vez: autoridad, componentes, medidas, modelo, ajustes
+## locales, habilidad, HUD y señales, y al terminar emite [code]setup_completed[/code]. Sin
+## [RoleProfile] registra un error y el jugador queda sin configurar.
 func _apply_setup() -> void:
 	if _is_configured:
 		return
@@ -105,18 +111,11 @@ func _apply_setup() -> void:
 	setup_completed.emit()
 
 
-## Reparto de autoridad según a quién pertenece cada cosa.
-##
-## OJO: set_multiplayer_authority() es recursivo por defecto y eso rompería los
-## RPC de estado del mundo — el servidor dejaría de ser la autoridad de Health y
-## sus @rpc("authority") serían rechazados. Por eso se asigna nodo a nodo:
-##
-##   cliente dueño -> transform, mirada, interacción, percepción, synchronizer
-##   servidor      -> salud, inventario y el equipamiento que cuelga del anchor
-##
-## Idempotente: la llama setup() (antes del árbol) y también _apply_setup(), que
-## puede ejecutarse un frame más tarde desde _ready(). Reasignar la autoridad de
-## un MultiplayerSynchronizer ya sincronizando es justo lo que rompe su spawn.
+## Reparte la autoridad nodo a nodo: el cliente dueño recibe el [Player], movimiento, vista,
+## interacción, percepción y synchronizer; el servidor, salud, inventario y
+## [code]hand_anchor[/code] (y con él el equipamiento). Nunca recursiva: el servidor dejaría
+## de ser autoridad de la salud y sus [code]@rpc("authority")[/code] serían rechazados.
+## Idempotente: reasignar la autoridad de un synchronizer que ya sincroniza rompe su spawn.
 func _assign_authority() -> void:
 	if _authority_assigned:
 		return
@@ -136,6 +135,8 @@ func _assign_authority() -> void:
 			node.set_multiplayer_authority(Statics.SERVER_ID, false)
 
 
+## Asigna este jugador a cada [PlayerComponent] y les pasa el [RoleProfile]; a
+## [HealthComponent] solo el perfil.
 func _configure_components() -> void:
 	# HealthComponent es genérico (no extiende PlayerComponent) para poder
 	# reutilizarlo en enemigos, por eso no recibe la referencia al Player.
@@ -147,6 +148,7 @@ func _configure_components() -> void:
 			component.configure(profile)
 
 
+## Activa la cámara solo en el peer dueño y le oculta su propio cuerpo; los demás sí lo ven.
 func _configure_local_only() -> void:
 	var is_owner: bool = is_multiplayer_authority()
 	if camera:
@@ -156,12 +158,9 @@ func _configure_local_only() -> void:
 		body.visible = not is_owner
 
 
-## Ajusta cámara y cápsula a la altura del modelo del rol.
-##
-## Las medidas viven en el RoleProfile porque player.tscn es una sola escena
-## compartida: en cuanto dos roles tengan modelos de distinta altura, cablearlas
-## en la escena obligaría a un if sobre el rol, que es justo lo que el diseño
-## prohíbe.
+## Ajusta la altura de los ojos, la cápsula de colisión y el placeholder a las medidas del
+## [RoleProfile]. Viven en el perfil porque [code]player.tscn[/code] es común a todos los
+## roles: cablearlas en la escena obligaría a un [code]if[/code] sobre el rol.
 func _apply_body_dimensions() -> void:
 	if head:
 		head.position.y = profile.eye_height
@@ -189,9 +188,9 @@ func _apply_body_dimensions() -> void:
 			body_placeholder.position.y = height * 0.5
 
 
-## Instancia el modelo del rol. Cuelga de Body y no del Player porque
-## _configure_local_only() apaga Body entero: en primera persona el dueño no
-## debe verse a sí mismo, pero los demás peers sí tienen que verlo.
+## Instancia el [code]body_scene[/code] del rol bajo [code]body[/code] (el nodo que se
+## oculta al dueño), lo pasa a la capa visual de cuerpos y oculta el placeholder. No hace
+## nada si el rol no trae modelo; si no es un [Node3D], registra un error.
 func _spawn_body() -> void:
 	if not body or not profile.body_scene:
 		return
@@ -207,6 +206,8 @@ func _spawn_body() -> void:
 		body_placeholder.hide()
 
 
+## Instancia la [PlayerAbility] del rol como hija y la vincula a este jugador. No hace nada
+## si el rol no tiene habilidad; si la escena no es una [PlayerAbility], registra un error.
 func _spawn_ability() -> void:
 	if not profile.ability_scene:
 		return
@@ -218,6 +219,7 @@ func _spawn_ability() -> void:
 	ability.setup(self)
 
 
+## Instancia el HUD del rol dentro de [code]hud_layer[/code], solo en el peer dueño.
 func _spawn_hud() -> void:
 	if not is_multiplayer_authority() or not profile.hud_scene or not hud_layer:
 		return
@@ -225,6 +227,8 @@ func _spawn_hud() -> void:
 	hud_layer.add_child(hud)
 
 
+## Conecta las señales de salud a sus manejadores y reemite como
+## [code]equipment_changed[/code] cada item que equipa el inventario.
 func _connect_signals() -> void:
 	if health:
 		health.downed.connect(_handle_downed)
@@ -234,16 +238,20 @@ func _connect_signals() -> void:
 		inventory.item_equipped.connect(func(item: Equipment) -> void: equipment_changed.emit(item))
 
 
+## Bloquea los controles al caer derribado y emite [code]downed[/code].
 func _handle_downed() -> void:
 	_set_controls_enabled(false)
 	downed.emit()
 
 
+## Devuelve los controles al ser reanimado y emite [code]revived[/code].
 func _handle_revived() -> void:
 	_set_controls_enabled(true)
 	revived.emit()
 
 
+## Al morir, el servidor suelta todo el inventario (sigue en juego); luego bloquea los
+## controles, desactiva la habilidad, libera el ratón y emite [code]died[/code].
 func _handle_died() -> void:
 	# El equipamiento del muerto no se pierde: cae al suelo y sigue en juego.
 	if multiplayer.is_server() and inventory:
@@ -256,6 +264,9 @@ func _handle_died() -> void:
 	died.emit()
 
 
+## Activa o desactiva movimiento e interacción y captura o libera el ratón. En las copias
+## remotas el procesado queda siempre apagado.
+## Recibe: [param enabled] — [code]true[/code] para devolver el control al jugador.
 func _set_controls_enabled(enabled: bool) -> void:
 	var is_owner: bool = is_multiplayer_authority()
 	if movement:
