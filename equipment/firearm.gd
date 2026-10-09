@@ -1,16 +1,10 @@
 class_name Firearm
 extends Equipment
 
-## Arma de fuego. Efectiva contra enemigos físicos y etéreos.
-##
-## Es el caso que valida todo el modelo de competencia: en manos del militar el
-## pulso es firme; en manos de cualquier otro, la vista tiembla al apuntar.
-## Fíjate en que no hay un solo if sobre el rol — el temblor es un ViewModifier
-## construido desde el FirearmProficiency del portador.
-##
-## Autoridad: el cliente reproduce el feedback local de inmediato y pide al
-## servidor que resuelva el disparo. Si cada cliente calculase el daño, los
-## enemigos se desincronizarían en la primera partida.
+## Arma de fuego, efectiva contra enemigos físicos y etéreos. No hay un solo if sobre el rol:
+## el temblor en manos inexpertas es un [ViewModifier] construido desde la
+## [FirearmProficiency] del portador. El cliente da el feedback al instante, pero el disparo
+## lo resuelve el servidor: si cada cliente calculase el daño, se desincronizarían.
 
 signal fired(origin: Vector3, direction: Vector3)
 signal reloaded
@@ -37,30 +31,42 @@ var _cooldown_left: float = 0.0
 var _is_reloading: bool = false
 
 
+## Empieza con el cargador lleno.
 func _ready() -> void:
 	in_magazine = magazine_size
 
 
+## Devuelve la munición del cargador y de la reserva, que sobrevive a soltar y recoger.
 func get_state() -> Dictionary:
 	return {"in_magazine": in_magazine, "reserve_ammo": reserve_ammo}
 
 
+## Restaura la munición guardada (si falta una clave: cargador lleno y reserva actual) y
+## emite [code]ammo_changed[/code].
+## Recibe: [param state] — el diccionario que devolvió [code]get_state()[/code].
 func set_state(state: Dictionary) -> void:
 	in_magazine = state.get("in_magazine", magazine_size)
 	reserve_ammo = state.get("reserve_ammo", reserve_ammo)
 	ammo_changed.emit(in_magazine, reserve_ammo)
 
 
+## Aplica al portador el temblor de vista que dicta su competencia.
 func _on_equipped() -> void:
 	_apply_proficiency_modifiers()
 
 
+## Quita el temblor de vista del portador y baja la marca de recarga. Ojo: el temporizador de
+## una recarga ya empezada no se cancela y, al vencer, carga igualmente.
 func _on_unequipped() -> void:
 	if wielder and wielder.view:
 		wielder.view.remove_modifier(SWAY_SOURCE)
 	_is_reloading = false
 
 
+## Dispara si está empuñada, sin cooldown ni recarga en curso; con el cargador vacío recarga
+## en su lugar. Gasta una bala, aplica dispersión y retroceso escalados por la competencia,
+## emite [code]ammo_changed[/code], [code]fired[/code] y [code]used[/code] en local y pide al
+## servidor que resuelva el disparo.
 func use() -> void:
 	if not is_equipped() or _cooldown_left > 0.0 or _is_reloading:
 		return
@@ -83,10 +89,14 @@ func use() -> void:
 	_request_fire.rpc_id(1, origin, direction)
 
 
+## Acción secundaria: recarga.
 func alt_use() -> void:
 	reload()
 
 
+## Corrutina: espera [code]base_reload_time[/code] escalado por la competencia, pasa balas de
+## la reserva al cargador y emite [code]ammo_changed[/code] y [code]reloaded[/code]. No hace
+## nada si ya está recargando, el cargador está lleno o no queda reserva.
 func reload() -> void:
 	if _is_reloading or in_magazine >= magazine_size or reserve_ammo <= 0:
 		return
@@ -103,12 +113,16 @@ func reload() -> void:
 	reloaded.emit()
 
 
+## Descuenta el cooldown entre disparos.
+## Recibe: [param delta] — segundos desde el frame anterior.
 func _process(delta: float) -> void:
 	if _cooldown_left > 0.0:
 		_cooldown_left = maxf(_cooldown_left - delta, 0.0)
 
 
-## Construye el temblor de vista desde la competencia del portador.
+## Registra en la vista del portador un [ViewModifier] de temblor con la amplitud y la
+## frecuencia de su [FirearmProficiency]. No hace nada sin portador, vista o competencia de
+## arma.
 func _apply_proficiency_modifiers() -> void:
 	if not wielder or not wielder.view:
 		return
@@ -121,8 +135,10 @@ func _apply_proficiency_modifiers() -> void:
 	wielder.view.add_modifier(SWAY_SOURCE, modifier)
 
 
-## call_local es obligatorio: el host se envía esto a sí mismo (rpc_id(1) siendo
-## el peer 1) y sin él Godot lo rechaza, así que el anfitrión no podría disparar.
+## Solo el servidor resuelve el disparo: valida que el emisor sea el portador y difunde los
+## efectos a todos los peers; el impacto aún no se calcula. [code]call_local[/code] es
+## obligatorio: el host se lo envía a sí mismo y sin él Godot rechaza la llamada.
+## Recibe: [param origin] — origen del rayo; [param direction] — dirección ya con dispersión.
 @rpc("any_peer", "call_local", "reliable")
 func _request_fire(origin: Vector3, direction: Vector3) -> void:
 	if not multiplayer.is_server():
@@ -135,12 +151,19 @@ func _request_fire(origin: Vector3, direction: Vector3) -> void:
 	_play_fire_effects.rpc(origin, direction)
 
 
+## Efectos del disparo visibles para todos los peers, difundidos por el servidor. Aún vacío.
+## Recibe: [param _origin] — origen del disparo; [param _direction] — su dirección.
 @rpc("authority", "call_local", "reliable")
 func _play_fire_effects(_origin: Vector3, _direction: Vector3) -> void:
 	# TODO: sonido y partículas visibles para todos los peers.
 	pass
 
 
+## Desvía la dirección un ángulo aleatorio de hasta ±dispersión radianes alrededor de los
+## ejes Y y X globales; la dispersión es [code]base_spread[/code] por el multiplicador de la
+## competencia.
+## Recibe: [param direction] — dirección de apuntado.
+## Devuelve: la dirección desviada y normalizada, o la original si la dispersión es 0.
 func _apply_spread(direction: Vector3) -> Vector3:
 	var spread: float = base_spread * _get_spread_multiplier()
 	if spread <= 0.0:
@@ -149,16 +172,19 @@ func _apply_spread(direction: Vector3) -> Vector3:
 		.rotated(Vector3.RIGHT, randf_range(-spread, spread)).normalized()
 
 
+## Devuelve el multiplicador de dispersión de la competencia, o 1.0 si no es de arma.
 func _get_spread_multiplier() -> float:
 	var firearm_proficiency: FirearmProficiency = proficiency as FirearmProficiency
 	return firearm_proficiency.spread_multiplier if firearm_proficiency else 1.0
 
 
+## Devuelve el multiplicador de retroceso de la competencia, o 1.0 si no es de arma.
 func _get_recoil_multiplier() -> float:
 	var firearm_proficiency: FirearmProficiency = proficiency as FirearmProficiency
 	return firearm_proficiency.recoil_multiplier if firearm_proficiency else 1.0
 
 
+## Devuelve el multiplicador del tiempo de recarga de la competencia, o 1.0 si no es de arma.
 func _get_reload_multiplier() -> float:
 	var firearm_proficiency: FirearmProficiency = proficiency as FirearmProficiency
 	return firearm_proficiency.reload_time_multiplier if firearm_proficiency else 1.0

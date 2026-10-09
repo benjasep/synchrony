@@ -1,29 +1,26 @@
 class_name EquipmentPickup
 extends Interactable
 
-## Un Equipment tirado en el mundo, esperando a que alguien lo recoja.
-##
-## Es lo que cierra el bucle del diseño: muere el militar, su arma cae aquí, y
-## el técnico puede recogerla — con el temblor de su competencia, resuelto solo
-## al equiparla.
-##
-## Se replica con el MultiplayerSpawner de PlayerSpawner, así que se identifica
-## por la ruta de su escena y lleva el estado del item (munición, batería) como
-## Dictionary, no como referencia al nodo original.
+## [Equipment] tirado en el mundo, esperando a que alguien lo recoja. Lo replica el
+## [MultiplayerSpawner] de [PlayerSpawner], así que guarda la ruta de escena y el estado del
+## item (munición, batería), nunca una referencia al nodo original.
 
-## Ruta de la escena del Equipment que contiene.
 @export var scene_path: String = ""
-## Estado del item en el momento de soltarlo.
 @export var item_state: Dictionary = {}
 
 var _preview: Node3D
 
 
+## Fuerza la capa de interacción (vía [code]super()[/code]) y construye la vista previa.
 func _ready() -> void:
 	super()
 	_build_preview()
 
 
+## Configura qué item contiene. Lo llama [PlayerSpawner] al crear el pickup, antes de que
+## entre al árbol; si ya estaba listo, reconstruye la vista previa al momento.
+## Recibe: [param equipment_scene_path] — ruta de la escena del [Equipment];
+## [param state] — lo que devolvió su [code]get_state()[/code] al soltarlo.
 func setup(equipment_scene_path: String, state: Dictionary) -> void:
 	scene_path = equipment_scene_path
 	item_state = state
@@ -31,13 +28,19 @@ func setup(equipment_scene_path: String, state: Dictionary) -> void:
 		_build_preview()
 
 
+## Comprueba si [param player] puede recogerlo.
+## Devuelve: [code]true[/code] si está habilitado, contiene un item y el inventario de
+## [param player] tiene un hueco libre.
 func can_interact(player: Player) -> bool:
 	if not super(player) or scene_path.is_empty():
 		return false
 	return player.inventory != null and player.inventory.has_free_slot()
 
 
-## Solo servidor: InteractionComponent ya validó al emisor.
+## Solo servidor ([InteractionComponent] ya validó al emisor): mete el item en el inventario
+## de [param player], emite [code]interacted[/code] y libera el pickup. Si el inventario lo
+## rechaza, no hace nada.
+## Recibe: [param player] — quien lo recoge.
 func perform(player: Player) -> void:
 	if not player.inventory.add_item_from_scene(scene_path, item_state):
 		return
@@ -45,6 +48,9 @@ func perform(player: Player) -> void:
 	queue_free()
 
 
+## Instancia la escena del item como hijo solo para mostrar su modelo y, si el prompt es el
+## genérico, lo cambia a "Recoger <nombre>". Libera la vista previa anterior; si la ruta no
+## existe o no es un [Equipment], se queda sin ninguna.
 func _build_preview() -> void:
 	if _preview:
 		_preview.queue_free()

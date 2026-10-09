@@ -1,16 +1,10 @@
 class_name Equipment
 extends Node3D
 
-## Objeto que un jugador puede empuñar. La linterna y el arma son Equipment, NO
-## features de rol: eso permite que se caigan al morir, se presten y se recojan,
-## y evita que la muerte del técnico bloquee el nivel.
-##
-## Un Equipment NUNCA menciona Statics.Role. Declara su familia (tag) y, al
-## equiparse, resuelve UNA sola vez su ProficiencyProfile contra el portador.
-## Los debuffs por usar el item de otro rol salen de ahí, como datos.
-##
-## Todos los parámetros de manejo deben leerse del proficiency, no ser
-## constantes: así añadir un debuff nuevo es un @export, no un refactor.
+## Objeto que un jugador empuña, suelta y recoge (linterna, arma). No es una feature de rol:
+## si muere su dueño otro lo recoge y el nivel no se bloquea. Nunca consulta
+## [code]Statics.Role[/code]; declara su [code]tag[/code] y lee todo parámetro de manejo de su
+## [ProficiencyProfile], no de constantes.
 
 signal equipped(player: Player)
 signal unequipped(player: Player)
@@ -19,13 +13,15 @@ signal used
 @export var tag: Statics.EquipmentTag = Statics.EquipmentTag.NONE
 @export var display_name: String = ""
 @export var icon: Texture2D
-## Nodo visual que se oculta cuando el item está guardado.
 @export var model: Node3D
 
 var wielder: Player = null
 var proficiency: ProficiencyProfile = null
 
 
+## Comprueba si el rol de [param player] puede empuñar este item según su competencia.
+## Devuelve: [code]false[/code] si no hay jugador, perfil o competencia, o si esta no es
+## [code]usable[/code].
 func can_be_equipped_by(player: Player) -> bool:
 	if not player or not player.profile:
 		return false
@@ -33,7 +29,11 @@ func can_be_equipped_by(player: Player) -> bool:
 	return candidate != null and candidate.usable
 
 
-## Único punto donde se cruza item × rol. Se cachea: no hay lookups por frame.
+## Empuña el item: cachea la competencia del portador (único cruce item × rol, así no hay
+## lookups por frame), muestra el modelo, lo pasa a la capa de viewmodel, llama a
+## [code]_on_equipped()[/code] y emite [code]equipped[/code].
+## Recibe: [param player] — quien lo empuña.
+## Devuelve: [code]false[/code], sin efectos, si [param player] no puede equiparlo.
 func equip(player: Player) -> bool:
 	if not can_be_equipped_by(player):
 		return false
@@ -50,6 +50,9 @@ func equip(player: Player) -> bool:
 	return true
 
 
+## Deja de empuñar el item: llama a [code]_on_unequipped()[/code], oculta el modelo, olvida
+## portador y competencia y emite [code]unequipped[/code] con el portador anterior. No hace
+## nada si no estaba empuñado.
 func unequip() -> void:
 	if not wielder:
 		return
@@ -62,17 +65,20 @@ func unequip() -> void:
 	unequipped.emit(previous)
 
 
-## Guarda el item sin desequiparlo lógicamente (recién añadido al inventario).
+## Oculta el modelo sin desequipar el item; el inventario lo llama al añadirlo.
 func stow() -> void:
 	if model:
 		model.hide()
 
 
+## Devuelve [code]true[/code] si alguien empuña el item.
 func is_equipped() -> bool:
 	return wielder != null
 
 
-## True si el portador maneja este item con soltura. Para HUD y feedback.
+## Indica si el rol del portador declara una competencia propia para este [code]tag[/code]
+## en vez de caer al default "sin entrenamiento". Pensado para HUD y feedback.
+## Devuelve: [code]false[/code] también si no hay portador.
 func is_wielder_proficient() -> bool:
 	if not wielder or not wielder.profile:
 		return false
@@ -82,28 +88,38 @@ func is_wielder_proficient() -> bool:
 	return false
 
 
-## Estado que debe sobrevivir a soltar y recoger el item (munición, batería).
-## Al morir el militar, su arma cae con las balas que le quedaban.
+## Estado que debe sobrevivir a soltar y recoger el item (munición, batería). Las subclases
+## con estado lo sobrescriben junto con [code]set_state()[/code].
+## Devuelve: un diccionario serializable; vacío en la base.
 func get_state() -> Dictionary:
 	return {}
 
 
+## Restaura el estado guardado con [code]get_state()[/code]; en la base no hace nada. Se llama
+## después de entrar al árbol, porque el [code]_ready()[/code] del item lo reinicializa.
+## Recibe: [param _state] — el diccionario que devolvió [code]get_state()[/code].
 func set_state(_state: Dictionary) -> void:
 	pass
 
 
-## Puntos de extensión.
+## Acción principal (clic izquierdo). La base solo emite [code]used[/code]; las subclases la
+## sobrescriben.
 func use() -> void:
 	used.emit()
 
 
+## Acción secundaria (clic derecho). No hace nada en la base.
 func alt_use() -> void:
 	pass
 
 
+## Gancho para subclases, llamado por [code]equip()[/code] con portador y competencia ya
+## asignados y antes de emitir [code]equipped[/code].
 func _on_equipped() -> void:
 	pass
 
 
+## Gancho para subclases, llamado por [code]unequip()[/code] cuando el portador aún está
+## asignado, para poder quitarle los modificadores que le aplicó el item.
 func _on_unequipped() -> void:
 	pass
