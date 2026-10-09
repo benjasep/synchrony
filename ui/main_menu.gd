@@ -8,6 +8,8 @@ extends Control
 @onready var quit: Button = %Quit
 
 
+## Con [code]Game.multiplayer_test[/code] activo salta al arnés lobby_test; si no, conecta los
+## botones de host, unirse, créditos y salir y da el foco a host.
 func _ready() -> void:
 	if Game.instance.multiplayer_test:
 		get_tree().change_scene_to_file("res://lobby/lobby_test.tscn")

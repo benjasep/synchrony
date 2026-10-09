@@ -8,6 +8,8 @@ extends Control
 @onready var error_timer: Timer = $ErrorTimer
 
 
+## Rellena el nombre con el usuario del sistema (más un número aleatorio al ejecutar desde el
+## editor, para distinguir instancias), le da el foco y conecta los botones.
 func _ready() -> void:
 	player_name.text = OS.get_environment("USERNAME") + (str(randi() % 1000) if OS.has_feature("editor")
  else "")
@@ -19,6 +21,8 @@ func _ready() -> void:
 	back_button.pressed.connect(func() -> void: Lobby.instance.go_to_menu())
 
 
+## Crea el servidor ENet en [code]Statics.PORT[/code], se añade como jugador con índice 0 y
+## pasa a la sala de espera. Si no puede crear el servidor, muestra el error unos segundos.
 func _host() -> void:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var err: Error = peer.create_server(Statics.PORT, Statics.MAX_CLIENTS)

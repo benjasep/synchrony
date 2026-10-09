@@ -1,10 +1,16 @@
 extends Node
 
+## Arnés de multijugador local (con [code]Game.multiplayer_test[/code]): la primera instancia
+## hospeda y las demás se unen a localhost, los jugadores salen de
+## [code]Game.test_players[/code] y se salta directamente a [code]main_scene[/code].
 
 var player_index: int = 1
 
 @onready var start_game_timer: Timer = $StartGameTimer
 
+## Crea los jugadores a partir de [code]Game.test_players[/code] (el primero es el servidor,
+## id 1), escucha las conexiones e intenta hospedar; si no puede, se une. Después desactiva
+## [code]multiplayer_test[/code] para que el menú principal vuelva a ser accesible.
 func _ready() -> void:
 	for i: int in Game.instance.test_players.size():
 		var test_player: PlayerDataResource = Game.instance.test_players[i]
@@ -29,6 +35,9 @@ func _ready() -> void:
 	Game.instance.multiplayer_test = false
 
 
+## Intenta crear el servidor; si lo consigue, marca la ventana como Server, la coloca en la
+## primera celda y conecta el temporizador de arranque.
+## Devuelve: [code]true[/code] si se creó el servidor (el puerto estaba libre).
 func _try_host() -> bool:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var err: Error = peer.create_server(Statics.PORT, Statics.MAX_CLIENTS)
@@ -41,6 +50,8 @@ func _try_host() -> bool:
 	return err == OK
 
 
+## Crea un cliente hacia localhost.
+## Devuelve: [code]true[/code] si se creó el peer; si llega a conectar se sabe después.
 func _try_join() -> bool:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	var err: Error = peer.create_client("localhost", Statics.PORT)
@@ -49,6 +60,10 @@ func _try_join() -> bool:
 	return err == OK
 
 
+## En el servidor, asigna el id del peer nuevo al siguiente jugador de prueba, reenvía todos los
+## ids a los clientes y reinicia el temporizador de arranque: la partida empieza cuando dejan
+## de llegar conexiones.
+## Recibe: [param id] — id de peer del que se conectó.
 func _on_peer_connected(id: int) -> void:
 	if multiplayer.is_server():
 		Game.instance.players[player_index].id = id
@@ -58,6 +73,10 @@ func _on_peer_connected(id: int) -> void:
 		start_game_timer.start()
 
 
+## Registra el id de peer de un jugador de prueba. Si es el propio y aún no lo tenía, marca la
+## ventana como Client N y la coloca en su celda. La envía el servidor y se ejecuta solo en
+## los clientes.
+## Recibe: [param index] — posición del jugador en la lista; [param id] — su id de peer.
 @rpc("reliable")
 func _send_player_data_id(index: int, id: int) -> void:
 	if multiplayer.get_unique_id() == id and not Game.instance.players[index].id:
@@ -67,15 +86,22 @@ func _send_player_data_id(index: int, id: int) -> void:
 	Game.instance.players[index].id = id
 
 
+## Al vencer el temporizador, el servidor arranca la partida en todos los peers.
 func _on_start_game_timeout() -> void:
 	_start_game.rpc()
 
 
+## Cambia a [code]Game.main_scene[/code]. RPC del servidor que se ejecuta en todos los peers,
+## él incluido.
 @rpc("reliable", "call_local")
 func _start_game() -> void:
 	get_tree().change_scene_to_packed(Game.instance.main_scene)
 
 
+## Si [code]Game.fill_screen[/code] está activo, reparte la pantalla en una cuadrícula casi
+## cuadrada, una celda por jugador, y coloca y dimensiona la ventana en la suya descontando la
+## barra de título.
+## Recibe: [param index] — posición del jugador (0 = servidor).
 func _update_window_placement(index: int) -> void:
 	if not Game.instance.fill_screen:
 		return
