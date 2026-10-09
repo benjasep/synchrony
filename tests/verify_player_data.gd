@@ -1,19 +1,16 @@
 extends Node
 
-## Verificación de la capa de jugadores sin abrir el editor.
-##
-##   "$GODOT" --headless --path . res://tests/verify_player_data.tscn
-##
-## Sale con código != 0 si algo falla, así que sirve en CI.
-##
-## Corre como ESCENA y no con --script a propósito: con --script el bucle
-## principal no crea un MultiplayerAPI, `Node.multiplayer` es null y todo lo que
-## toque autoridad o RPC revienta.
+## Verifica la capa de jugadores, los enemigos y la animación; sale con código != 0 si falla.
+## Se corre como escena y no con --script, que deja [code]multiplayer[/code] en null:
+## [code]"$GODOT" --headless --path . res://tests/verify_player_data.tscn[/code]
 
 var failures: int = 0
 var runtime_completed: bool = false
 
 
+## Pone un peer offline (los RPC y [code]is_server()[/code] lo necesitan), ejecuta las dos
+## fases e imprime el resumen; cuenta como fallo que la fase de runtime no termine. Cierra el
+## proceso con el número de fallos como código de salida.
 func _ready() -> void:
 	# is_server() y los .rpc() necesitan un peer, aunque sea offline.
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
@@ -34,6 +31,8 @@ func _ready() -> void:
 	get_tree().quit(failures)
 
 
+## Comprueba los datos sin montar jugadores: nombres y roles de [RoleDatabase], competencias y
+## su fallback, máscaras de visión de cada rol y la escena del enemigo etéreo.
 func _verify_data() -> void:
 	print("--- RoleDatabase ---")
 	_check("perfil del militar existe", RoleDatabase.get_profile(Statics.Role.SOLDIER) != null)
@@ -103,11 +102,13 @@ func _verify_data() -> void:
 	print("--- Enemigo etereo ---")
 	var enemy_scene: PackedScene = load("res://enemies/ethereal_entity.tscn") as PackedScene
 	_check("ethereal_entity.tscn carga", enemy_scene != null)
-	var enemy: EtherealEntity = enemy_scene.instantiate() as EtherealEntity
-	_check("es un EtherealEntity", enemy != null)
+	var enemy: Enemy = enemy_scene.instantiate() as Enemy
+	_check("es un Enemy", enemy != null)
 	if enemy:
 		_check("cableado", enemy.model != null and enemy.model_placeholder != null \
 			and enemy.health != null)
+		_check("marcado como etereo", enemy.is_ethereal \
+			and enemy.get_visual_layer() == Statics.ETHEREAL_VISUAL_LAYER)
 		# El cubo viene ya en la capa etérea desde la escena; _ready() la fuerza
 		# otra vez para cubrir el .glb que vendrá de Blender.
 		_check("el placeholder esta en la capa eterea",
@@ -119,6 +120,10 @@ func _verify_data() -> void:
 		enemy.free()
 
 
+## Comprueba un [Player] militar de otro peer (id 77) ya en el árbol: cableado, reparto de
+## autoridad, modelo y medidas del cuerpo, loadout, estado del item, soltar, recoger,
+## reanimar y las escenas de pickup y spawner. Después lanza las verificaciones en caliente y
+## marca [code]runtime_completed[/code].
 func _verify_runtime() -> void:
 	var scene: PackedScene = load("res://player/player.tscn") as PackedScene
 	_check("player.tscn carga", scene != null)
@@ -255,15 +260,176 @@ func _verify_runtime() -> void:
 	p.free()
 
 	await _verify_seer_view()
+	await _verify_body_animation("res://player/bodies/cat_body.tscn", 4.0)
+	await _verify_body_animation("res://enemies/pesadilla/pesadilla_animation.tscn", 1.5)
+	await _verify_physical_enemy()
+	await _verify_foot_placement()
 	runtime_completed = true
 
 
-## El vidente en caliente. Hace falta un Player entero y no solo su .tres porque
-## lo que se comprueba es el cableado de las tres piezas de su vista.
-##
-## El id tiene que ser el de este peer: PerceptionComponent solo configura la
-## percepción del dueño, así que con un id ajeno no se aplicaría nada y el test
-## pasaría en vacío.
+## Mueve a mano un envoltorio de modelo y comprueba que su [LocomotionAnimator] mide la
+## velocidad por posición, se la pasa al árbol, ignora un teletransporte y apaga el árbol al
+## ocultarse: la misma medida que hace un peer remoto, donde velocity no se replica.
+## Recibe: [param path] — escena del envoltorio; [param test_speed] — velocidad simulada
+## en m/s.
+func _verify_body_animation(path: String, test_speed: float) -> void:
+	print("--- Animacion: %s ---" % path.get_file())
+	var holder: Node3D = Node3D.new()
+	get_tree().root.add_child.call_deferred(holder)
+	var body: Node3D = (load(path) as PackedScene).instantiate() as Node3D
+	holder.add_child(body)
+	await get_tree().process_frame
+	var animator: LocomotionAnimator = body.get_node_or_null("LocomotionAnimator") as LocomotionAnimator
+	_check("tiene LocomotionAnimator", animator != null)
+	if not animator:
+		holder.free()
+		return
+	_check("animador cableado", animator.tree != null and animator.tracked == body)
+	# Se pregunta al árbol y no a un AnimationPlayer concreto: el del gato vive
+	# en el envoltorio, el de la pesadilla viene dentro de su .glb.
+	_check("el arbol ve idle, caminar y correr", animator.tree.has_animation(&"idle") \
+		and animator.tree.has_animation(&"caminar") and animator.tree.has_animation(&"correr"))
+
+	for i: int in 45:
+		await get_tree().physics_frame
+		holder.position.x += test_speed / Engine.physics_ticks_per_second
+	_check("mide la velocidad por posicion", absf(animator.speed - test_speed) < 0.2)
+	_check("y se la pasa al arbol",
+		absf(float(animator.tree.get(animator.blend_parameter)) - test_speed) < 0.2)
+	var playback: AnimationNodeStateMachinePlayback = animator.tree.get(&"parameters/playback") \
+		as AnimationNodeStateMachinePlayback
+	_check("el arbol arranca en locomotion",
+		playback != null and playback.get_current_node() == &"locomotion")
+
+	holder.position.x += 50.0
+	await get_tree().physics_frame
+	await get_tree().physics_frame
+	_check("ignora un teletransporte", animator.speed < animator.max_plausible_speed)
+
+	# Al dueño el cuerpo se le oculta en primera persona.
+	holder.visible = false
+	await get_tree().physics_frame
+	_check("oculto, el arbol se apaga", not animator.tree.active)
+	holder.free()
+
+
+## Mete la pesadilla en el árbol (su modelo se instancia en [code]_ready()[/code]) y comprueba
+## que trae su modelo y que todo él queda solo en la capa del mundo: si cayera en la etérea, el
+## técnico y el militar no la verían.
+func _verify_physical_enemy() -> void:
+	print("--- Enemigo fisico (pesadilla) ---")
+	var enemy: Enemy = (load("res://enemies/pesadilla/pesadilla.tscn") as PackedScene) \
+		.instantiate() as Enemy
+	_check("es un Enemy", enemy != null)
+	if not enemy:
+		return
+	get_tree().root.add_child.call_deferred(enemy)
+	await get_tree().process_frame
+	_check("no es etereo", not enemy.is_ethereal)
+	_check("trae su modelo y oculta el cubo", enemy.model.get_child_count() > 1 \
+		and not enemy.model_placeholder.visible)
+	_check("todo el modelo en la capa del mundo",
+		_all_meshes_in_layer(enemy.model, Statics.WORLD_VISUAL_LAYER))
+	enemy.queue_free()
+	await get_tree().process_frame
+
+
+## Compara los pies de la pesadilla en plano y sobre escalones con la animación pura: el foot
+## placement debe desplazar cada pie exactamente lo que sube o baja el suelo bajo él. El
+## modelo mira a -X, así que un escalón que acaba en x = -0.3 separa los pies delanteros de
+## los traseros.
+func _verify_foot_placement() -> void:
+	print("--- Foot placement (pesadilla) ---")
+	var step: float = 0.25
+	var flat: Array[AABB] = [AABB(Vector3(-5, -1, -5), Vector3(10, 1, 10))]
+	var step_up_front: Array[AABB] = [AABB(Vector3(-5, -1, -5), Vector3(10, 1, 10)),
+		AABB(Vector3(-3, 0, -2), Vector3(2.7, step, 4))]
+	var step_down_rear: Array[AABB] = [AABB(Vector3(-5, -1, -5), Vector3(4.7, 1, 10)),
+		AABB(Vector3(-0.3, -1 - step, -5), Vector3(5.3, 1, 10))]
+
+	# [trasero L, trasero R, delantero L, delantero R]
+	var animated: Array[float] = await _feet_heights_on(flat, false)
+	_check("el envoltorio trae FootPlacement con cuatro patas", animated.size() == 4)
+	if animated.size() != 4:
+		return
+	var on_flat: Array[float] = await _feet_heights_on(flat, true)
+	_check("en plano no cambia la animacion", _feet_match(on_flat, animated, [0.0, 0.0, 0.0, 0.0]))
+	var front_up: Array[float] = await _feet_heights_on(step_up_front, true)
+	_check("escalon delante: las manos suben y las patas traseras no",
+		_feet_match(front_up, animated, [0.0, 0.0, step, step]))
+	var rear_down: Array[float] = await _feet_heights_on(step_down_rear, true)
+	_check("desnivel detras: las patas traseras bajan y las manos no",
+		_feet_match(rear_down, animated, [-step, -step, 0.0, 0.0]))
+	var disabled: Array[float] = await _feet_heights_on(step_up_front, false)
+	_check("apagado, manda la animacion", _feet_match(disabled, animated, [0.0, 0.0, 0.0, 0.0]))
+
+
+## Monta un suelo de cajas, pone la pesadilla encima y mide la altura global de cada hueso de
+## contacto. Lee dentro de [code]skeleton_updated[/code] porque fuera de esa señal Godot ya ha
+## descartado la pose modificada y solo queda la animación pura.
+## Recibe: [param ground] — cajas del suelo, en coordenadas globales; [param placement_enabled]
+## — si el foot placement está encendido.
+## Devuelve: una altura por pata, en el orden de [code]legs[/code]; vacío si el modelo no trae
+## un [FootPlacement] con cuatro patas.
+func _feet_heights_on(ground: Array[AABB], placement_enabled: bool) -> Array[float]:
+	var holder: Node3D = Node3D.new()
+	for box: AABB in ground:
+		var body: StaticBody3D = StaticBody3D.new()
+		var shape: CollisionShape3D = CollisionShape3D.new()
+		var box_shape: BoxShape3D = BoxShape3D.new()
+		box_shape.size = box.size
+		shape.shape = box_shape
+		body.position = box.get_center()
+		body.add_child(shape)
+		holder.add_child(body)
+	var model: Node3D = (load("res://enemies/pesadilla/pesadilla_animation.tscn") as PackedScene) \
+		.instantiate() as Node3D
+	holder.add_child(model)
+	get_tree().root.add_child.call_deferred(holder)
+	await get_tree().process_frame
+
+	var heights: Array[float] = []
+	var placement: FootPlacement = model.get_node_or_null("pesadilla/Armature/Skeleton3D/FootPlacement") \
+		as FootPlacement
+	if not placement or placement.legs.size() != 4:
+		holder.free()
+		return heights
+	placement.enabled = placement_enabled
+	# Que la física registre el suelo y que el suavizado y el fundido se asienten.
+	await get_tree().create_timer(0.8).timeout
+
+	var skeleton: Skeleton3D = placement.get_skeleton()
+	skeleton.skeleton_updated.connect(func() -> void:
+		for leg: FootPlacementLeg in placement.legs:
+			var bone: int = skeleton.find_bone(leg.contact_bone)
+			heights.append((skeleton.global_transform * skeleton.get_bone_global_pose(bone)).origin.y),
+		CONNECT_ONE_SHOT)
+	await skeleton.skeleton_updated
+	# El await se reanuda DENTRO de la emisión: liberar aquí el esqueleto que la
+	# está emitiendo tumba el motor. Se espera a que termine el frame.
+	holder.queue_free()
+	await get_tree().process_frame
+	return heights
+
+
+## Comprueba que cada pie esté a su altura animada más el desnivel esperado, con 2 cm de
+## tolerancia por lo poco que se mueve el idle entre muestras; imprime el primer pie que falla.
+## Recibe: [param measured] — alturas medidas; [param animated] — alturas en plano sin foot
+## placement; [param expected_offsets] — desnivel esperado de cada pie.
+## Devuelve: [code]true[/code] si todos los pies coinciden.
+func _feet_match(measured: Array[float], animated: Array[float], expected_offsets: Array[float]) -> bool:
+	if measured.size() != animated.size():
+		return false
+	for i: int in measured.size():
+		if absf(measured[i] - (animated[i] + expected_offsets[i])) > 0.02:
+			print("        pie %d: %.3f, esperado %.3f" % [i, measured[i], animated[i] + expected_offsets[i]])
+			return false
+	return true
+
+
+## Monta un vidente y un militar enteros y comprueba las tres piezas de la vista del vidente
+## (cámara, quad de eco, segunda pasada) y que el militar no monte ninguna. Usa el id de este
+## peer: la percepción solo se configura en el dueño, y con un id ajeno pasaría en vacío.
 func _verify_seer_view() -> void:
 	print("--- Vista del vidente, en caliente ---")
 	var local_id: int = multiplayer.get_unique_id()
@@ -334,6 +500,8 @@ func _verify_seer_view() -> void:
 	soldier.queue_free()
 
 
+## Imprime el resultado de una comprobación y suma un fallo si no se cumple.
+## Recibe: [param label] — descripción de lo comprobado; [param condition] — si se cumple.
 func _check(label: String, condition: bool) -> void:
 	if condition:
 		print("  ok    %s" % label)
@@ -342,10 +510,15 @@ func _check(label: String, condition: bool) -> void:
 		print("  FALLO %s" % label)
 
 
+## Devuelve [code]true[/code] si toda la geometría bajo [param node] está solo en la capa de
+## cuerpos.
 func _all_meshes_in_body_layer(node: Node) -> bool:
 	return _all_meshes_in_layer(node, Statics.BODY_VISUAL_LAYER)
 
 
+## Recorre [param node] y sus descendientes comprobando que cada [GeometryInstance3D] tenga
+## exactamente [param layer] como máscara de capas visuales.
+## Devuelve: [code]true[/code] si todas la tienen (también si no hay geometría).
 func _all_meshes_in_layer(node: Node, layer: int) -> bool:
 	var geometry: GeometryInstance3D = node as GeometryInstance3D
 	if geometry and geometry.layers != layer:
