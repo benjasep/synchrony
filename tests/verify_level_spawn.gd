@@ -1,14 +1,16 @@
 extends Node
 
-## Prueba de extremo a extremo: cargar un nivel, aparecer, caer por gravedad y
-## quedarse apoyado en el suelo. Es lo que responde a "¿ya me puedo mover?".
-##
-##   "$GODOT" --headless --path . res://tests/verify_level_spawn.tscn
+## Prueba de extremo a extremo: carga un nivel, aparece, cae, anda, suelta, recoge y dispara
+## siendo el host. Se corre con:
+## [code]"$GODOT" --headless --path . res://tests/verify_level_spawn.tscn[/code]
 
 var failures: int = 0
 var completed: bool = false
 
 
+## Carga [code]test_level.tscn[/code] fijando el rol de depuración en militar antes de que
+## entre al árbol (el spawner genera ya en su [code]_ready()[/code]) y recorre la batería:
+## configuración sin lobby, gravedad, movimiento simulado, soltar y recoger, y disparar.
 func _ready() -> void:
 	_start_watchdog()
 	var level: Node3D = load("res://tests/test_level.tscn").instantiate() as Node3D
@@ -130,12 +132,14 @@ func _ready() -> void:
 	_finish()
 
 
-## _ready() es una corrutina: si un error de script la aborta, _finish() nunca
-## corre y el proceso se queda colgado para siempre. Esto lo convierte en fallo.
+## Arranca un temporizador de 60 s que da el test por fallido si no ha terminado: si un error
+## de script aborta la corrutina [code]_ready()[/code], [code]_finish()[/code] nunca corre y el
+## proceso se quedaría colgado para siempre.
 func _start_watchdog() -> void:
 	get_tree().create_timer(60.0).timeout.connect(_on_watchdog_timeout)
 
 
+## Si el test no ha terminado, lo avisa y cierra el proceso con código 99.
 func _on_watchdog_timeout() -> void:
 	if completed:
 		return
@@ -143,6 +147,8 @@ func _on_watchdog_timeout() -> void:
 	get_tree().quit(99)
 
 
+## Marca el test como terminado, imprime el resumen y cierra el proceso con el número de fallos
+## como código de salida.
 func _finish() -> void:
 	completed = true
 	print("")
@@ -153,6 +159,8 @@ func _finish() -> void:
 	get_tree().quit(failures)
 
 
+## Imprime el resultado de una comprobación y suma un fallo si no se cumple.
+## Recibe: [param label] — descripción de lo comprobado; [param condition] — si se cumple.
 func _check(label: String, condition: bool) -> void:
 	if condition:
 		print("  ok    %s" % label)
