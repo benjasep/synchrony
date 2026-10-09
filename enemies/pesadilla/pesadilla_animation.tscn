@@ -1,34 +1,91 @@
 [gd_scene format=3 uid="uid://dglkputjuqyv"]
 
 [ext_resource type="PackedScene" uid="uid://djbfyuhvlowv7" path="res://assets/pesadilla.glb" id="1_40x0k"]
+[ext_resource type="Script" uid="uid://6ai0s1xwniqe" path="res://scripts/locomotion_animator.gd" id="2_animator"]
+[ext_resource type="Script" path="res://scripts/foot_placement.gd" id="3_foot"]
+[ext_resource type="Script" path="res://scripts/foot_placement_leg.gd" id="4_leg"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_caminar"]
+animation = &"caminar"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_correr"]
+animation = &"correr"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_locomotion"]
+min_space = 0.0
+max_space = 6.0
+value_label = "m/s"
+blend_point_0/node = SubResource("AnimationNodeAnimation_idle")
+blend_point_0/pos = 0.0
+blend_point_0/name = &"0"
+blend_point_1/node = SubResource("AnimationNodeAnimation_caminar")
+blend_point_1/pos = 1.5
+blend_point_1/name = &"1"
+blend_point_2/node = SubResource("AnimationNodeAnimation_correr")
+blend_point_2/pos = 4.0
+blend_point_2/name = &"2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_start"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_root"]
+states/locomotion/node = SubResource("AnimationNodeBlendSpace1D_locomotion")
+states/locomotion/position = Vector2(360, 100)
+transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_start")]
+
+[sub_resource type="Resource" id="Resource_leg_hind_l"]
+script = ExtResource("4_leg")
+root_bone = &"muslo.L"
+middle_bone = &"canilla_1.L"
+end_bone = &"canilla_2.L"
+contact_bone = &"dedo_punta_medio.L"
+is_front = false
+
+[sub_resource type="Resource" id="Resource_leg_hind_r"]
+script = ExtResource("4_leg")
+root_bone = &"muslo.R"
+middle_bone = &"canilla_1.R"
+end_bone = &"canilla_2.R"
+contact_bone = &"dedo_punta_medio.R"
+is_front = false
+
+[sub_resource type="Resource" id="Resource_leg_front_l"]
+script = ExtResource("4_leg")
+root_bone = &"brazo.L"
+middle_bone = &"antebrazo.L"
+end_bone = &"muneca.L"
+contact_bone = &"medio_punta.L"
+is_front = true
+
+[sub_resource type="Resource" id="Resource_leg_front_r"]
+script = ExtResource("4_leg")
+root_bone = &"brazo.R"
+middle_bone = &"antebrazo.R"
+end_bone = &"muneca.R"
+contact_bone = &"medio_punta.R"
+is_front = true
 
 [node name="Pesadilla" type="Node3D" unique_id=1920190203]
-
-[node name="mano_left" type="Marker3D" parent="." unique_id=185666032]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5086741, 0.32724774, 0.62471366)
-top_level = true
-
-[node name="polL" type="Marker3D" parent="mano_left" unique_id=2040750000]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0166118, -0.31005132, 0.37680387)
 
 [node name="pesadilla" parent="." unique_id=1575842656 instance=ExtResource("1_40x0k")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.041482687, 0, 0.26910472)
 
-[node name="TwoBoneIK3D" type="TwoBoneIK3D" parent="pesadilla/Armature/Skeleton3D" parent_id_path=PackedInt32Array(1575842656, 1744475155) index="1" unique_id=1150168918]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.28469193, -0.45043218, -0.4179473)
-setting_count = 1
-settings/0/target_node = NodePath("../../../../mano_left")
-settings/0/pole_node = NodePath("../../../../mano_left/polL")
-settings/0/root_bone_name = "brazo.L"
-settings/0/root_bone = 59
-settings/0/middle_bone_name = "antebrazo.L"
-settings/0/middle_bone = 60
-settings/0/pole_direction = 0
-settings/0/end_bone_name = "muneca.L"
-settings/0/end_bone = 65
-settings/0/use_virtual_end = false
-settings/0/extend_end_bone = false
+[node name="FootPlacement" type="SkeletonModifier3D" parent="pesadilla/Armature/Skeleton3D"]
+script = ExtResource("3_foot")
+legs = Array[ExtResource("4_leg")]([SubResource("Resource_leg_hind_l"), SubResource("Resource_leg_hind_r"), SubResource("Resource_leg_front_l"), SubResource("Resource_leg_front_r")])
 
-[node name="codoL" type="Marker3D" parent="." unique_id=1367085503]
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1583920482]
+root_node = NodePath("../pesadilla")
+tree_root = SubResource("AnimationNodeStateMachine_root")
+anim_player = NodePath("../pesadilla/AnimationPlayer")
+parameters/locomotion/blend_position = 0.0
+
+[node name="LocomotionAnimator" type="Node" parent="." unique_id=1583920483 node_paths=PackedStringArray("tree", "tracked")]
+script = ExtResource("2_animator")
+tree = NodePath("../AnimationTree")
+tracked = NodePath("..")
 
 [editable path="pesadilla"]
