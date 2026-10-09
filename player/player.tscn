@@ -70,8 +70,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, -0.2, -0.3)
 [node name="EchoQuad" type="MeshInstance3D" parent="Head/Camera" unique_id=1556193341]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 visible = false
-extra_cull_margin = 16384.0
 cast_shadow = 0
+extra_cull_margin = 16384.0
 mesh = SubResource("QuadMesh_echo")
 
 [node name="InteractionRay" type="RayCast3D" parent="Head/Camera" unique_id=1556193340]

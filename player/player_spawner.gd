@@ -24,7 +24,7 @@ static var instance: PlayerSpawner
 
 @export_group("Depuración")
 @export var spawn_local_player_without_lobby: bool = true
-@export var debug_role: Statics.Role = Statics.Role.SEER
+@export var debug_role: Statics.Role = Statics.Role.SOLDIER
 @export_range(1, 8) var debug_player_count: int = 1
 
 @export_group("Sincronización de carga")
