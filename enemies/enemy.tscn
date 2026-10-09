@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://ovs6puodl052" path="res://enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="2_health"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_body"]
+size = Vector3(0.8, 1.8, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_body"]
+size = Vector3(0.8, 1.8, 0.8)
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "health")]
+collision_layer = 8
+collision_mask = 1
+script = ExtResource("1_enemy")
+model = NodePath("Model")
+model_placeholder = NodePath("Model/Placeholder")
+health = NodePath("Health")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("BoxShape3D_body")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Placeholder" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+mesh = SubResource("BoxMesh_body")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 60.0
+can_be_downed = false
