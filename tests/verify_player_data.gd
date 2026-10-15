@@ -106,7 +106,7 @@ func _verify_data() -> void:
 	_check("es un Enemy", enemy != null)
 	if enemy:
 		_check("cableado", enemy.model != null and enemy.model_placeholder != null \
-			and enemy.health != null)
+			and enemy.collision != null and enemy.health != null)
 		_check("marcado como etereo", enemy.is_ethereal \
 			and enemy.get_visual_layer() == Statics.ETHEREAL_VISUAL_LAYER)
 		# El cubo viene ya en la capa etérea desde la escena; _ready() la fuerza
@@ -121,9 +121,9 @@ func _verify_data() -> void:
 
 
 ## Comprueba un [Player] militar de otro peer (id 77) ya en el árbol: cableado, reparto de
-## autoridad, modelo y medidas del cuerpo, loadout, estado del item, soltar, recoger,
-## reanimar y las escenas de pickup y spawner. Después lanza las verificaciones en caliente y
-## marca [code]runtime_completed[/code].
+## autoridad, modelo y medidas del cuerpo, loadout, estado del item, soltar, recoger y las
+## escenas de pickup y spawner; morir y reanimar se prueban con un jugador local aparte.
+## Después lanza las verificaciones en caliente y marca [code]runtime_completed[/code].
 func _verify_runtime() -> void:
 	var scene: PackedScene = load("res://player/player.tscn") as PackedScene
 	_check("player.tscn carga", scene != null)
@@ -142,11 +142,14 @@ func _verify_runtime() -> void:
 	print("--- Cableado de la escena ---")
 	_check("componentes cableados", p.movement != null and p.view != null \
 		and p.interaction != null and p.inventory != null and p.health != null \
-		and p.perception != null)
+		and p.perception != null and p.capture != null)
 	_check("nodos cableados", p.head != null and p.camera != null and p.hand_anchor != null \
 		and p.body != null and p.body_placeholder != null and p.hud_layer != null \
 		and p.synchronizer != null)
-	_check("componentes conocen a su Player", p.movement.player == p and p.view.player == p)
+	_check("componentes conocen a su Player", p.movement.player == p and p.view.player == p \
+		and p.capture.player == p)
+	_check("Capture arranca libre y sin seguir nada", not p.is_captured() \
+		and not p.capture.is_processing())
 	_check("ViewComponent tiene la cabeza", p.view.head == p.head)
 	_check("Inventory tiene el hand_anchor", p.inventory.hand_anchor == p.hand_anchor)
 	_check("Interaction tiene el ray", p.interaction.ray != null)
@@ -160,6 +163,7 @@ func _verify_runtime() -> void:
 	_check("Health al SERVIDOR", p.health.get_multiplayer_authority() == Statics.SERVER_ID)
 	_check("Inventory al SERVIDOR", p.inventory.get_multiplayer_authority() == Statics.SERVER_ID)
 	_check("HandAnchor al SERVIDOR", p.hand_anchor.get_multiplayer_authority() == Statics.SERVER_ID)
+	_check("Capture al SERVIDOR", p.capture.get_multiplayer_authority() == Statics.SERVER_ID)
 
 	print("--- Modelo del cuerpo ---")
 	for role: Statics.Role in RoleDatabase.get_selectable_roles():
@@ -207,7 +211,7 @@ func _verify_runtime() -> void:
 		gun.in_magazine = 3
 		var state: Dictionary = gun.get_state()
 		_check("get_state guarda la munición", state.get("in_magazine") == 3)
-		var fresh: Firearm = load("res://equipment/firearm.tscn").instantiate() as Firearm
+		var fresh: Firearm = (load("res://equipment/firearm.tscn") as PackedScene).instantiate() as Firearm
 		fresh.set_state(state)
 		_check("set_state la restaura", fresh.in_magazine == 3)
 		fresh.free()
@@ -233,23 +237,17 @@ func _verify_runtime() -> void:
 	_check("conserva la munición al recogerlo", picked != null and picked.in_magazine == 3)
 
 	print("--- Reanimar devuelve el control ---")
-	_check("Player conecta health.revived", p.health.revived.is_connected(p._handle_revived))
-	p.health.max_health = 10.0
-	p.health.current_health = 10.0
-	p.health.apply_damage(20.0)
-	_check("queda derribado", p.health.is_downed)
-	_check("no está muerto (es reanimable)", not p.health.is_dead)
-	p.health.revive()
-	_check("revive", not p.health.is_downed)
-	_check("recupera vida al revivir", p.health.current_health > 0.0)
+	await _verify_revive()
 
 	print("--- Escenas nuevas ---")
-	var pickup: EquipmentPickup = load("res://equipment/equipment_pickup.tscn").instantiate() as EquipmentPickup
+	var pickup: EquipmentPickup = (load("res://equipment/equipment_pickup.tscn") as PackedScene) \
+		.instantiate() as EquipmentPickup
 	_check("el pickup es un Interactable", pickup is Interactable)
 	if pickup:
 		pickup.free()
 
-	var spawner: PlayerSpawner = load("res://player/player_spawner.tscn").instantiate() as PlayerSpawner
+	var spawner: PlayerSpawner = (load("res://player/player_spawner.tscn") as PackedScene) \
+		.instantiate() as PlayerSpawner
 	_check("spawner instancia", spawner != null)
 	_check("spawner cableado", spawner != null and spawner.players_spawner != null \
 		and spawner.pickups_spawner != null and spawner.player_scene != null \
@@ -260,19 +258,54 @@ func _verify_runtime() -> void:
 	p.free()
 
 	await _verify_seer_view()
-	await _verify_body_animation("res://player/bodies/cat_body.tscn", 4.0)
-	await _verify_body_animation("res://enemies/pesadilla/pesadilla_animation.tscn", 1.5)
+	await _verify_body_animation("res://player/bodies/cat_body.tscn", 4.0, &"parameters/playback")
+	# La raíz de la pesadilla es un BlendTree (reacciones aditivas encima): la máquina de
+	# estados es su nodo main.
+	await _verify_body_animation("res://enemies/pesadilla/pesadilla_animation.tscn", 1.5,
+		&"parameters/main/playback")
 	await _verify_physical_enemy()
 	await _verify_foot_placement()
 	runtime_completed = true
+
+
+## Monta un militar local, porque los controles solo se encienden en el peer dueño, lo mata
+## de un golpe y lo reanima: el daño letal mata sin estado intermedio y quita los controles, y
+## [code]revive()[/code] devuelve la vida llena y los controles.
+func _verify_revive() -> void:
+	var player: Player = (load("res://player/player.tscn") as PackedScene).instantiate() as Player
+	get_tree().root.add_child.call_deferred(player)
+	await get_tree().process_frame
+	player.setup(Statics.PlayerData.new(multiplayer.get_unique_id(), "Reanimado", 0, Statics.Role.SOLDIER))
+	await get_tree().process_frame
+
+	_check("Player conecta health.revived", player.health.revived.is_connected(player._handle_revived))
+	_check("vivo, tiene los controles", _has_controls(player))
+	player.health.apply_damage(player.health.max_health + 50.0)
+	_check("el daño letal mata de un golpe, sin estado intermedio", player.health.is_dead)
+	_check("la vida queda a 0", is_zero_approx(player.health.current_health))
+	_check("muerto pierde los controles", not _has_controls(player))
+	player.health.revive()
+	_check("revive", not player.health.is_dead)
+	_check("vuelve con la vida llena",
+		is_equal_approx(player.health.current_health, player.health.max_health))
+	_check("y recupera los controles", _has_controls(player))
+
+	player.queue_free()
+	await get_tree().process_frame
+
+
+## Devuelve [code]true[/code] si el movimiento y la interacción de [param player] están
+## procesando, que es lo que enciende y apaga [code]Player._set_controls_enabled()[/code].
+func _has_controls(player: Player) -> bool:
+	return player.movement.is_physics_processing() and player.interaction.is_physics_processing()
 
 
 ## Mueve a mano un envoltorio de modelo y comprueba que su [LocomotionAnimator] mide la
 ## velocidad por posición, se la pasa al árbol, ignora un teletransporte y apaga el árbol al
 ## ocultarse: la misma medida que hace un peer remoto, donde velocity no se replica.
 ## Recibe: [param path] — escena del envoltorio; [param test_speed] — velocidad simulada
-## en m/s.
-func _verify_body_animation(path: String, test_speed: float) -> void:
+## en m/s; [param playback_path] — parámetro de la máquina de estados con la locomoción.
+func _verify_body_animation(path: String, test_speed: float, playback_path: StringName) -> void:
 	print("--- Animacion: %s ---" % path.get_file())
 	var holder: Node3D = Node3D.new()
 	get_tree().root.add_child.call_deferred(holder)
@@ -296,7 +329,7 @@ func _verify_body_animation(path: String, test_speed: float) -> void:
 	_check("mide la velocidad por posicion", absf(animator.speed - test_speed) < 0.2)
 	_check("y se la pasa al arbol",
 		absf(float(animator.tree.get(animator.blend_parameter)) - test_speed) < 0.2)
-	var playback: AnimationNodeStateMachinePlayback = animator.tree.get(&"parameters/playback") \
+	var playback: AnimationNodeStateMachinePlayback = animator.tree.get(playback_path) \
 		as AnimationNodeStateMachinePlayback
 	_check("el arbol arranca en locomotion",
 		playback != null and playback.get_current_node() == &"locomotion")
@@ -433,7 +466,7 @@ func _feet_match(measured: Array[float], animated: Array[float], expected_offset
 func _verify_seer_view() -> void:
 	print("--- Vista del vidente, en caliente ---")
 	var local_id: int = multiplayer.get_unique_id()
-	var seer: Player = load("res://player/player.tscn").instantiate() as Player
+	var seer: Player = (load("res://player/player.tscn") as PackedScene).instantiate() as Player
 	get_tree().root.add_child.call_deferred(seer)
 	await get_tree().process_frame
 	seer.setup(Statics.PlayerData.new(local_id, "Vidente", 0, Statics.Role.SEER))
@@ -479,7 +512,7 @@ func _verify_seer_view() -> void:
 		seer.perception.ethereal_camera.global_position.is_equal_approx(seer.camera.global_position))
 
 	print("--- ...y el militar no monta nada de eso ---")
-	var soldier: Player = load("res://player/player.tscn").instantiate() as Player
+	var soldier: Player = (load("res://player/player.tscn") as PackedScene).instantiate() as Player
 	get_tree().root.add_child.call_deferred(soldier)
 	await get_tree().process_frame
 	soldier.setup(Statics.PlayerData.new(local_id, "Militar", 0, Statics.Role.SOLDIER))

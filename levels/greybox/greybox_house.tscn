@@ -1,0 +1,105 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mission/objective_zone.gd" id="1_zone"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.62, 0.6, 0.56, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_back"]
+size = Vector3(6.3, 3, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(6.3, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_side"]
+size = Vector3(0.3, 3, 6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(0.3, 3, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_front"]
+size = Vector3(2.15, 3, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_front"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(2.15, 3, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lintel"]
+size = Vector3(2, 0.6, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lintel"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(2, 0.6, 0.3)
+
+[node name="GreyboxHouse" type="Node3D"]
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="Back" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -3)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Back"]
+shape = SubResource("BoxShape3D_back")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Back"]
+mesh = SubResource("BoxMesh_back")
+
+[node name="Left" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1.5, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Left"]
+shape = SubResource("BoxShape3D_side")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Left"]
+mesh = SubResource("BoxMesh_side")
+
+[node name="Right" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1.5, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Right"]
+shape = SubResource("BoxShape3D_side")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Right"]
+mesh = SubResource("BoxMesh_side")
+
+[node name="FrontLeft" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.075, 1.5, 3)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/FrontLeft"]
+shape = SubResource("BoxShape3D_front")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/FrontLeft"]
+mesh = SubResource("BoxMesh_front")
+
+[node name="FrontRight" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.075, 1.5, 3)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/FrontRight"]
+shape = SubResource("BoxShape3D_front")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/FrontRight"]
+mesh = SubResource("BoxMesh_front")
+
+[node name="Lintel" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.7, 3)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Lintel"]
+shape = SubResource("BoxShape3D_lintel")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Lintel"]
+mesh = SubResource("BoxMesh_lintel")
+
+[node name="ObjectiveZone" type="Node3D" parent="."]
+script = ExtResource("1_zone")
+tag = &"casa"
+
+[node name="SiteA" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="SiteB" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 2, 0, -2)
+
+[node name="SiteC" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)

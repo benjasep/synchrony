@@ -46,6 +46,7 @@ enum EquipmentTag {
 	LOCKPICK,
 	MAP,
 	RITUAL_TOOL,
+	EVIDENCE,
 }
 
 
@@ -53,6 +54,16 @@ enum EquipmentTag {
 enum DamageType {
 	PHYSICAL = 1,
 	ETHEREAL = 2,
+}
+
+
+## Zona del cuerpo donde entra un impacto. Semántica y no anatómica: es el modelo de cada
+## enemigo el que decide qué parte es su punto débil (en la pesadilla, las rodillas), y así
+## las reglas que la miran valen para cualquier enemigo.
+enum HitZone {
+	CUERPO,
+	CABEZA,
+	PUNTO_DEBIL,
 }
 
 

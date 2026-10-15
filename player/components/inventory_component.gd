@@ -11,6 +11,9 @@ signal item_removed(item: Equipment)
 signal item_equipped(item: Equipment)
 signal item_dropped(item: Equipment, drop_transform: Transform3D)
 
+## Acciones de cambio de item (teclas 1–4): la de posición i empuña [code]items[i][/code].
+const SLOT_ACTIONS: Array[StringName] = [&"slot_1", &"slot_2", &"slot_3", &"slot_4"]
+
 @export var hand_anchor: Node3D
 @export var max_slots: int = 4
 @export var drop_distance: float = 1.2
@@ -146,8 +149,8 @@ func _apply_add(scene_path: String, state: Dictionary) -> void:
 		return
 	_attach_item(item, state)
 
-	# Sin esto el item recogido se queda guardado y sin forma de sacarlo: no hay
-	# acción de cambio de slot, así que con las manos vacías hay que equiparlo.
+	# Con las manos vacías se empuña al recogerlo: si no, habría que pulsar su
+	# tecla para ver siquiera qué se ha cogido.
 	if not active_item:
 		_apply_equip(items.size() - 1)
 
@@ -225,6 +228,13 @@ func _get_drop_transform() -> Transform3D:
 	return Transform3D(Basis.IDENTITY, origin)
 
 
+## Pide empuñar el item de [param index] si existe y no es el que ya está en la mano; si no, no
+## hace nada.
+func _select_slot(index: int) -> void:
+	if index < items.size() and items[index] != active_item:
+		request_equip(index)
+
+
 ## Devuelve [code]true[/code] si el RPC en curso lo envió el dueño de este jugador o es una
 ## llamada local del host (emisor [code]0[/code]).
 func _is_sender_the_owner() -> bool:
@@ -232,9 +242,19 @@ func _is_sender_the_owner() -> bool:
 	return sender_id == 0 or (player.data != null and sender_id == player.data.id)
 
 
-## Con un item activo, traduce [code]use_item[/code], [code]alt_use_item[/code] y
-## [code]drop_item[/code] en usarlo, su uso alternativo o pedir soltarlo. Solo corre en el dueño.
-func _unhandled_input(_event: InputEvent) -> void:
+## Traduce [code]slot_1[/code]…[code]slot_4[/code] en pedir empuñar ese item y, con un item
+## activo, [code]use_item[/code], [code]alt_use_item[/code] y [code]drop_item[/code] en usarlo,
+## su uso alternativo o pedir soltarlo. Solo corre en el dueño.
+## Recibe: [param event] — el evento de input sin consumir.
+func _unhandled_input(event: InputEvent) -> void:
+	# Del evento y no de Input.is_action_just_pressed(): esa sigue siendo cierta con
+	# cada evento que llegue en el mismo frame (un movimiento de ratón, por ejemplo) y
+	# pediría el cambio varias veces.
+	for slot: int in SLOT_ACTIONS.size():
+		if event.is_action_pressed(SLOT_ACTIONS[slot]):
+			_select_slot(slot)
+			get_viewport().set_input_as_handled()
+			return
 	if not active_item:
 		return
 	if Input.is_action_just_pressed(&"use_item"):

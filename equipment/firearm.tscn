@@ -5,11 +5,12 @@
 [sub_resource type="BoxMesh" id="BoxMesh_body"]
 size = Vector3(0.06, 0.12, 0.3)
 
-[node name="Firearm" type="Node3D" node_paths=PackedStringArray("model")]
+[node name="Firearm" type="Node3D" node_paths=PackedStringArray("model", "muzzle")]
 script = ExtResource("1_firearm")
 tag = 1
 display_name = "Revólver"
 model = NodePath("Model")
+muzzle = NodePath("Model/Muzzle")
 damage = 25.0
 range_meters = 60.0
 base_spread = 0.01
@@ -23,3 +24,6 @@ base_reload_time = 2.0
 [node name="Mesh" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
 mesh = SubResource("BoxMesh_body")
+
+[node name="Muzzle" type="Marker3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)

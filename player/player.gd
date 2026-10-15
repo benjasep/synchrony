@@ -6,7 +6,6 @@ extends CharacterBody3D
 ## [code]setup()[/code] rompe el diseño: eso va en un .tres, [Equipment] o [PlayerAbility].
 
 signal setup_completed
-signal downed
 signal revived
 signal died
 signal equipment_changed(item: Equipment)
@@ -28,6 +27,7 @@ signal equipment_changed(item: Equipment)
 @export var inventory: InventoryComponent
 @export var health: HealthComponent
 @export var perception: PerceptionComponent
+@export var capture: CaptureComponent
 
 var data: Statics.PlayerData
 var profile: RoleProfile
@@ -67,6 +67,11 @@ func _ready() -> void:
 ## Devuelve [code]true[/code] si este peer controla al jugador (es su autoridad).
 func is_local_player() -> bool:
 	return is_multiplayer_authority()
+
+
+## Devuelve [code]true[/code] si algo lo tiene atrapado (ver [CaptureComponent]).
+func is_captured() -> bool:
+	return capture != null and capture.is_captured()
 
 
 ## Devuelve el nombre de sesión del jugador, o cadena vacía si aún no tiene datos.
@@ -112,9 +117,10 @@ func _apply_setup() -> void:
 
 
 ## Reparte la autoridad nodo a nodo: el cliente dueño recibe el [Player], movimiento, vista,
-## interacción, percepción y synchronizer; el servidor, salud, inventario y
-## [code]hand_anchor[/code] (y con él el equipamiento). Nunca recursiva: el servidor dejaría
-## de ser autoridad de la salud y sus [code]@rpc("authority")[/code] serían rechazados.
+## interacción, percepción y synchronizer; el servidor, salud, inventario,
+## [code]hand_anchor[/code] (y con él el equipamiento) y captura, que es estado del mundo. Nunca
+## recursiva: el servidor dejaría de ser autoridad de la salud y sus
+## [code]@rpc("authority")[/code] serían rechazados.
 ## Idempotente: reasignar la autoridad de un synchronizer que ya sincroniza rompe su spawn.
 func _assign_authority() -> void:
 	if _authority_assigned:
@@ -129,7 +135,7 @@ func _assign_authority() -> void:
 		if node:
 			node.set_multiplayer_authority(data.id, false)
 
-	var server_owned: Array[Node] = [health, inventory, hand_anchor]
+	var server_owned: Array[Node] = [health, inventory, hand_anchor, capture]
 	for node: Node in server_owned:
 		if node:
 			node.set_multiplayer_authority(Statics.SERVER_ID, false)
@@ -142,7 +148,7 @@ func _configure_components() -> void:
 	# reutilizarlo en enemigos, por eso no recibe la referencia al Player.
 	if health:
 		health.configure(profile)
-	for component: PlayerComponent in [movement, view, interaction, inventory, perception]:
+	for component: PlayerComponent in [movement, view, interaction, inventory, perception, capture]:
 		if component:
 			component.player = self
 			component.configure(profile)
@@ -227,34 +233,36 @@ func _spawn_hud() -> void:
 	hud_layer.add_child(hud)
 
 
-## Conecta las señales de salud a sus manejadores y reemite como
+## Conecta las señales de salud y de captura a sus manejadores y reemite como
 ## [code]equipment_changed[/code] cada item que equipa el inventario.
 func _connect_signals() -> void:
 	if health:
-		health.downed.connect(_handle_downed)
 		health.revived.connect(_handle_revived)
 		health.died.connect(_handle_died)
+	if capture:
+		capture.captured.connect(_handle_captured)
+		capture.released.connect(_handle_released)
 	if inventory:
 		inventory.item_equipped.connect(func(item: Equipment) -> void: equipment_changed.emit(item))
 
 
-## Bloquea los controles al caer derribado y emite [code]downed[/code].
-func _handle_downed() -> void:
-	_set_controls_enabled(false)
-	downed.emit()
-
-
-## Devuelve los controles al ser reanimado y emite [code]revived[/code].
+## Al volver a la vida devuelve los controles (y, al dueño, el ratón), salvo que siga
+## atrapado, y emite [code]revived[/code]. Solo deshace de [code]_handle_died()[/code] lo que
+## tiene sentido deshacer: el inventario soltado sigue en el suelo, la habilidad no se reactiva
+## sola y el jugador no se mueve de donde cayó.
 func _handle_revived() -> void:
-	_set_controls_enabled(true)
+	if not is_captured():
+		_set_controls_enabled(true)
 	revived.emit()
 
 
-## Al morir, el servidor suelta todo el inventario (sigue en juego); luego bloquea los
-## controles, desactiva la habilidad, libera el ratón y emite [code]died[/code].
+## Al morir, el servidor suelta todo el inventario (sigue en juego) salvo que esté atrapado:
+## entonces lo suelta [code]_handle_released()[/code], o quedaría flotando donde lo sujetaban.
+## Luego bloquea los controles, desactiva la habilidad, libera el ratón y emite
+## [code]died[/code].
 func _handle_died() -> void:
 	# El equipamiento del muerto no se pierde: cae al suelo y sigue en juego.
-	if multiplayer.is_server() and inventory:
+	if multiplayer.is_server() and inventory and not is_captured():
 		inventory.drop_all()
 	_set_controls_enabled(false)
 	if ability:
@@ -264,8 +272,27 @@ func _handle_died() -> void:
 	died.emit()
 
 
-## Activa o desactiva movimiento e interacción y captura o libera el ratón. En las copias
-## remotas el procesado queda siempre apagado.
+## Al quedar atrapado le quita los controles: ni moverse (ni gravedad, que aplica el
+## movimiento), ni interactuar, ni usar items.
+func _handle_captured() -> void:
+	_set_controls_enabled(false)
+
+
+## Al soltarlo, si sigue vivo y no se soltaron sus restos, le devuelve los controles. Si está
+## muerto, el servidor suelta ahora el inventario que [code]_handle_died()[/code] retuvo.
+## Recibe: [param as_remains] — [code]true[/code] si se soltó su cuerpo: no recupera los
+## controles aunque la muerte aún no haya llegado a este peer.
+func _handle_released(as_remains: bool) -> void:
+	if health and health.is_dead:
+		if multiplayer.is_server() and inventory:
+			inventory.drop_all()
+		return
+	if not as_remains:
+		_set_controls_enabled(true)
+
+
+## Activa o desactiva movimiento, interacción y el uso de items y captura o libera el ratón. En
+## las copias remotas el procesado queda siempre apagado.
 ## Recibe: [param enabled] — [code]true[/code] para devolver el control al jugador.
 func _set_controls_enabled(enabled: bool) -> void:
 	var is_owner: bool = is_multiplayer_authority()
@@ -273,6 +300,9 @@ func _set_controls_enabled(enabled: bool) -> void:
 		movement.set_physics_process(enabled and is_owner)
 	if interaction:
 		interaction.set_physics_process(enabled and is_owner)
+	if inventory:
+		# El input de usar, recargar y soltar lo lee el inventario.
+		inventory.set_process_unhandled_input(enabled and is_owner)
 	if view:
 		if enabled and is_owner:
 			view.capture_mouse()

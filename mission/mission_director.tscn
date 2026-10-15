@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mission/mission_director.gd" id="1_director"]
+
+[node name="MissionDirector" type="Node" node_paths=PackedStringArray("end_screen", "end_label")]
+script = ExtResource("1_director")
+end_screen = NodePath("EndScreen")
+end_label = NodePath("EndScreen/Label")
+
+[node name="EndScreen" type="CanvasLayer" parent="."]
+layer = 100
+visible = false
+
+[node name="Shade" type="ColorRect" parent="EndScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.6)
+
+[node name="Label" type="Label" parent="EndScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 96
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,54 +1,65 @@
 class_name HealthComponent
 extends Node
 
-## Salud y estado de derribo. No extiende [PlayerComponent] a propósito, para poder
-## reutilizarlo en enemigos. El daño solo se aplica en el servidor y se replica por RPC.
+## Salud de un jugador o un enemigo: solo vivo o muerto, sin estados intermedios. No extiende
+## [PlayerComponent] a propósito, para poder reutilizarlo en enemigos. Todo cambio lo decide el
+## servidor y se replica por RPC.
 
 signal health_changed(current: float, maximum: float)
-signal downed
+## Solo se emite en el servidor, una vez por impacto que quita vida, con la zona donde entró:
+## las reglas de punto débil lo escuchan a él y no a [code]health_changed[/code], que no sabe
+## dónde entró el tiro.
+signal damaged(amount: float, zone: Statics.HitZone, source: Node)
 signal died
 signal revived
 
 @export var max_health: float = 100.0
-@export var can_be_downed: bool = true
-@export var downed_health: float = 25.0
 
 var current_health: float = 100.0
-var is_downed: bool = false
 var is_dead: bool = false
 
 
-## Toma la vida máxima del perfil y deja la salud llena, sin derribo ni muerte; emite
-## [code]health_changed[/code]. Es local: cada peer lo ejecuta al configurar el [Player].
+## Toma la vida máxima del perfil y deja la salud llena y viva; emite
+## [code]health_changed[/code]. Es local: cada peer lo ejecuta al configurar el [Player], y
+## [Enemy] en su [code]_ready()[/code].
 ## Recibe: [param profile] — perfil del rol; con [code]null[/code] se conserva
 ## [code]max_health[/code].
 func configure(profile: RoleProfile) -> void:
 	if profile:
 		max_health = profile.max_health
 	current_health = max_health
-	is_downed = false
 	is_dead = false
 	health_changed.emit(current_health, max_health)
 
 
-## Resta vida y la replica. Al llegar a 0 derriba al jugador si [code]can_be_downed[/code] y no
-## lo estaba ya; si no, lo mata. Solo actúa en el servidor e ignora daños no positivos o
-## a objetivos muertos.
-## Recibe: [param amount] — daño a restar; [param _source] — causante del daño (aún sin usar).
-func apply_damage(amount: float, _source: Node = null) -> void:
+## Resta vida, la replica y emite [code]damaged[/code]; al llegar a 0, muere. Solo actúa en el
+## servidor e ignora daños no positivos o a objetivos muertos.
+## Recibe: [param amount] — daño a restar; [param source] — causante del daño (puede ser
+## [code]null[/code]); [param zone] — zona donde entró el impacto.
+func apply_damage(amount: float, source: Node = null, zone: Statics.HitZone = Statics.HitZone.CUERPO) -> void:
 	if not multiplayer.is_server() or is_dead or amount <= 0.0:
 		return
 	_set_health.rpc(maxf(current_health - amount, 0.0))
-	if current_health > 0.0:
-		return
-	if can_be_downed and not is_downed:
-		_set_downed.rpc(true)
-	else:
+	# Antes de morir, para que quien escuche la zona vea el impacto que mató.
+	damaged.emit(amount, zone, source)
+	if current_health <= 0.0:
 		_set_dead.rpc()
 
 
+## Mata en el acto, sin pasar por [code]damaged[/code]: deja la vida a 0 y replica la muerte.
+## Solo actúa en el servidor y si no estaba muerto ya.
+## Recibe: [param _source] — causante de la muerte (aún sin usar).
+func kill(_source: Node = null) -> void:
+	if not multiplayer.is_server() or is_dead:
+		return
+	if current_health > 0.0:
+		_set_health.rpc(0.0)
+	_set_dead.rpc()
+
+
 ## Suma vida sin pasar de [code]max_health[/code] y la replica. Solo actúa en el servidor e
-## ignora cantidades no positivas u objetivos muertos. No quita el derribo.
+## ignora cantidades no positivas u objetivos muertos: a un muerto se le devuelve con
+## [code]revive()[/code].
 ## Recibe: [param amount] — vida a recuperar.
 func heal(amount: float) -> void:
 	if not multiplayer.is_server() or is_dead or amount <= 0.0:
@@ -56,13 +67,14 @@ func heal(amount: float) -> void:
 	_set_health.rpc(minf(current_health + amount, max_health))
 
 
-## Levanta a un jugador derribado con [code]downed_health[/code] de vida. Solo actúa en el
-## servidor y solo si está derribado y no muerto.
-func revive() -> void:
-	if not multiplayer.is_server() or not is_downed or is_dead:
+## Devuelve a la vida a un muerto, con la vida indicada, y emite [code]revived[/code] en todos
+## los peers. Solo actúa en el servidor y solo si está muerto.
+## Recibe: [param health] — vida con la que vuelve, acotada a [code]max_health[/code];
+## [code]<= 0[/code] = vida llena.
+func revive(health: float = 0.0) -> void:
+	if not multiplayer.is_server() or not is_dead:
 		return
-	_set_downed.rpc(false)
-	_set_health.rpc(downed_health)
+	_set_revived.rpc(max_health if health <= 0.0 else minf(health, max_health))
 
 
 ## Fija la salud en todos los peers y emite [code]health_changed[/code]. Lo envía el servidor.
@@ -73,22 +85,20 @@ func _set_health(value: float) -> void:
 	health_changed.emit(current_health, max_health)
 
 
-## Pone o quita el derribo en todos los peers y emite [code]downed[/code] o [code]revived[/code].
-## Lo envía el servidor.
-## Recibe: [param value] — [code]true[/code] al derribar, [code]false[/code] al reanimar.
-@rpc("authority", "call_local", "reliable")
-func _set_downed(value: bool) -> void:
-	is_downed = value
-	if is_downed:
-		downed.emit()
-	else:
-		revived.emit()
-
-
-## Marca la muerte en todos los peers, quita el derribo y emite [code]died[/code]. Lo envía el
-## servidor.
+## Marca la muerte en todos los peers y emite [code]died[/code]. Lo envía el servidor.
 @rpc("authority", "call_local", "reliable")
 func _set_dead() -> void:
 	is_dead = true
-	is_downed = false
 	died.emit()
+
+
+## Devuelve a la vida en todos los peers con [param value] de salud; emite
+## [code]health_changed[/code] y después [code]revived[/code], para que quien reaccione vea ya la
+## vida nueva. Lo envía el servidor.
+## Recibe: [param value] — salud con la que vuelve, ya acotada por quien llama.
+@rpc("authority", "call_local", "reliable")
+func _set_revived(value: float) -> void:
+	is_dead = false
+	current_health = value
+	health_changed.emit(current_health, max_health)
+	revived.emit()

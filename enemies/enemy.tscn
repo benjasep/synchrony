@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://ovs6puodl052" path="res://enemies/enemy.gd" id="1_enemy"]
 [ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/hitbox.gd" id="3_hitbox"]
+[ext_resource type="Script" path="res://enemies/components/enemy_combat.gd" id="4_combat"]
+[ext_resource type="Script" path="res://enemies/components/melee_attack.gd" id="5_melee"]
+[ext_resource type="Script" path="res://enemies/components/hit_reaction.gd" id="6_reaction"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(0.8, 1.8, 0.8)
@@ -9,12 +13,16 @@ size = Vector3(0.8, 1.8, 0.8)
 [sub_resource type="BoxMesh" id="BoxMesh_body"]
 size = Vector3(0.8, 1.8, 0.8)
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "health")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
+size = Vector3(0.8, 1.8, 0.8)
+
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "collision", "health")]
 collision_layer = 8
 collision_mask = 1
 script = ExtResource("1_enemy")
 model = NodePath("Model")
 model_placeholder = NodePath("Model/Placeholder")
+collision = NodePath("Collision")
 health = NodePath("Health")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
@@ -27,7 +35,27 @@ shape = SubResource("BoxShape3D_body")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 mesh = SubResource("BoxMesh_body")
 
+[node name="Hitbox" type="Area3D" parent="Model/Placeholder"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("3_hitbox")
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Placeholder/Hitbox"]
+shape = SubResource("BoxShape3D_hitbox")
+
 [node name="Health" type="Node" parent="."]
 script = ExtResource("2_health")
 max_health = 60.0
-can_be_downed = false
+
+[node name="Combat" type="Node" parent="." node_paths=PackedStringArray("enemy", "melee")]
+script = ExtResource("4_combat")
+enemy = NodePath("..")
+melee = NodePath("../Melee")
+
+[node name="Melee" type="Node" parent="." node_paths=PackedStringArray("enemy")]
+script = ExtResource("5_melee")
+enemy = NodePath("..")
+
+[node name="HitReaction" type="Node" parent="." node_paths=PackedStringArray("enemy")]
+script = ExtResource("6_reaction")
+enemy = NodePath("..")

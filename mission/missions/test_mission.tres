@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="MissionDefinition" format=3]
+
+[ext_resource type="Script" path="res://mission/mission_definition.gd" id="1_definition"]
+[ext_resource type="Script" path="res://mission/mission_objective.gd" id="2_objective"]
+[ext_resource type="PackedScene" path="res://equipment/evidence_report.tscn" id="3_report"]
+[ext_resource type="PackedScene" path="res://equipment/evidence_id_card.tscn" id="4_id_card"]
+
+[sub_resource type="Resource" id="Resource_reports"]
+script = ExtResource("2_objective")
+item_scene = ExtResource("3_report")
+count = 2
+
+[sub_resource type="Resource" id="Resource_id_card"]
+script = ExtResource("2_objective")
+item_scene = ExtResource("4_id_card")
+count = 1
+allowed_tags = Array[StringName]([&"capilla"])
+
+[resource]
+script = ExtResource("1_definition")
+objectives = Array[ExtResource("2_objective")]([SubResource("Resource_reports"), SubResource("Resource_id_card")])
+max_per_zone = 1

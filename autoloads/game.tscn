@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c8lsyb801m532" path="res://autoloads/game.gd" id="1_fmbhi"]
 [ext_resource type="Script" uid="uid://bnqpng0o60r43" path="res://scripts/player_data_resource.gd" id="2_xaonh"]
-[ext_resource type="PackedScene" uid="uid://cfgh1er0gla8c" path="res://tests/test_level.tscn" id="3_level"]
+[ext_resource type="PackedScene" path="res://levels/greybox_level.tscn" id="3_level"]
 
 [sub_resource type="Resource" id="Resource_nviqh"]
 script = ExtResource("2_xaonh")

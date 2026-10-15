@@ -1,19 +1,25 @@
 extends Node
 
-## Prueba de extremo a extremo: carga un nivel, aparece, cae, anda, suelta, recoge y dispara
-## siendo el host. Se corre con:
+## Prueba de extremo a extremo: carga un nivel, aparece, cae, anda, suelta, recoge, dispara y
+## cambia de item con las teclas 1–4 siendo el host. Se corre con:
 ## [code]"$GODOT" --headless --path . res://tests/verify_level_spawn.tscn[/code]
+
+## Nivel propio de la prueba: suelo plano y nada más. No usa [code]test_level.tscn[/code], un
+## patio de pruebas que va cambiando: cuando le pusieron el mapa provisional, una de sus casas
+## quedó justo delante del origen y el jugador se estampaba contra su pared a los 0,17 m.
+const ARENA_PATH: String = "res://tests/spawn_arena.tscn"
+const REPORT_PATH: String = "res://equipment/evidence_report.tscn"
 
 var failures: int = 0
 var completed: bool = false
 
 
-## Carga [code]test_level.tscn[/code] fijando el rol de depuración en militar antes de que
-## entre al árbol (el spawner genera ya en su [code]_ready()[/code]) y recorre la batería:
-## configuración sin lobby, gravedad, movimiento simulado, soltar y recoger, y disparar.
+## Carga la arena fijando el rol de depuración en militar antes de que entre al árbol (el
+## spawner genera ya en su [code]_ready()[/code]) y recorre la batería: configuración sin lobby,
+## gravedad, movimiento simulado, soltar y recoger, disparar y cambiar de item.
 func _ready() -> void:
 	_start_watchdog()
-	var level: Node3D = load("res://tests/test_level.tscn").instantiate() as Node3D
+	var level: Node3D = (load(ARENA_PATH) as PackedScene).instantiate() as Node3D
 	# El rol lo declara la PRUEBA, no el nivel. Esta batería ejercita soltar,
 	# recoger y disparar, así que necesita un rol CON equipo; dejarlo al
 	# debug_role del nivel hizo que cambiar el default del export tumbara cuatro
@@ -106,8 +112,8 @@ func _ready() -> void:
 		_check("recogerlo lo devuelve al inventario", player.inventory.items.size() == 1)
 		_check("el pickup desaparece del mundo", not is_instance_valid(pickup) \
 			or pickup.is_queued_for_deletion())
-		# Sin esto el item volvía al inventario pero guardado: invisible y sin
-		# poder usarlo, porque no hay acción para cambiar de slot.
+		# Sin esto el item volvía al inventario pero guardado: invisible hasta
+		# pulsar su tecla, sin que nada avise de que se ha cogido.
 		_check("y vuelve a la mano, no al fondo del inventario",
 			player.inventory.active_item != null \
 			and player.inventory.active_item.is_equipped())
@@ -129,7 +135,61 @@ func _ready() -> void:
 		_check("el disparo consume munición", gun.in_magazine == ammo_before - 1)
 		_check("resolvió competencia al equiparla", gun.proficiency != null)
 
+	await _verify_slot_keys(player, spawner)
 	_finish()
+
+
+## Cambia de item con las acciones [code]slot_1[/code]…[code]slot_4[/code] por la ruta real: el
+## evento entra por el viewport, [InventoryComponent] lo recibe en
+## [code]_unhandled_input()[/code] y pide el cambio al host con [code]request_equip()[/code].
+## Usa una evidencia porque es el caso que motivó las teclas: quien recogía un informe con
+## otro item en la mano no podía ni mirarlo ni soltarlo.
+func _verify_slot_keys(player: Player, spawner: PlayerSpawner) -> void:
+	print("--- Cambiar de item con 1–4 ---")
+	var inventory: InventoryComponent = player.inventory
+	var added: bool = inventory.add_item_from_scene(REPORT_PATH, {})
+	await get_tree().process_frame
+	_check("recoge una evidencia sin soltar lo que empuña", added and inventory.active_item != null \
+		and inventory.items.back() != inventory.active_item)
+	if not added or inventory.items.size() > InventoryComponent.SLOT_ACTIONS.size():
+		return
+	var report_index: int = inventory.items.size() - 1
+	var report: Equipment = inventory.items[report_index]
+	var first: Equipment = inventory.items[0]
+
+	await _press_action(InventoryComponent.SLOT_ACTIONS[report_index])
+	_check("la tecla %d empuña la evidencia" % (report_index + 1),
+		inventory.active_item == report and report.is_equipped())
+	await _press_action(InventoryComponent.SLOT_ACTIONS[0])
+	_check("la tecla 1 vuelve al primer item y guarda la evidencia",
+		inventory.active_item == first and first.is_equipped() and not report.is_equipped())
+
+	# Contador en un Array: una lambda captura por valor, así que un int no cambiaría fuera.
+	var equips: Array[int] = [0]
+	var count_equip: Callable = func(_item: Equipment) -> void: equips[0] += 1
+	inventory.item_equipped.connect(count_equip)
+	await _press_action(InventoryComponent.SLOT_ACTIONS[0])
+	_check("la tecla del item que ya empuña no pide nada", equips[0] == 0)
+	await _press_action(InventoryComponent.SLOT_ACTIONS[InventoryComponent.SLOT_ACTIONS.size() - 1])
+	_check("una tecla sin item detrás no cambia nada",
+		equips[0] == 0 and inventory.active_item == first)
+	inventory.item_equipped.disconnect(count_equip)
+
+	var dummy: Player = spawner.players_container.get_child(1) as Player \
+		if spawner.players_container.get_child_count() > 1 else null
+	_check("los maniquíes no atienden las teclas", dummy != null \
+		and not dummy.inventory.is_processing_unhandled_input())
+
+
+## Pulsa y suelta [param action] como lo haría el teclado: el evento pasa por [Input] y el
+## viewport, así que llega a los [code]_unhandled_input()[/code] igual que una tecla de verdad.
+func _press_action(action: StringName) -> void:
+	for pressed: bool in [true, false]:
+		var event: InputEventAction = InputEventAction.new()
+		event.action = action
+		event.pressed = pressed
+		Input.parse_input_event(event)
+		await get_tree().process_frame
 
 
 ## Arranca un temporizador de 60 s que da el test por fallido si no ha terminado: si un error

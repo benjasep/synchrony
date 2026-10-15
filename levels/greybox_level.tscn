@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://levels/level_base.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://levels/greybox/greybox_chapel.tscn" id="2_chapel"]
+[ext_resource type="PackedScene" path="res://levels/greybox/greybox_house.tscn" id="3_house"]
+[ext_resource type="PackedScene" path="res://mission/extraction_zone.tscn" id="4_extraction"]
+[ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="5_pesadilla"]
+[ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="6_ghost"]
+
+[sub_resource type="Environment" id="Environment_greybox"]
+background_mode = 1
+background_color = Color(0.05, 0.06, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.5, 0.6, 1)
+ambient_light_energy = 0.4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(60, 1, 60)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
+albedo_color = Color(0.3, 0.32, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+material = SubResource("StandardMaterial3D_ground")
+size = Vector3(60, 1, 60)
+
+[node name="GreyboxLevel" instance=ExtResource("1_base")]
+
+[node name="PlayerSpawner" parent="." index="0" node_paths=PackedStringArray("spawn_points")]
+spawn_points = [NodePath("../SpawnPoints/A"), NodePath("../SpawnPoints/B"), NodePath("../SpawnPoints/C")]
+debug_player_count = 1
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_greybox")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8192, -0.4394, 0.3687, 0, 0.6428, 0.766, -0.5736, -0.6275, 0.5266, 0, 10, 0)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="Map" type="Node3D" parent="." groups=["navigation_source"]]
+
+[node name="Ground" type="StaticBody3D" parent="Map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Map/Ground"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Mesh" type="MeshInstance3D" parent="Map/Ground"]
+mesh = SubResource("BoxMesh_ground")
+
+[node name="Chapel" parent="Map" instance=ExtResource("2_chapel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -16)
+
+[node name="HouseWest" parent="Map" instance=ExtResource("3_house")]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -15, 0, -2)
+
+[node name="HouseEast" parent="Map" instance=ExtResource("3_house")]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 15, 0, -2)
+
+[node name="HouseSouth" parent="Map" instance=ExtResource("3_house")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, 0, 17)
+
+[node name="Extraction" type="Node3D" parent="."]
+
+[node name="NorthEast" parent="Extraction" instance=ExtResource("4_extraction")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -20)
+
+[node name="SouthWest" parent="Extraction" instance=ExtResource("4_extraction")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 20)
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="A" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 4)
+
+[node name="B" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="C" type="Marker3D" parent="SpawnPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 4)
+
+[node name="EnemySpawns" type="Node3D" parent="."]
+
+[node name="SouthEast" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 24)
+
+[node name="NorthWest" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -24)
+
+[node name="East" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 8)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="Pesadilla" parent="Enemies" instance=ExtResource("5_pesadilla")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
+
+[node name="Ghost" parent="Enemies" instance=ExtResource("6_ghost")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -12)

@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://equipment/evidence.gd" id="1_evidence"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_folder"]
+albedo_color = Color(0.82, 0.68, 0.42, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_folder"]
+material = SubResource("StandardMaterial3D_folder")
+size = Vector3(0.24, 0.03, 0.32)
+
+[node name="EvidenceReport" type="Node3D" node_paths=PackedStringArray("model")]
+script = ExtResource("1_evidence")
+tag = 6
+display_name = "Informe"
+model = NodePath("Model")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Model"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.015, 0)
+mesh = SubResource("BoxMesh_folder")

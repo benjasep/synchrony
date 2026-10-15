@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://mission/objective_zone.gd" id="1_zone"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.52, 0.55, 0.62, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_altar"]
+albedo_color = Color(0.45, 0.32, 0.25, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_back"]
+size = Vector3(7.3, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(7.3, 4, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_side"]
+size = Vector3(0.3, 4, 10)
+
+[sub_resource type="BoxMesh" id="BoxMesh_side"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(0.3, 4, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_front"]
+size = Vector3(2.65, 4, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_front"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(2.65, 4, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lintel"]
+size = Vector3(2, 1.6, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lintel"]
+material = SubResource("StandardMaterial3D_wall")
+size = Vector3(2, 1.6, 0.3)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_altar"]
+size = Vector3(2, 1, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_altar"]
+material = SubResource("StandardMaterial3D_altar")
+size = Vector3(2, 1, 0.8)
+
+[node name="GreyboxChapel" type="Node3D"]
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="Back" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -5)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Back"]
+shape = SubResource("BoxShape3D_back")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Back"]
+mesh = SubResource("BoxMesh_back")
+
+[node name="Left" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 2, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Left"]
+shape = SubResource("BoxShape3D_side")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Left"]
+mesh = SubResource("BoxMesh_side")
+
+[node name="Right" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 2, 0)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Right"]
+shape = SubResource("BoxShape3D_side")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Right"]
+mesh = SubResource("BoxMesh_side")
+
+[node name="FrontLeft" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.325, 2, 5)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/FrontLeft"]
+shape = SubResource("BoxShape3D_front")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/FrontLeft"]
+mesh = SubResource("BoxMesh_front")
+
+[node name="FrontRight" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.325, 2, 5)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/FrontRight"]
+shape = SubResource("BoxShape3D_front")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/FrontRight"]
+mesh = SubResource("BoxMesh_front")
+
+[node name="Lintel" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, 5)
+
+[node name="Collision" type="CollisionShape3D" parent="Walls/Lintel"]
+shape = SubResource("BoxShape3D_lintel")
+
+[node name="Mesh" type="MeshInstance3D" parent="Walls/Lintel"]
+mesh = SubResource("BoxMesh_lintel")
+
+[node name="Altar" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -4)
+
+[node name="Collision" type="CollisionShape3D" parent="Altar"]
+shape = SubResource("BoxShape3D_altar")
+
+[node name="Mesh" type="MeshInstance3D" parent="Altar"]
+mesh = SubResource("BoxMesh_altar")
+
+[node name="ObjectiveZone" type="Node3D" parent="."]
+script = ExtResource("1_zone")
+tag = &"capilla"
+
+[node name="OnAltar" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4)
+
+[node name="PewLeft" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+
+[node name="PewRight" type="Marker3D" parent="ObjectiveZone"]
+transform = Transform3D(0.7071068, 0, -0.7071068, 0, 1, 0, 0.7071068, 0, 0.7071068, 2.5, 0, 2)

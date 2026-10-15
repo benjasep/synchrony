@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://bjgvc47nqm8wb" path="res://player/components/inventory_component.gd" id="5_inventory"]
 [ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="6_health"]
 [ext_resource type="Script" uid="uid://cm0huseiov012" path="res://player/components/perception_component.gd" id="7_perception"]
+[ext_resource type="Script" path="res://player/components/capture_component.gd" id="8_capture"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -30,7 +31,7 @@ properties/2/path = NodePath("Head:rotation")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D" unique_id=50683130 node_paths=PackedStringArray("head", "camera", "hand_anchor", "collision", "body", "body_placeholder", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception")]
+[node name="Player" type="CharacterBody3D" unique_id=50683130 node_paths=PackedStringArray("head", "camera", "hand_anchor", "collision", "body", "body_placeholder", "hud_layer", "synchronizer", "movement", "view", "interaction", "inventory", "health", "perception", "capture")]
 collision_layer = 2
 script = ExtResource("1_player")
 head = NodePath("Head")
@@ -47,6 +48,7 @@ interaction = NodePath("Components/Interaction")
 inventory = NodePath("Components/Inventory")
 health = NodePath("Components/Health")
 perception = NodePath("Components/Perception")
+capture = NodePath("Components/Capture")
 
 [node name="Collision" type="CollisionShape3D" parent="." unique_id=2067758514]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -109,6 +111,10 @@ echo_quad = NodePath("../../Head/Camera/EchoQuad")
 ethereal_viewport = NodePath("../../EtherealViewport")
 ethereal_camera = NodePath("../../EtherealViewport/EtherealCamera")
 ethereal_view = NodePath("../../HUD/EtherealView")
+player = NodePath("../..")
+
+[node name="Capture" type="Node" parent="Components" node_paths=PackedStringArray("player")]
+script = ExtResource("8_capture")
 player = NodePath("../..")
 
 [node name="EtherealViewport" type="SubViewport" parent="." unique_id=381802066]

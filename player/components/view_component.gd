@@ -30,7 +30,7 @@ func capture_mouse() -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 
-## Libera y muestra el ratón, solo en el dueño. [Player] lo usa al quedar derribado o morir.
+## Libera y muestra el ratón, solo en el dueño. [Player] lo usa al morir.
 func release_mouse() -> void:
 	if is_owner():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

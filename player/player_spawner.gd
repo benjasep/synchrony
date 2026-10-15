@@ -90,6 +90,13 @@ func spawn_all_players(force: bool = false) -> void:
 	all_players_spawned.emit()
 
 
+## Devuelve [code]true[/code] si este peer ya generó a los jugadores; solo puede pasar en el
+## servidor. Sirve para no perderse [code]all_players_spawned[/code] al conectarse tarde: sin
+## lobby se emite dentro del propio [code]_ready()[/code] de este nodo.
+func has_spawned_players() -> bool:
+	return _has_spawned
+
+
 ## Devuelve [code]true[/code] si todos los peers conectados han avisado de tener el nivel.
 func _is_everyone_ready() -> bool:
 	# multiplayer.get_peers() y no la lista del lobby: si alguien se desconecta
