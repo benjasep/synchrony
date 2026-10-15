@@ -1,0 +1,261 @@
+[gd_scene format=3 uid="uid://b6886180rblg0"]
+
+[ext_resource type="PackedScene" uid="uid://cfvjcwa2wkj4f" path="res://assets/PSX-Waste/PSX-Waste/glb/crumpled-can.glb" id="1_jw1bu"]
+[ext_resource type="PackedScene" uid="uid://b7oiuemmw2h1a" path="res://assets/PSX-Waste/PSX-Waste/glb/glass-bottle.glb" id="2_ak5du"]
+
+[node name="Latas" type="Node3D" unique_id=1176149772]
+
+[node name="crumpled-can" parent="." unique_id=238968541 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 0, 0, 1.975819)
+
+[node name="crumpled-can2" parent="." unique_id=1915488511 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -2.003615, 0, -2.3569567)
+
+[node name="crumpled-can3" parent="." unique_id=623065923 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 1.5626472, 0, 0.86165047)
+
+[node name="crumpled-can4" parent="." unique_id=1343065442 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -0.0019125938, 0, 0)
+
+[node name="crumpled-can5" parent="." unique_id=1885765479 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 1.0703807, 0, -0.9496157)
+
+[node name="crumpled-can6" parent="." unique_id=1420037756 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -1.9058986, 0, 1.0180326)
+
+[node name="crumpled-can7" parent="." unique_id=1113692512 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.77553093, 0, -0.7271074)
+
+[node name="crumpled-can8" parent="." unique_id=378089853 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.95098865, 0, -2.3167887)
+
+[node name="crumpled-can9" parent="." unique_id=955128521 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.6621311, 0, 0.8394784)
+
+[node name="crumpled-can10" parent="." unique_id=1515607774 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, -1.7380576)
+
+[node name="crumpled-can11" parent="." unique_id=322407441 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.7965573, 0, 0)
+
+[node name="crumpled-can12" parent="." unique_id=1236020333 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 0, 0, 7.3797374)
+
+[node name="crumpled-can13" parent="." unique_id=1230174737 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -2.003615, 0, 3.0469615)
+
+[node name="crumpled-can14" parent="." unique_id=1253951384 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 1.5626472, 0, 6.2655687)
+
+[node name="crumpled-can15" parent="." unique_id=1051520093 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -0.0019125938, 0, 5.4039183)
+
+[node name="crumpled-can16" parent="." unique_id=591565401 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 1.0703807, 0, 4.454303)
+
+[node name="crumpled-can17" parent="." unique_id=474362063 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, -1.9058986, 0, 6.421951)
+
+[node name="crumpled-can18" parent="." unique_id=1369350228 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.77553093, 0, 4.6768107)
+
+[node name="crumpled-can19" parent="." unique_id=913220373 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.95098865, 0, 3.0871296)
+
+[node name="crumpled-can20" parent="." unique_id=35399378 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.6621311, 0, 6.2433968)
+
+[node name="crumpled-can21" parent="." unique_id=615790420 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 3.6658607)
+
+[node name="crumpled-can22" parent="." unique_id=256267785 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.7965573, 0, 5.4039183)
+
+[node name="crumpled-can23" parent="." unique_id=1463062179 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 4.383723, 0, 1.975819)
+
+[node name="crumpled-can24" parent="." unique_id=345827652 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 2.3801079, 0, -2.3569567)
+
+[node name="crumpled-can25" parent="." unique_id=291145766 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 5.94637, 0, 0.86165047)
+
+[node name="crumpled-can26" parent="." unique_id=1058793546 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 4.38181, 0, 0)
+
+[node name="crumpled-can27" parent="." unique_id=804308629 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 5.4541035, 0, -0.9496157)
+
+[node name="crumpled-can28" parent="." unique_id=476991083 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 2.4778242, 0, 1.0180326)
+
+[node name="crumpled-can29" parent="." unique_id=1478246131 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.608192, 0, -0.7271074)
+
+[node name="crumpled-can30" parent="." unique_id=629809599 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.3347116, 0, -2.3167887)
+
+[node name="crumpled-can31" parent="." unique_id=810356755 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.7215917, 0, 0.8394784)
+
+[node name="crumpled-can32" parent="." unique_id=379248236 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.383723, 0, -1.7380576)
+
+[node name="crumpled-can33" parent="." unique_id=1301957673 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.18028, 0, 0)
+
+[node name="crumpled-can34" parent="." unique_id=1606141828 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 4.0433493, 0, 7.591921)
+
+[node name="crumpled-can35" parent="." unique_id=2072726199 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 2.0397344, 0, 3.259145)
+
+[node name="crumpled-can36" parent="." unique_id=848584928 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 5.6059966, 0, 6.477752)
+
+[node name="crumpled-can37" parent="." unique_id=1053288324 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 4.0414367, 0, 5.6161017)
+
+[node name="crumpled-can38" parent="." unique_id=1672267173 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 5.11373, 0, 4.666486)
+
+[node name="crumpled-can39" parent="." unique_id=469977869 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.22543877, 0, 0.4462929, 0, 0.5, 0, -0.4462929, 0, 0.22543877, 2.1374507, 0, 6.6341343)
+
+[node name="crumpled-can40" parent="." unique_id=2108661699 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.2678185, 0, 4.888994)
+
+[node name="crumpled-can41" parent="." unique_id=1818826787 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.994338, 0, 3.299313)
+
+[node name="crumpled-can42" parent="." unique_id=1316569192 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.3812182, 0, 6.45558)
+
+[node name="crumpled-can43" parent="." unique_id=550258718 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.0433493, 0, 3.8780441)
+
+[node name="crumpled-can44" parent="." unique_id=2036253624 instance=ExtResource("1_jw1bu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.8399067, 0, 5.6161017)
+
+[node name="glass-bottle" parent="." unique_id=1583889881 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.93649435, 0, 0.5560856)
+
+[node name="glass-bottle3" parent="." unique_id=1954420039 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.02463293, 0, -0.7214427)
+
+[node name="glass-bottle4" parent="." unique_id=1883718147 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.6115931, 0, -1.7305081)
+
+[node name="glass-bottle5" parent="." unique_id=730280414 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.59011793, 0, -0.594146)
+
+[node name="glass-bottle2" parent="glass-bottle5" unique_id=1838562352 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.68082654, 0, 0.26822966)
+
+[node name="glass-bottle6" parent="." unique_id=107257629 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.13624287, 0, 1.3053486)
+
+[node name="glass-bottle7" parent="." unique_id=2071836712 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.82817364, 0, 1.5402386)
+
+[node name="glass-bottle8" parent="." unique_id=894609717 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.79651535, 0, 0.9497056)
+
+[node name="glass-bottle9" parent="." unique_id=1172570130 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.68434906, 0, -1.5915751)
+
+[node name="glass-bottle10" parent="." unique_id=595353496 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0.6798116)
+
+[node name="glass-bottle11" parent="." unique_id=269703349 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.4105191, 0, -1.128406)
+
+[node name="glass-bottle12" parent="." unique_id=1813511320 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.105007, 0, -0.32591635)
+
+[node name="glass-bottle13" parent="." unique_id=1131632565 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.8094296, 0, -0.7214427)
+
+[node name="glass-bottle14" parent="." unique_id=884337878 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.2224693, 0, -1.7305081)
+
+[node name="glass-bottle15" parent="." unique_id=275360381 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.4241805, 0, -0.594146)
+
+[node name="glass-bottle16" parent="." unique_id=1634302757 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.9703054, 0, 1.3053486)
+
+[node name="glass-bottle17" parent="." unique_id=1532115845 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.005889, 0, 1.5402386)
+
+[node name="glass-bottle18" parent="." unique_id=1807994675 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.630578, 0, 0.9497056)
+
+[node name="glass-bottle19" parent="." unique_id=220146204 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.5184116, 0, -1.5915751)
+
+[node name="glass-bottle20" parent="." unique_id=1987442899 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.8340626, 0, 0.6798116)
+
+[node name="glass-bottle21" parent="." unique_id=1838701628 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.4235435, 0, -1.128406)
+
+[node name="glass-bottle22" parent="." unique_id=1149713825 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1.2709445, 0, 3.9919248)
+
+[node name="glass-bottle23" parent="." unique_id=218726163 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.02463293, 0, 3.5963984)
+
+[node name="glass-bottle24" parent="." unique_id=686538826 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.6115931, 0, 2.587333)
+
+[node name="glass-bottle25" parent="." unique_id=112161959 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.59011793, 0, 3.723695)
+
+[node name="glass-bottle26" parent="." unique_id=1346304640 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.13624287, 0, 5.62319)
+
+[node name="glass-bottle27" parent="." unique_id=242395120 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.82817364, 0, 5.85808)
+
+[node name="glass-bottle28" parent="." unique_id=591531324 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.79651535, 0, 5.2675467)
+
+[node name="glass-bottle29" parent="." unique_id=458418120 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0.68434906, 0, 2.726266)
+
+[node name="glass-bottle30" parent="." unique_id=247363570 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 4.9976525)
+
+[node name="glass-bottle31" parent="." unique_id=1671111038 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.4105191, 0, 3.189435)
+
+[node name="glass-bottle32" parent="." unique_id=277542346 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.811595, 0, 4.488343)
+
+[node name="glass-bottle33" parent="." unique_id=341232609 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.5160174, 0, 4.0928164)
+
+[node name="glass-bottle34" parent="." unique_id=1123549494 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.9290571, 0, 3.083751)
+
+[node name="glass-bottle35" parent="." unique_id=781247661 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.1307683, 0, 4.220113)
+
+[node name="glass-bottle36" parent="." unique_id=378635732 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.6768932, 0, 6.119608)
+
+[node name="glass-bottle37" parent="." unique_id=324152812 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.7124767, 0, 6.354498)
+
+[node name="glass-bottle38" parent="." unique_id=1838302416 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.337166, 0, 5.7639647)
+
+[node name="glass-bottle39" parent="." unique_id=1979053867 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 4.2249994, 0, 3.222684)
+
+[node name="glass-bottle40" parent="." unique_id=1685486993 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3.5406504, 0, 5.4940705)
+
+[node name="glass-bottle41" parent="." unique_id=1068985301 instance=ExtResource("2_ak5du")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.1301312, 0, 3.685853)

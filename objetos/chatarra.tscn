@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dcmfo12lwd0lw"]
+
+[ext_resource type="PackedScene" uid="uid://dyl41pshx81es" path="res://assets/PSX-Waste/PSX-Waste/glb/barrel.glb" id="1_tm4rs"]
+[ext_resource type="PackedScene" uid="uid://brlh1myoopbrn" path="res://objetos/cajas.tscn" id="2_jtl82"]
+[ext_resource type="PackedScene" uid="uid://b6886180rblg0" path="res://objetos/latas.tscn" id="3_ixo60"]
+[ext_resource type="PackedScene" uid="uid://dgmbnqpu0f1cd" path="res://assets/PSX-Waste/PSX-Waste/glb/dumpster.glb" id="4_amaha"]
+[ext_resource type="PackedScene" uid="uid://r5ap8khjr1db" path="res://assets/PSX-Waste/PSX-Waste/glb/trash-bag.glb" id="5_1n5gu"]
+[ext_resource type="PackedScene" uid="uid://b2yb7oauhm2sv" path="res://assets/MuscleCar_Asset_LightsOut/MuscleCar_Asset_LightsOut/muscle_car_lowpoly_lightsout_GLB.glb" id="6_lnp3g"]
+
+[node name="Chatarra" type="Node3D" unique_id=64412535]
+
+[node name="basura" type="Node3D" parent="." unique_id=310135266]
+
+[node name="Cajas" parent="basura" unique_id=889605775 instance=ExtResource("2_jtl82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9215956, 0, 0)
+
+[node name="Cajas2" parent="basura" unique_id=1623454369 instance=ExtResource("2_jtl82")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8174057, 0, 10.707756)
+
+[node name="Latas" parent="basura" unique_id=1176149772 instance=ExtResource("3_ixo60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5588002, 0, 2.8387556)
+
+[node name="dumpster" parent="basura" unique_id=300799970 instance=ExtResource("4_amaha")]
+transform = Transform3D(-0.5, 0, -7.54979e-08, 0, 0.5, 0, 7.54979e-08, 0, -0.5, 5.01736, 0, 2.9656968)
+
+[node name="trash-bag" parent="basura" unique_id=586244143 instance=ExtResource("5_1n5gu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.0278528, 0, 8.260445)
+
+[node name="trash-bag2" parent="basura" unique_id=143457190 instance=ExtResource("5_1n5gu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.3326654, 0, 5.5152054)
+
+[node name="basura2" type="Node3D" parent="." unique_id=701481139]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 15.7450905, 0, 11.240654)
+
+[node name="barrel" parent="basura2" unique_id=1441351693 instance=ExtResource("1_tm4rs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5286522, 0, 2.0780277)
+
+[node name="barrel2" parent="basura2" unique_id=1522734168 instance=ExtResource("1_tm4rs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.411107, 0, 9.143106)
+
+[node name="Latas" parent="basura2" unique_id=1001244040 instance=ExtResource("3_ixo60")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5588002, 0, 2.8387556)
+
+[node name="trash-bag" parent="basura2" unique_id=143541931 instance=ExtResource("5_1n5gu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.0278528, 0, 8.260445)
+
+[node name="trash-bag2" parent="basura2" unique_id=1008462665 instance=ExtResource("5_1n5gu")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.3326654, 0, 5.5152054)
+
+[node name="muscle_car_lowpoly_lightsout_GLB4" parent="basura2" unique_id=984289655 instance=ExtResource("6_lnp3g")]
+transform = Transform3D(-0.87461966, 0, 0.4848097, 0, 1, 0, -0.4848097, 0, -0.87461966, 1.768631, 0, 4.228252)

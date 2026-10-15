@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dp68ker5hvwi5" path="res://assets/suelo.jpg" id="4_o0nf2"]
 [ext_resource type="PackedScene" uid="uid://dxa306jcbwo8t" path="res://objetos/iglesia.tscn" id="4_v13m4"]
 [ext_resource type="PackedScene" uid="uid://ci5jsl6im2els" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/roof/roof_a_1x_3.tscn" id="5_v13m4"]
-[ext_resource type="PackedScene" uid="uid://b2yb7oauhm2sv" path="res://assets/MuscleCar_Asset_LightsOut/MuscleCar_Asset_LightsOut/muscle_car_lowpoly_lightsout_GLB.glb" id="6_vxgx3"]
+[ext_resource type="PackedScene" uid="uid://dcmfo12lwd0lw" path="res://objetos/chatarra.tscn" id="6_o0nf2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
 albedo_texture = ExtResource("4_o0nf2")
@@ -17,7 +17,7 @@ uv1_scale = Vector3(50, 50, 50)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_57qmd"]
 
-[node name="StaticBody3D" type="StaticBody3D" unique_id=494792580]
+[node name="StaticBody3D" type="Node3D" unique_id=1782852787]
 metadata/_edit_lock_ = true
 
 [node name="HospitalScene" parent="." unique_id=1912447450 instance=ExtResource("1_hymea")]
@@ -159,26 +159,6 @@ transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524,
 
 [node name="root_casa10" parent="Nivel/RootNivel4" unique_id=1184741598 instance=ExtResource("1_swmnm")]
 transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524, 0.9999941, 3.6376783e-12, -0.0047791917, -1.668259e-05, -0.99998873, 7.0175495, -0.004531324, -18.461147)
-
-[node name="Build_7" parent="Nivel" unique_id=1289637446]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1267881, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_8" parent="Nivel" unique_id=1172872012]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.952491, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_9" parent="Nivel" unique_id=758022318]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.244586, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_5" parent="Nivel" unique_id=1072212382]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.34367, 1, 43.773006)
-metadata/_edit_lock_ = true
-
-[node name="Build_6" parent="Nivel" unique_id=803163406]
-transform = Transform3D(0.007093326, 0, -0.99997485, 0, 1, 0, 0.99997485, 0, 0.007093326, -26.695702, 1, 39.984917)
-metadata/_edit_lock_ = true
 
 [node name="cuadraCasa" type="Node3D" parent="Nivel" unique_id=1597621400]
 metadata/_edit_lock_ = true
@@ -415,74 +395,296 @@ metadata/_edit_lock_ = true
 [node name="Iglesia" parent="." unique_id=1925671312 instance=ExtResource("4_v13m4")]
 transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -63.875, 0, 4.837)
 
-[node name="muscle_car_lowpoly_lightsout_GLB9" parent="." unique_id=1546944336 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, 7.012401)
+[node name="Chatarra" parent="." unique_id=64412535 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.300213, 0, 11.036155)
 
-[node name="muscle_car_lowpoly_lightsout_GLB14" parent="." unique_id=838298869 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, 2.2167263)
+[node name="Chatarra2" parent="." unique_id=1274500539 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.047977, 0, 0)
 
-[node name="muscle_car_lowpoly_lightsout_GLB" parent="." unique_id=1192176392 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, 3.5535803)
+[node name="Chatarra3" parent="." unique_id=723057433 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.558832, 0, 0)
 
-[node name="muscle_car_lowpoly_lightsout_GLB3" parent="." unique_id=135543993 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, 3.5535803)
+[node name="Chatarra4" parent="." unique_id=586917242 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.670238, 0, 11.036155)
 
-[node name="muscle_car_lowpoly_lightsout_GLB4" parent="." unique_id=536958939 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, 7.012401)
+[node name="Chatarra6" parent="." unique_id=1632550699 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.915499, 0, -18.981586)
 
-[node name="muscle_car_lowpoly_lightsout_GLB5" parent="." unique_id=1835540603 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, -25.94141)
+[node name="Chatarra7" parent="." unique_id=336537148 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.047977, 0, -29.61074)
 
-[node name="muscle_car_lowpoly_lightsout_GLB6" parent="." unique_id=272096392 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, -22.48259)
+[node name="Chatarra8" parent="." unique_id=133551332 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.558832, 0, -29.61074)
 
-[node name="muscle_car_lowpoly_lightsout_GLB7" parent="." unique_id=599451193 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, -25.94141)
+[node name="Chatarra9" parent="." unique_id=481068990 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.054953, 0, -18.981586)
 
-[node name="muscle_car_lowpoly_lightsout_GLB8" parent="." unique_id=561510871 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, -22.48259)
+[node name="Chatarra10" parent="." unique_id=1589368942 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -51.110687, 0, -29.61074)
 
-[node name="muscle_car_lowpoly_lightsout_GLB10" parent="." unique_id=667746936 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -47.1531, 0, -19.23755)
+[node name="Chatarra11" parent="." unique_id=1224036121 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -51.52939, 0, 29.3555)
 
-[node name="muscle_car_lowpoly_lightsout_GLB11" parent="." unique_id=304958620 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.52991927, 0, -0.8480481, 0, 1, 0, 0.8480481, 0, 0.52991927, -55.646267, 0, -31.161608)
+[node name="Chatarra12" parent="." unique_id=1296283694 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -51.52939, 0, -2.0434875)
 
-[node name="muscle_car_lowpoly_lightsout_GLB12" parent="." unique_id=1299513335 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 46.000114, 0, -9.264309)
+[node name="Chatarra13" parent="." unique_id=989507842 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 35.427956, 0, -14.602848)
 
-[node name="muscle_car_lowpoly_lightsout_GLB13" parent="." unique_id=1490031656 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 43.32282, 0, 18.464352)
+[node name="Chatarra14" parent="." unique_id=1805150652 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 35.427956, 0, 2.0647755)
 
-[node name="muscle_car_lowpoly_lightsout_GLB2" parent="." unique_id=1494305596 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -47.1531, 0, 26.997824)
+[node name="Chatarra15" parent="." unique_id=1552731397 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 35.427956, 0, 18.706654)
 
-[node name="muscle_car_lowpoly_lightsout_GLB15" parent="." unique_id=245340973 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, -50.086586)
+[node name="Chatarra16" parent="." unique_id=1874031762 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 35.427956, 0, 35.35486)
 
-[node name="muscle_car_lowpoly_lightsout_GLB16" parent="." unique_id=1036461347 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, -54.882263)
+[node name="Chatarra27" parent="." unique_id=2073789654 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -25.025366, 0, -31.638575)
 
-[node name="muscle_car_lowpoly_lightsout_GLB17" parent="." unique_id=480084383 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, -53.545406)
+[node name="Chatarra28" parent="." unique_id=876869986 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 10.107428, 0, -31.638575)
 
-[node name="muscle_car_lowpoly_lightsout_GLB18" parent="." unique_id=48147757 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, -53.545406)
+[node name="Chatarra29" parent="." unique_id=1288318149 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.498447, 0, -59.95047)
 
-[node name="muscle_car_lowpoly_lightsout_GLB19" parent="." unique_id=1081724467 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, -50.086586)
+[node name="Chatarra5" parent="." unique_id=138657438 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.300213, 0, 41.063557)
 
-[node name="muscle_car_lowpoly_lightsout_GLB20" parent="." unique_id=392408190 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -19.054998, 0, 38.37948)
+[node name="Chatarra17" parent="." unique_id=1283651114 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.047977, 0, 30.027401)
 
-[node name="muscle_car_lowpoly_lightsout_GLB21" parent="." unique_id=549963862 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, 33.5838)
+[node name="Chatarra18" parent="." unique_id=2139861150 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.558832, 0, 30.027401)
 
-[node name="muscle_car_lowpoly_lightsout_GLB22" parent="." unique_id=766557262 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 0, 0, 34.92066)
+[node name="Chatarra19" parent="." unique_id=592834232 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.670238, 0, 41.063557)
 
-[node name="muscle_car_lowpoly_lightsout_GLB23" parent="." unique_id=702101751 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, 34.92066)
+[node name="Chatarra20" parent="." unique_id=2070584142 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 44.187565, 0, -49.023113)
 
-[node name="muscle_car_lowpoly_lightsout_GLB24" parent="." unique_id=2004723838 instance=ExtResource("6_vxgx3")]
-transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 10.417001, 0, 38.37948)
+[node name="Chatarra21" parent="." unique_id=1876973235 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.93533, 0, -60.05927)
+
+[node name="Chatarra22" parent="." unique_id=393495599 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.328518, 0, -60.05927)
+
+[node name="Chatarra23" parent="." unique_id=942073073 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.2171135, 0, -49.023113)
+
+[node name="Chatarra24" parent="." unique_id=2072640492 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.560055, 0, -49.023113)
+
+[node name="Chatarra25" parent="." unique_id=66324704 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -34.801178, 0, 42.66849)
+
+[node name="Chatarra26" parent="." unique_id=535791108 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.300213, 0, 11.036155)
+
+[node name="Chatarra30" parent="." unique_id=13543174 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.047977, 0, 0)
+
+[node name="Chatarra31" parent="." unique_id=2092674816 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.558832, 0, 0)
+
+[node name="Chatarra32" parent="." unique_id=1577747320 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.670238, 0, 11.036155)
+
+[node name="Chatarra33" parent="." unique_id=475721081 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 53.895542, 0, -62.220467)
+
+[node name="Chatarra34" parent="." unique_id=1560479597 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.643307, 0, -73.25662)
+
+[node name="Chatarra35" parent="." unique_id=629480887 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.036495, 0, -73.25662)
+
+[node name="Chatarra36" parent="." unique_id=169343133 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 18.92509, 0, -62.220467)
+
+[node name="Chatarra37" parent="." unique_id=401529981 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 2.1479225, 0, -62.220467)
+
+[node name="Chatarra38" parent="." unique_id=1103113479 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 29.759415, 0, 53.82816)
+
+[node name="Chatarra39" parent="." unique_id=619221140 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.50718, 0, 42.792004)
+
+[node name="Chatarra40" parent="." unique_id=445489715 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0996304, 0, 42.792004)
+
+[node name="Chatarra41" parent="." unique_id=197624437 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.2110367, 0, 53.82816)
+
+[node name="Chatarra42" parent="." unique_id=771953361 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -21.988205, 0, 53.82816)
+
+[node name="Chatarra43" parent="." unique_id=2106715551 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 17.300213, 0, 65.23724)
+
+[node name="Chatarra44" parent="." unique_id=717234974 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.047977, 0, 54.20109)
+
+[node name="Chatarra45" parent="." unique_id=1213711467 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.558832, 0, 54.20109)
+
+[node name="Chatarra46" parent="." unique_id=716044985 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -17.670238, 0, 65.23724)
+
+[node name="Chatarra47" parent="." unique_id=1043626644 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -34.801178, 0, 66.84218)
+
+[node name="Chatarra48" parent="." unique_id=1436653457 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 29.759415, 0, 78.00185)
+
+[node name="Chatarra49" parent="." unique_id=238261441 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.50718, 0, 66.9657)
+
+[node name="Chatarra50" parent="." unique_id=28909652 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.0996304, 0, 66.9657)
+
+[node name="Chatarra51" parent="." unique_id=1472270148 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -5.2110367, 0, 78.00185)
+
+[node name="Chatarra52" parent="." unique_id=1026438901 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -21.988205, 0, 78.00185)
+
+[node name="Chatarra53" parent="." unique_id=906387398 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 45.959145, 0, 0.88357925)
+
+[node name="Chatarra54" parent="." unique_id=464271115 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 45.959145, 0, 17.551203)
+
+[node name="Chatarra55" parent="." unique_id=1093177352 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 45.959145, 0, 34.19308)
+
+[node name="Chatarra56" parent="." unique_id=207309136 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 45.959145, 0, 50.841286)
+
+[node name="Chatarra57" parent="." unique_id=618572487 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 55.788574, 0, 5.813328)
+
+[node name="Chatarra58" parent="." unique_id=415115041 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 55.788574, 0, 22.480951)
+
+[node name="Chatarra59" parent="." unique_id=279020594 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 55.788574, 0, 39.12283)
+
+[node name="Chatarra60" parent="." unique_id=329781737 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 55.788574, 0, 55.771034)
+
+[node name="Chatarra61" parent="." unique_id=1240473526 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 66.31976, 0, 21.299755)
+
+[node name="Chatarra62" parent="." unique_id=1024447131 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 66.31976, 0, 37.967377)
+
+[node name="Chatarra63" parent="." unique_id=1513750453 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 66.31976, 0, 54.609257)
+
+[node name="Chatarra64" parent="." unique_id=2089231832 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, 66.31976, 0, 71.25746)
+
+[node name="Chatarra65" parent="." unique_id=437948347 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.498447, 0, -59.95047)
+
+[node name="Chatarra66" parent="." unique_id=59132034 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 44.187565, 0, -49.023113)
+
+[node name="Chatarra67" parent="." unique_id=1502100452 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.93533, 0, -60.05927)
+
+[node name="Chatarra68" parent="." unique_id=342192541 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.328518, 0, -60.05927)
+
+[node name="Chatarra69" parent="." unique_id=1261579839 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 9.2171135, 0, -49.023113)
+
+[node name="Chatarra70" parent="." unique_id=1593851796 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -7.560055, 0, -49.023113)
+
+[node name="Chatarra71" parent="." unique_id=52026320 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 53.895542, 0, -62.220467)
+
+[node name="Chatarra72" parent="." unique_id=1194422023 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 54.643307, 0, -73.25662)
+
+[node name="Chatarra73" parent="." unique_id=951981150 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.036495, 0, -73.25662)
+
+[node name="Chatarra74" parent="." unique_id=753229786 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 18.92509, 0, -62.220467)
+
+[node name="Chatarra75" parent="." unique_id=770351935 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 2.1479225, 0, -62.220467)
+
+[node name="Chatarra76" parent="." unique_id=2116666276 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -26.5155, 0, -49.023113)
+
+[node name="Chatarra77" parent="." unique_id=1247274501 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.374546, 0, -60.05927)
+
+[node name="Chatarra78" parent="." unique_id=503852490 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -61.48595, 0, -49.023113)
+
+[node name="Chatarra80" parent="." unique_id=709150043 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.66657, 0, -73.25662)
+
+[node name="Chatarra81" parent="." unique_id=823886631 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -51.777973, 0, -62.220467)
+
+[node name="Chatarra83" parent="." unique_id=271811322 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -26.5155, 0, -49.023113)
+
+[node name="Chatarra84" parent="." unique_id=1312213128 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.374546, 0, -60.05927)
+
+[node name="Chatarra85" parent="." unique_id=1422988450 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -61.48595, 0, -49.023113)
+
+[node name="Chatarra87" parent="." unique_id=1845364232 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -52.66657, 0, -73.25662)
+
+[node name="Chatarra88" parent="." unique_id=653155982 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, -51.777973, 0, -62.220467)
+
+[node name="Chatarra79" parent="." unique_id=1569832811 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -51.389248, 0, 41.063557)
+
+[node name="Chatarra86" parent="." unique_id=1074800484 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -38.930046, 0, 53.82816)
+
+[node name="Chatarra89" parent="." unique_id=680694640 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -55.707214, 0, 53.82816)
+
+[node name="Chatarra90" parent="." unique_id=1607112205 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -51.389248, 0, 65.23724)
+
+[node name="Chatarra92" parent="." unique_id=1781296969 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -38.930046, 0, 78.00185)
+
+[node name="Chatarra93" parent="." unique_id=457325417 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -55.707214, 0, 78.00185)
+
+[node name="Chatarra82" parent="." unique_id=2128884827 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -76.044586, 0, -53.785202)
+
+[node name="Chatarra91" parent="." unique_id=1348416105 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -76.044586, 0, -37.143322)
+
+[node name="Chatarra94" parent="." unique_id=1213530136 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -76.044586, 0, -20.495117)
+
+[node name="Chatarra95" parent="." unique_id=186158287 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -65.5134, 0, -54.966396)
+
+[node name="Chatarra96" parent="." unique_id=1142111040 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -65.5134, 0, -38.298775)
+
+[node name="Chatarra97" parent="." unique_id=1763657663 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -65.5134, 0, -21.656895)
+
+[node name="Chatarra98" parent="." unique_id=196655587 instance=ExtResource("6_o0nf2")]
+transform = Transform3D(-4.3711385e-08, 0, 0.99999994, 0, 1, 0, -0.99999994, 0, -4.3711385e-08, -65.5134, 0, -5.00869)

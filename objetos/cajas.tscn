@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://brlh1myoopbrn"]
+
+[ext_resource type="PackedScene" uid="uid://duywrc130kusj" path="res://assets/PSX-Waste/PSX-Waste/glb/cardboard-box.glb" id="1_0p2jf"]
+
+[node name="Cajas" type="Node3D" unique_id=889605775]
+
+[node name="cardboard-box" parent="." unique_id=19177286 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.3549404, 0, 0.027478993)
+
+[node name="cardboard-box2" parent="." unique_id=1859967604 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.18224049, 0.19775483, 0.027478993)
+
+[node name="cardboard-box3" parent="." unique_id=396915003 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.3521657, 0.21577442, 0.027478993)
+
+[node name="cardboard-box4" parent="." unique_id=314705779 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.13854933, 0.39206028, 0.027478993)
+
+[node name="cardboard-box5" parent="." unique_id=1085573565 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.13854933, 0, 0.027478993)
+
+[node name="cardboard-box6" parent="." unique_id=1402599835 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.6633162, 0, -0.26660794)
+
+[node name="cardboard-box7" parent="." unique_id=1064121240 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.12613529, 0.19775483, -0.26660794)
+
+[node name="cardboard-box8" parent="." unique_id=183117031 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.6605415, 0.21577442, -0.26660794)
+
+[node name="cardboard-box9" parent="." unique_id=1623617930 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.16982645, 0.39206028, -0.26660794)
+
+[node name="cardboard-box10" parent="." unique_id=2055520557 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.16982645, 0, -0.26660794)
+
+[node name="cardboard-box11" parent="." unique_id=1284962110 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.5651798, 0, 0.2847275)
+
+[node name="cardboard-box12" parent="." unique_id=1031775796 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.027998924, 0.19775483, 0.2847275)
+
+[node name="cardboard-box13" parent="." unique_id=1083575345 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.5624051, 0.21577442, 0.2847275)
+
+[node name="cardboard-box14" parent="." unique_id=2000981809 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.07169008, 0.39206028, 0.2847275)
+
+[node name="cardboard-box15" parent="." unique_id=40816926 instance=ExtResource("1_0p2jf")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0.07169008, 0, 0.2847275)
