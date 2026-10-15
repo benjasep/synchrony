@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="1_base"]
+[ext_resource type="PackedScene" path="res://enemies/monster_vidente/monster_vidente_model.tscn" id="2_model"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_monster_vidente"]
+size = Vector3(1.56597056, 3.05737110, 0.74570027)
+
+[node name="MonsterVidente" instance=ExtResource("1_base")]
+is_ethereal = true
+model_scene = ExtResource("2_model")
+
+[node name="Placeholder" parent="Model" index="0"]
+layers = 2
+
+[node name="Collision" parent="." index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.52868555, 0.00894840)
+shape = SubResource("BoxShape3D_monster_vidente")
+
+[node name="Health" parent="." index="2"]
+max_health = 300.0
+

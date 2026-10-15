@@ -264,6 +264,7 @@ func _verify_runtime() -> void:
 	await _verify_body_animation("res://enemies/pesadilla/pesadilla_animation.tscn", 1.5,
 		&"parameters/main/playback")
 	await _verify_physical_enemy()
+	await _verify_ethereal_enemy()
 	await _verify_foot_placement()
 	runtime_completed = true
 
@@ -365,6 +366,32 @@ func _verify_physical_enemy() -> void:
 		_all_meshes_in_layer(enemy.model, Statics.WORLD_VISUAL_LAYER))
 	enemy.queue_free()
 	await get_tree().process_frame
+
+
+## Verifica el modelo estático, su escala, hitboxes y visibilidad exclusiva del vidente.
+func _verify_ethereal_enemy() -> void:
+	print("--- Monstruo vidente, sin animaciones ---")
+	var enemy: Enemy = (load("res://enemies/monster_vidente/monster_vidente.tscn") as PackedScene).instantiate() as Enemy
+	get_tree().root.add_child.call_deferred(enemy)
+	await get_tree().process_frame
+	_check("usa Enemy y su modelo propio", enemy.model_scene != null and not enemy.model_placeholder.visible)
+	_check("solo en la capa eterea", enemy.is_ethereal and _all_meshes_in_layer(enemy.model, Statics.ETHEREAL_VISUAL_LAYER))
+	_check("misma salud que la pesadilla", is_equal_approx(enemy.health.current_health, 300.0))
+	_check("sin arboles ni reproductores de animacion", enemy.find_children("*", "AnimationMixer", true, false).is_empty())
+	_check("hitboxes propias cableadas", not enemy.hitboxes.is_empty())
+	for hitbox: Hitbox in enemy.hitboxes:
+		_check("hitbox recibe dano etereo y usa la salud del enemigo", hitbox.health == enemy.health \
+			and hitbox.accepted_damage_types == Statics.DamageType.ETHEREAL)
+	var model: Node3D = enemy.model.get_node("MonsterVidenteModel/Model") as Node3D
+	var mesh: MeshInstance3D = model.get_node("Armature/Skeleton3D/columna") as MeshInstance3D
+	var bounds: AABB = mesh.global_transform * mesh.get_aabb()
+	_check("un metro mas alto que la version de dos metros", is_equal_approx(bounds.size.y, 3.03499981))
+	_check("modelo apoyado en el suelo", absf(bounds.position.y) < 0.01)
+	for role: Statics.Role in RoleDatabase.get_selectable_roles():
+		var mode: VisionMode = RoleDatabase.get_profile(role).vision_mode
+		var sees_enemy: bool = (mode.cull_mask | mode.ethereal_cull_mask) & Statics.ETHEREAL_VISUAL_LAYER != 0
+		_check("visibilidad correcta para %s" % RoleDatabase.get_role_name(role), sees_enemy == (role == Statics.Role.SEER))
+	enemy.queue_free()
 
 
 ## Compara los pies de la pesadilla en plano y sobre escalones con la animación pura: el foot

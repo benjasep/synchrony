@@ -22,6 +22,9 @@ var is_on: bool = false
 var battery: float = 300.0
 
 var _flicker_left: float = 0.0
+var _rapid_flicker_wait: float = 0.0
+var _flickers_in_burst: int = 0
+var _steady_light_left: float = 0.0
 
 
 ## Llena la batería, aplica alcance y energía del haz y deja la luz apagada.
@@ -43,6 +46,7 @@ func get_state() -> Dictionary:
 func set_state(state: Dictionary) -> void:
 	battery = state.get("battery", max_battery)
 	is_on = state.get("is_on", false)
+	_reset_flicker()
 	if light:
 		light.visible = is_on
 	battery_changed.emit(battery / max_battery)
@@ -50,12 +54,12 @@ func set_state(state: Dictionary) -> void:
 
 ## Recalcula alcance y energía del haz con la competencia del nuevo portador.
 func _on_equipped() -> void:
-	_apply_light_settings()
+	_reset_flicker()
 
 
 ## Cancela el parpadeo en curso.
 func _on_unequipped() -> void:
-	_flicker_left = 0.0
+	_reset_flicker()
 
 
 ## Si está empuñada, alterna la luz en todos los peers y emite [code]used[/code].
@@ -74,6 +78,7 @@ func set_light_state(value: bool) -> void:
 	if value and battery <= 0.0:
 		return
 	is_on = value
+	_reset_flicker()
 	if light:
 		light.visible = is_on
 	toggled.emit(is_on)
@@ -98,19 +103,71 @@ func _process(delta: float) -> void:
 	_process_flicker(delta)
 
 
-## Parpadeo cosmético y local, no vale la pena replicarlo: con una probabilidad por segundo
-## que dicta la competencia, apaga el haz entre 0,05 y 0,15 s y después restaura su energía.
+## Agrupa los fallos en ráfagas de hasta tres cortes, seguidas de una pausa encendida
+## garantizada. Los apagones largos también cuentan y respetan esa pausa.
+## Ambos efectos son cosméticos y locales.
 ## Recibe: [param delta] — segundos desde el frame anterior.
 func _process_flicker(delta: float) -> void:
 	if not light:
 		return
+	var light_proficiency: LightProficiency = _get_light_proficiency()
+	if not light_proficiency:
+		return
 	if _flicker_left > 0.0:
 		_flicker_left -= delta
 		light.light_energy = 0.0 if _flicker_left > 0.0 else base_energy * _get_energy_multiplier()
+		if _flicker_left <= 0.0 and _flickers_in_burst >= clampi(light_proficiency.flicker_burst_limit, 1, 3):
+			_start_steady_light()
+		return
+	if _steady_light_left > 0.0:
+		_steady_light_left = maxf(_steady_light_left - delta, 0.0)
 		return
 	var chance: float = _get_flicker_chance()
 	if chance > 0.0 and randf() < chance * delta:
-		_flicker_left = randf_range(0.05, 0.15)
+		var min_duration: float = maxf(light_proficiency.flicker_duration_min, 0.0)
+		var max_duration: float = maxf(light_proficiency.flicker_duration_max, min_duration)
+		_flicker_left = randf_range(min_duration, max_duration)
+	elif light_proficiency.rapid_flicker_interval_max > 0.0:
+		_rapid_flicker_wait -= delta
+		if _rapid_flicker_wait <= 0.0:
+			var min_duration: float = maxf(light_proficiency.rapid_flicker_duration_min, 0.0)
+			var max_duration: float = maxf(light_proficiency.rapid_flicker_duration_max, min_duration)
+			_flicker_left = randf_range(min_duration, max_duration)
+	if _flicker_left > 0.0:
+		_flickers_in_burst += 1
+		light.light_energy = 0.0
+		_schedule_rapid_flicker()
+
+
+## Cancela cortes anteriores al encender, restaurar estado o cambiar de portador.
+func _reset_flicker() -> void:
+	_flicker_left = 0.0
+	_start_steady_light()
+	_schedule_rapid_flicker()
+	_apply_light_settings()
+
+
+## Deja la luz estable varios segundos antes de permitir una nueva ráfaga de fallos.
+func _start_steady_light() -> void:
+	_flickers_in_burst = 0
+	_steady_light_left = 0.0
+	var light_proficiency: LightProficiency = _get_light_proficiency()
+	if not light_proficiency:
+		return
+	var min_duration: float = maxf(light_proficiency.steady_duration_min, 0.0)
+	var max_duration: float = maxf(light_proficiency.steady_duration_max, min_duration)
+	_steady_light_left = randf_range(min_duration, max_duration)
+
+
+## Programa la pausa encendida antes del siguiente titileo breve; el técnico los desactiva.
+func _schedule_rapid_flicker() -> void:
+	_rapid_flicker_wait = 0.0
+	var light_proficiency: LightProficiency = _get_light_proficiency()
+	if not light_proficiency or light_proficiency.rapid_flicker_interval_max <= 0.0:
+		return
+	var min_interval: float = maxf(light_proficiency.rapid_flicker_interval_min, 0.0)
+	var max_interval: float = maxf(light_proficiency.rapid_flicker_interval_max, min_interval)
+	_rapid_flicker_wait = randf_range(min_interval, max_interval)
 
 
 ## Aplica a la luz el alcance y la energía base escalados por la competencia del portador.

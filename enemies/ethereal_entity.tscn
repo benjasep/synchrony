@@ -1,10 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="1_base"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ghost"]
-shading_mode = 0
-albedo_color = Color(0.55, 1, 0.75, 1)
+[ext_resource type="PackedScene" path="res://enemies/monster_vidente/monster_vidente.tscn" id="1_base"]
 
 [node name="EtherealEntity" instance=ExtResource("1_base")]
 is_ethereal = true
@@ -12,4 +8,3 @@ is_ethereal = true
 [node name="Placeholder" parent="Model" index="0"]
 layers = 2
 cast_shadow = 0
-surface_material_override/0 = SubResource("StandardMaterial3D_ghost")

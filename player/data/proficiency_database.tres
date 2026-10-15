@@ -12,7 +12,7 @@ display_name = "Sin entrenamiento"
 usable = true
 equip_time_multiplier = 1.4
 sway_amplitude = 0.035
-sway_frequency = 2.5
+sway_frequency = 1.575
 spread_multiplier = 2.2
 recoil_multiplier = 1.8
 reload_time_multiplier = 1.9
@@ -25,7 +25,16 @@ usable = true
 equip_time_multiplier = 1.2
 range_multiplier = 0.75
 energy_multiplier = 0.8
-flicker_chance = 0.15
+flicker_chance = 0.3
+flicker_duration_min = 1.0
+flicker_duration_max = 1.5
+rapid_flicker_interval_min = 0.15
+rapid_flicker_interval_max = 0.35
+rapid_flicker_duration_min = 0.04
+rapid_flicker_duration_max = 0.1
+flicker_burst_limit = 3
+steady_duration_min = 3.0
+steady_duration_max = 5.0
 drain_multiplier = 1.5
 
 [sub_resource type="Resource" id="Resource_fallback"]

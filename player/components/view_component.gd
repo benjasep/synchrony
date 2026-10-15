@@ -117,12 +117,13 @@ func _get_sway_amplitude() -> float:
 	return total
 
 
-## Devuelve la frecuencia del temblor en ciclos por segundo: la mayor entre los modificadores,
-## nunca menos de [code]1.0[/code].
+## Devuelve la mayor frecuencia de los modificadores con temblor activo, en ciclos por
+## segundo. Permite oscilaciones lentas, por debajo de 1 Hz; sin temblor devuelve 0.
 func _get_sway_frequency() -> float:
-	var highest: float = 1.0
+	var highest: float = 0.0
 	for modifier: ViewModifier in _modifiers.values():
-		highest = maxf(highest, modifier.sway_frequency)
+		if not is_zero_approx(modifier.sway_amplitude):
+			highest = maxf(highest, modifier.sway_frequency)
 	return highest
 
 

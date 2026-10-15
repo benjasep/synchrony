@@ -1,0 +1,261 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/monster_vidente.glb" id="1_model"]
+[ext_resource type="Script" path="res://scripts/hitbox.gd" id="5_hitbox"]
+
+[sub_resource type="CapsuleShape3D" id="Shape_Torso"]
+radius = 0.75
+height = 2.41472554
+
+[sub_resource type="CapsuleShape3D" id="Shape_Neck"]
+radius = 0.5
+height = 1.00000000
+
+[sub_resource type="CapsuleShape3D" id="Shape_UpperArmL"]
+radius = 0.35
+height = 2.30905496
+
+[sub_resource type="CapsuleShape3D" id="Shape_ForearmL"]
+radius = 0.3
+height = 1.93334442
+
+[sub_resource type="CapsuleShape3D" id="Shape_ThighL"]
+radius = 0.45
+height = 1.50843667
+
+[sub_resource type="CapsuleShape3D" id="Shape_ShinL"]
+radius = 0.3
+height = 1.99752880
+
+[sub_resource type="CapsuleShape3D" id="Shape_FootL"]
+radius = 0.35
+height = 1.66233316
+
+[sub_resource type="SphereShape3D" id="Shape_KneeL"]
+radius = 0.5
+
+[sub_resource type="CapsuleShape3D" id="Shape_UpperArmR"]
+radius = 0.35
+height = 2.31006312
+
+[sub_resource type="CapsuleShape3D" id="Shape_ForearmR"]
+radius = 0.3
+height = 1.93334378
+
+[sub_resource type="CapsuleShape3D" id="Shape_ThighR"]
+radius = 0.45
+height = 1.53083461
+
+[sub_resource type="CapsuleShape3D" id="Shape_ShinR"]
+radius = 0.3
+height = 1.99752951
+
+[sub_resource type="CapsuleShape3D" id="Shape_FootR"]
+radius = 0.35
+height = 1.66233365
+
+[sub_resource type="SphereShape3D" id="Shape_KneeR"]
+radius = 0.5
+
+[node name="MonsterVidenteModel" type="Node3D"]
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(0, 0, -0.298280107, 0, 0.298280107, 0, 0.298280107, 0, 0, 0, -0.035701464, 0)
+
+[node name="Torso" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"torso"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/Torso"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/Torso/Hitbox"]
+position = Vector3(-0.00000000, 1.20736277, -0.00000000)
+shape = SubResource("Shape_Torso")
+
+[node name="Neck" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"cuello"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/Neck"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 1
+damage_multiplier = 2.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/Neck/Hitbox"]
+position = Vector3(0.00000003, 0.44166952, -0.00000000)
+shape = SubResource("Shape_Neck")
+
+[node name="UpperArmL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"brazo.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/UpperArmL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/UpperArmL/Hitbox"]
+position = Vector3(-0.00000011, 1.15452731, -0.00000002)
+shape = SubResource("Shape_UpperArmL")
+
+[node name="ForearmL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"antebrazo.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ForearmL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ForearmL/Hitbox"]
+position = Vector3(-0.00000002, 0.96667194, 0.00000002)
+shape = SubResource("Shape_ForearmL")
+
+[node name="ThighL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"muslo.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ThighL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ThighL/Hitbox"]
+position = Vector3(-0.00000000, 0.75421828, -0.00000007)
+shape = SubResource("Shape_ThighL")
+
+[node name="ShinL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla1.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ShinL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ShinL/Hitbox"]
+position = Vector3(0.00000004, 0.99876434, 0.00000002)
+shape = SubResource("Shape_ShinL")
+
+[node name="FootL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla2.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/FootL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/FootL/Hitbox"]
+position = Vector3(0.00000001, 0.83116651, 0.00000001)
+shape = SubResource("Shape_FootL")
+
+[node name="KneeL" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla1.L"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/KneeL"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 2
+damage_multiplier = 2.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/KneeL/Hitbox"]
+position = Vector3(0.00000000, 0.00000000, 0.00000000)
+shape = SubResource("Shape_KneeL")
+
+[node name="UpperArmR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"brazo.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/UpperArmR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/UpperArmR/Hitbox"]
+position = Vector3(0.00000001, 1.15503156, -0.00000002)
+shape = SubResource("Shape_UpperArmR")
+
+[node name="ForearmR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"antebrazo.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ForearmR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ForearmR/Hitbox"]
+position = Vector3(-0.00000005, 0.96667200, 0.00000001)
+shape = SubResource("Shape_ForearmR")
+
+[node name="ThighR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"muslo.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ThighR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ThighR/Hitbox"]
+position = Vector3(-0.00000001, 0.76541728, -0.00000006)
+shape = SubResource("Shape_ThighR")
+
+[node name="ShinR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla1.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/ShinR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/ShinR/Hitbox"]
+position = Vector3(0.00000003, 0.99876457, -0.00000001)
+shape = SubResource("Shape_ShinR")
+
+[node name="FootR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla2.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/FootR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 0
+damage_multiplier = 1.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/FootR/Hitbox"]
+position = Vector3(0.00000000, 0.83116674, -0.00000002)
+shape = SubResource("Shape_FootR")
+
+[node name="KneeR" type="BoneAttachment3D" parent="Model/Armature/Skeleton3D"]
+bone_name = &"canilla1.R"
+
+[node name="Hitbox" type="Area3D" parent="Model/Armature/Skeleton3D/KneeR"]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_hitbox")
+zone = 2
+damage_multiplier = 2.0
+
+[node name="Shape" type="CollisionShape3D" parent="Model/Armature/Skeleton3D/KneeR/Hitbox"]
+position = Vector3(0.00000000, 0.00000000, 0.00000000)
+shape = SubResource("Shape_KneeR")
+
+[editable path="Model"]

@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://tests/verify_stationary_attack.gd" id="1_test"]
+
+[node name="VerifyStationaryAttack" type="Node3D"]
+script = ExtResource("1_test")
