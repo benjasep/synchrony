@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode unshaded, blend_mix, depth_draw_never, depth_test_disabled, cull_disabled, fog_disabled;
 
+#include "res://player/data/vision_depth.gdshaderinc"
+
 // Eco del vidente: el mundo entero en negro, solo los bordes en blanco.
 //
 // Reconstruye la escena desde el DEPTH BUFFER y se queda únicamente con lo que
@@ -38,13 +40,11 @@ const float FAR_LIMIT = 1.0e6;
 
 // Profundidad lineal en metros desde la cámara.
 //
-// En el cielo el plano lejano es infinito y w sale 0: la división da inf y la
-// comparación devuelve FAR_LIMIT, que es justo lo que se quiere. Vale igual con
-// depth buffer normal o invertido porque nunca se interpreta el valor crudo.
+// El helper protege la división por w en el cielo. La comparación descarta
+// posiciones inválidas; vale con depth normal o invertido porque se reconstruye
+// la posición con la matriz de proyección inversa.
 float view_depth(vec2 uv, mat4 inv_projection) {
-	float raw = texture(depth_texture, uv).r;
-	vec4 view = inv_projection * vec4(uv * 2.0 - 1.0, raw, 1.0);
-	float distance_to_plane = -view.z / view.w;
+	float distance_to_plane = -vision_view_position(depth_texture, uv, inv_projection).z;
 	return (distance_to_plane > 0.0 && distance_to_plane < FAR_LIMIT) ? distance_to_plane : FAR_LIMIT;
 }
 
@@ -58,9 +58,10 @@ void vertex() {
 
 void fragment() {
 	float center = view_depth(SCREEN_UV, INV_PROJECTION_MATRIX);
+	float distance_to_camera = length(vision_view_position(depth_texture, SCREEN_UV, INV_PROJECTION_MATRIX));
 	vec3 color = vec3(0.0);
 
-	if (center < perception_radius) {
+	if (distance_to_camera < perception_radius) {
 		vec2 texel = outline_width / VIEWPORT_SIZE;
 		float left = view_depth(SCREEN_UV - vec2(texel.x, 0.0), INV_PROJECTION_MATRIX);
 		float right = view_depth(SCREEN_UV + vec2(texel.x, 0.0), INV_PROJECTION_MATRIX);
@@ -82,7 +83,7 @@ void fragment() {
 			smoothstep(outline_threshold, outline_threshold * 2.0, silhouette),
 			smoothstep(crease_threshold, crease_threshold * 2.0, crease));
 
-		float fade = 1.0 - smoothstep(perception_radius * fade_start, perception_radius, center);
+		float fade = 1.0 - smoothstep(perception_radius * fade_start, perception_radius, distance_to_camera);
 		color = outline_color.rgb * outline * outline_energy * fade;
 	}
 

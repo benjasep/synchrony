@@ -490,6 +490,16 @@ func _verify_seer_view() -> void:
 		seer.perception.echo_quad.layers & seer.camera.cull_mask != 0)
 	_check("el radio del perfil llego al shader", material != null \
 		and is_equal_approx(material.get_shader_parameter(&"perception_radius"), 12.0))
+	var range_quad: MeshInstance3D = seer.perception.ethereal_camera.get_node_or_null("PerceptionRangeMask") as MeshInstance3D
+	_check("la segunda pasada tiene filtro de alcance", range_quad != null and range_quad.visible)
+	if range_quad:
+		var range_material: ShaderMaterial = range_quad.material_override as ShaderMaterial
+		_check("el filtro no aparece en la camara principal", range_quad.layers & seer.camera.cull_mask == 0)
+		_check("ambas pasadas parten del mismo radio", is_equal_approx(range_material.get_shader_parameter(&"perception_radius"), 12.0))
+		seer.perception.set_shader_parameter(&"perception_radius", 25.0)
+		_check("el pulso amplia tambien la vista de aliados y enemigos", is_equal_approx(range_material.get_shader_parameter(&"perception_radius"), 25.0))
+		seer.perception.set_shader_parameter(&"perception_radius", 12.0)
+		_check("el alcance vuelve al valor base en ambas pasadas", is_equal_approx(range_material.get_shader_parameter(&"perception_radius"), 12.0))
 
 	_check("la segunda pasada renderiza", seer.perception.ethereal_viewport.render_target_update_mode \
 		== SubViewport.UPDATE_ALWAYS)

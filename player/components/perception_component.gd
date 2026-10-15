@@ -1,6 +1,8 @@
 class_name PerceptionComponent
 extends PlayerComponent
 
+const ETHEREAL_RANGE_SHADER: Shader = preload("res://player/data/ethereal_range.gdshader")
+
 ## Aplica el [VisionMode] del rol a la cámara, solo en el cliente dueño (la percepción no se
 ## replica). Para el vidente arma tres piezas: la cámara principal solo llena el depth, el quad
 ## de eco lo convierte en contornos y un [SubViewport] etéreo compone encima, en 2D, lo que el
@@ -17,6 +19,9 @@ extends PlayerComponent
 var vision_mode: VisionMode
 
 var _echo_material: ShaderMaterial
+var _range_material: ShaderMaterial
+var _range_quad: MeshInstance3D
+var _perception_radius: float = 0.0
 
 
 ## Aplica el [VisionMode] del perfil solo en el dueño; en las copias remotas no toca la vista.
@@ -37,6 +42,9 @@ func apply_vision_mode(mode: VisionMode) -> void:
 		return
 	camera.cull_mask = mode.cull_mask
 	_apply_post_process(mode)
+	_perception_radius = mode.perception_radius
+	if _echo_material:
+		_perception_radius = float(_echo_material.get_shader_parameter(&"perception_radius"))
 	_apply_ethereal_pass(mode)
 
 
@@ -46,6 +54,10 @@ func apply_vision_mode(mode: VisionMode) -> void:
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	if _echo_material:
 		_echo_material.set_shader_parameter(parameter, value)
+	if parameter == &"perception_radius":
+		_perception_radius = float(value)
+		if _range_material:
+			_range_material.set_shader_parameter(parameter, _perception_radius)
 
 
 ## Si el modo tiene segunda pasada, copia cada frame la cámara principal a la etérea. Solo
@@ -94,6 +106,8 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 		return
 	if not enabled:
 		ethereal_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		if _range_quad:
+			_range_quad.hide()
 		return
 
 	# Sin World3D propio: no es otro mundo, es otra cámara sobre el mismo, igual
@@ -102,9 +116,10 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 	ethereal_viewport.transparent_bg = true
 	ethereal_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 
-	ethereal_camera.cull_mask = mode.ethereal_cull_mask
+	ethereal_camera.cull_mask = mode.ethereal_cull_mask | Statics.PERCEPTION_MASK_VISUAL_LAYER
 	ethereal_camera.environment = _build_ethereal_environment(mode)
 	ethereal_camera.current = true
+	_apply_range_mask()
 
 	if ethereal_view:
 		ethereal_view.texture = ethereal_viewport.get_texture()
@@ -114,6 +129,28 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 	if host and not host.size_changed.is_connected(_resize_ethereal_viewport):
 		host.size_changed.connect(_resize_ethereal_viewport)
 	_sync_ethereal_camera()
+
+
+## Recorta el alfa de la segunda pasada por distancia real. El material es local
+## a esta cámara y recibe el mismo radio que el eco, incluido el pulso.
+func _apply_range_mask() -> void:
+	if not _range_quad:
+		_range_material = ShaderMaterial.new()
+		_range_material.shader = ETHEREAL_RANGE_SHADER
+		_range_material.render_priority = Material.RENDER_PRIORITY_MAX
+		var quad: QuadMesh = QuadMesh.new()
+		quad.size = Vector2(2.0, 2.0)
+		_range_quad = MeshInstance3D.new()
+		_range_quad.name = "PerceptionRangeMask"
+		_range_quad.mesh = quad
+		_range_quad.material_override = _range_material
+		_range_quad.layers = Statics.PERCEPTION_MASK_VISUAL_LAYER
+		_range_quad.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_range_quad.extra_cull_margin = 16384.0
+		ethereal_camera.add_child(_range_quad)
+		_range_quad.position.z = -1.0
+	_range_material.set_shader_parameter(&"perception_radius", _perception_radius)
+	_range_quad.show()
 
 
 ## Construye el entorno de la segunda pasada, no el del nivel: fondo transparente, para que un

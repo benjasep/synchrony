@@ -13,6 +13,7 @@ const WORLD_VISUAL_LAYER: int = 1      ## Máscara de la capa 1: mundo y enemigo
 const ETHEREAL_VISUAL_LAYER: int = 2   ## Máscara de la capa 2: enemigos etéreos.
 const VIEWMODEL_VISUAL_LAYER: int = 4  ## Máscara de la capa 3: item empuñado.
 const BODY_VISUAL_LAYER: int = 8       ## Máscara de la capa 4: cuerpos de otros jugadores.
+const PERCEPTION_MASK_VISUAL_LAYER: int = 524288 ## Capa 20: filtro de alcance, solo segunda pasada.
 
 
 ## Mueve [param node] y toda su descendencia a una capa visual. Existe porque un .glb siempre
