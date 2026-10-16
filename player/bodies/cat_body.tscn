@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bcb2puneef53y" path="res://assets/baseCat.glb" id="1_model"]
 [ext_resource type="Script" uid="uid://6ai0s1xwniqe" path="res://scripts/locomotion_animator.gd" id="2_animator"]
 [ext_resource type="AnimationLibrary" path="res://player/bodies/cat_animations.tres" id="3_animations"]
+[ext_resource type="Script" uid="uid://cnih30bdw25q7" path="res://player/bodies/player_body.gd" id="4_body"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
 animation = &"idle"
@@ -27,15 +28,30 @@ blend_point_2/node = SubResource("AnimationNodeAnimation_correr")
 blend_point_2/pos = 2.6
 blend_point_2/name = &"2"
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_forcejeo"]
+animation = &"forcejeo"
+
 [sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_start"]
 advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_locomotion_forcejeo"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_forcejeo_locomotion"]
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_root"]
 states/locomotion/node = SubResource("AnimationNodeBlendSpace1D_locomotion")
 states/locomotion/position = Vector2(360, 100)
-transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_start")]
+states/forcejeo/node = SubResource("AnimationNodeAnimation_forcejeo")
+states/forcejeo/position = Vector2(600, 100)
+transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_start"), "locomotion", "forcejeo", SubResource("AnimationNodeStateMachineTransition_locomotion_forcejeo"), "forcejeo", "locomotion", SubResource("AnimationNodeStateMachineTransition_forcejeo_locomotion")]
 
-[node name="CatBody" type="Node3D" unique_id=1]
+[node name="CatBody" type="Node3D" unique_id=1 node_paths=PackedStringArray("skeleton", "skinned_mesh", "animation_tree")]
+script = ExtResource("4_body")
+skeleton = NodePath("Model/Armature/Skeleton3D")
+skinned_mesh = NodePath("Model/Armature/Skeleton3D/Torso")
+animation_tree = NodePath("AnimationTree")
 
 [node name="Model" parent="." unique_id=2071890739 instance=ExtResource("1_model")]
 transform = Transform3D(-0.237, 0, 0, 0, 0.237, 0, 0, 0, -0.237, 0, 0, 0)

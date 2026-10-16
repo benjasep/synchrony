@@ -33,6 +33,9 @@ var data: Statics.PlayerData
 var profile: RoleProfile
 var ability: PlayerAbility
 var hud: Node
+## El modelo instanciado del rol si cumple el contrato de [PlayerBody] (forcejeo y restos);
+## [code]null[/code] si el rol no trae modelo o no es un [PlayerBody].
+var player_body: PlayerBody = null
 
 var _is_configured: bool = false
 var _authority_assigned: bool = false
@@ -156,12 +159,9 @@ func _configure_components() -> void:
 
 ## Activa la cámara solo en el peer dueño y le oculta su propio cuerpo; los demás sí lo ven.
 func _configure_local_only() -> void:
-	var is_owner: bool = is_multiplayer_authority()
 	if camera:
-		camera.current = is_owner
-	# En primera persona el dueño no debe ver su propio cuerpo.
-	if body:
-		body.visible = not is_owner
+		camera.current = is_multiplayer_authority()
+	_show_live_body(true)
 
 
 ## Ajusta la altura de los ojos, la cápsula de colisión y el placeholder a las medidas del
@@ -195,8 +195,9 @@ func _apply_body_dimensions() -> void:
 
 
 ## Instancia el [code]body_scene[/code] del rol bajo [code]body[/code] (el nodo que se
-## oculta al dueño), lo pasa a la capa visual de cuerpos y oculta el placeholder. No hace
-## nada si el rol no trae modelo; si no es un [Node3D], registra un error.
+## oculta al dueño), lo pasa a la capa visual de cuerpos y oculta el placeholder; si es un
+## [PlayerBody] lo guarda en [code]player_body[/code]. No hace nada si el rol no trae modelo; si
+## no es un [Node3D], registra un error.
 func _spawn_body() -> void:
 	if not body or not profile.body_scene:
 		return
@@ -205,6 +206,7 @@ func _spawn_body() -> void:
 		push_error("body_scene de %s no es un Node3D" % profile.display_name)
 		return
 	body.add_child(model)
+	player_body = model as PlayerBody
 	# El vidente no dibuja la capa del mundo: en la 1 sus compañeros serían
 	# invisibles para él.
 	Statics.force_visual_layer(model, Statics.BODY_VISUAL_LAYER)
@@ -242,16 +244,25 @@ func _connect_signals() -> void:
 	if capture:
 		capture.captured.connect(_handle_captured)
 		capture.released.connect(_handle_released)
+		capture.separated.connect(_handle_separated)
 	if inventory:
 		inventory.item_equipped.connect(func(item: Equipment) -> void: equipment_changed.emit(item))
 
 
-## Al volver a la vida devuelve los controles (y, al dueño, el ratón), salvo que siga
-## atrapado, y emite [code]revived[/code]. Solo deshace de [code]_handle_died()[/code] lo que
-## tiene sentido deshacer: el inventario soltado sigue en el suelo, la habilidad no se reactiva
-## sola y el jugador no se mueve de donde cayó.
+## Al volver a la vida retira sus restos, si los dejó, y vuelve a mostrar el cuerpo vivo con su
+## colisión; devuelve los controles (y, al dueño, el ratón), salvo que siga atrapado, y emite
+## [code]revived[/code]. Solo deshace de [code]_handle_died()[/code] lo que tiene sentido
+## deshacer: el inventario soltado sigue en el suelo, la habilidad no se reactiva sola y el
+## jugador no se mueve de donde cayó.
 func _handle_revived() -> void:
+	if capture:
+		capture.discard_remains()
+	_show_live_body(true)
+	if collision:
+		collision.disabled = false
 	if not is_captured():
+		if player_body:
+			player_body.set_struggling(false)
 		_set_controls_enabled(true)
 	revived.emit()
 
@@ -273,22 +284,44 @@ func _handle_died() -> void:
 
 
 ## Al quedar atrapado le quita los controles: ni moverse (ni gravedad, que aplica el
-## movimiento), ni interactuar, ni usar items.
+## movimiento), ni interactuar, ni usar items; y su cuerpo forcejea.
 func _handle_captured() -> void:
 	_set_controls_enabled(false)
+	if player_body:
+		player_body.set_struggling(true)
 
 
-## Al soltarlo, si sigue vivo y no se soltaron sus restos, le devuelve los controles. Si está
-## muerto, el servidor suelta ahora el inventario que [code]_handle_died()[/code] retuvo.
+## Al decapitarlo sus restos ocupan el lugar del cuerpo vivo: lo oculta en todos los peers y
+## apaga su colisión, o la cápsula invisible del muerto estorbaría a los vivos. Lo deshace
+## [code]_handle_revived()[/code].
+func _handle_separated() -> void:
+	_show_live_body(false)
+	if collision:
+		collision.disabled = true
+
+
+## Al soltarlo deja de forcejear y, si sigue vivo y no se soltaron sus restos, le devuelve los
+## controles. Si está muerto, el servidor suelta ahora el inventario que
+## [code]_handle_died()[/code] retuvo.
 ## Recibe: [param as_remains] — [code]true[/code] si se soltó su cuerpo: no recupera los
 ## controles aunque la muerte aún no haya llegado a este peer.
 func _handle_released(as_remains: bool) -> void:
+	if player_body:
+		player_body.set_struggling(false)
 	if health and health.is_dead:
 		if multiplayer.is_server() and inventory:
 			inventory.drop_all()
 		return
 	if not as_remains:
 		_set_controls_enabled(true)
+
+
+## Muestra u oculta el cuerpo vivo. Al dueño nunca se le muestra: en primera persona no debe
+## ver su propio cuerpo.
+## Recibe: [param shown] — [code]false[/code] para ocultarlo también a los demás.
+func _show_live_body(shown: bool) -> void:
+	if body:
+		body.visible = shown and not is_multiplayer_authority()
 
 
 ## Activa o desactiva movimiento, interacción y el uso de items y captura o libera el ratón. En

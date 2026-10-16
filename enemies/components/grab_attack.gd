@@ -8,10 +8,11 @@ extends Node
 ## local y mueve a la víctima desde sus propios huesos. Lo lanza [EnemyCombat] como remate.
 ##
 ## Secuencia: alinear → alcance ([code]contacto[/code]: la víctima queda atrapada) → levantar →
-## mordisco durante [code]bite_duration[/code] → remate ([code]separacion[/code]: muere;
-## [code]soltar_restos[/code]: se suelta su cuerpo) o, si en el mordisco le dañan una zona de
-## rescate, salida que suelta a la víctima viva ([code]soltar_victima[/code]). Si el enemigo se
-## retira a mitad, la víctima queda libre y viva.
+## mordisco durante [code]bite_duration[/code] → remate ([code]separacion[/code]: muere y su
+## cuerpo se parte en restos; [code]soltar_restos[/code]: los restos caen con física) o, si en el
+## mordisco le dañan una zona de rescate, salida que suelta a la víctima viva
+## ([code]soltar_victima[/code]). Si el enemigo se retira a mitad, la víctima queda libre y viva o,
+## si ya la había decapitado, sus restos caen igual.
 
 ## Se emite en todos los peers al empezar, tras alinear al enemigo.
 signal grab_started(victim: Player)
@@ -215,7 +216,7 @@ func _abort() -> void:
 
 
 ## Reacciona a cada evento de la animación (en todos los peers, cada uno con la suya): atrapa,
-## suelta o, en el servidor, mata a la víctima, y reemite el evento como
+## decapita, suelta o, en el servidor, mata a la víctima, y reemite el evento como
 ## [code]sequence_event[/code].
 ## Recibe: [param event] — nombre del evento en la tabla del [GrabRig].
 func _on_rig_event(event: StringName) -> void:
@@ -225,6 +226,7 @@ func _on_rig_event(event: StringName) -> void:
 		EVENT_CONTACT:
 			_catch_victim()
 		EVENT_SEPARATION:
+			_separate_victim()
 			if multiplayer.is_server() and get_victim():
 				_victim.health.kill(enemy)
 		EVENT_DROP_REMAINS:
@@ -292,18 +294,29 @@ func _catch_victim() -> void:
 		_abort.rpc()
 
 
-## Suelta a la víctima si la tiene atrapada y emite [code]victim_released[/code].
+## En este peer, decapita a la víctima atrapada: sus restos sustituyen al cuerpo vivo y siguen
+## a los huesos de la presa hasta [code]soltar_restos[/code] (ver
+## [code]CaptureComponent.separate()[/code]). La muerte la decide aparte el servidor.
+func _separate_victim() -> void:
+	var victim: Player = get_victim()
+	if victim and victim.capture and victim.capture.is_captured():
+		victim.capture.separate()
+
+
+## Suelta a la víctima si la tiene atrapada y emite [code]victim_released[/code]. Si ya la
+## decapitaron, siempre suelta sus restos: aunque la muerte aún no haya llegado a este peer.
 ## Recibe: [param alive] — [code]true[/code] para soltarla viva y de pie; [code]false[/code]
 ## para soltar su cuerpo en el suelo.
 func _release_victim(alive: bool) -> void:
 	var victim: Player = get_victim()
 	if not victim or not victim.capture or not victim.capture.is_captured():
 		return
-	if alive:
-		victim.capture.release()
-	else:
+	var as_remains: bool = not alive or victim.capture.has_remains()
+	if as_remains:
 		victim.capture.release_remains()
-	victim_released.emit(victim, alive)
+	else:
+		victim.capture.release()
+	victim_released.emit(victim, not as_remains)
 
 
 ## Corta el agarre en este peer: suelta a la víctima como esté (viva o sus restos), devuelve la

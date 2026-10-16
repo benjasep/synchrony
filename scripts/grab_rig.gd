@@ -158,8 +158,12 @@ func _on_mixer_applied() -> void:
 		# travel() no se aplica hasta que el árbol procesa: hasta entonces la
 		# raíz sigue en locomoción y eso no es el final de nada.
 		_entered = root_state == grab_state
-		if not _entered:
-			return
+		# Y el frame en que entra, la sub-máquina aún informa del estado y la
+		# posición en que se quedó si la secuencia anterior se cortó con stop():
+		# leerla dispararía sus eventos (separacion mataría a la víctima nueva
+		# antes de atraparla). Desde el frame siguiente informa del de verdad, y
+		# como _last_state sigue vacío se emite todo desde el principio.
+		return
 	if root_state != grab_state:
 		_running = false
 		_entered = false

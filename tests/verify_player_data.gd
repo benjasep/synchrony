@@ -259,6 +259,7 @@ func _verify_runtime() -> void:
 
 	await _verify_seer_view()
 	await _verify_body_animation("res://player/bodies/cat_body.tscn", 4.0, &"parameters/playback")
+	await _verify_player_bodies()
 	# La raíz de la pesadilla es un BlendTree (reacciones aditivas encima): la máquina de
 	# estados es su nodo main.
 	await _verify_body_animation("res://enemies/pesadilla/pesadilla_animation.tscn", 1.5,
@@ -345,6 +346,204 @@ func _verify_body_animation(path: String, test_speed: float, playback_path: Stri
 	await get_tree().physics_frame
 	_check("oculto, el arbol se apaga", not animator.tree.active)
 	holder.free()
+
+
+## Cada cuerpo de [RoleDatabase] cumple el contrato de [PlayerBody]; cada escena distinta se
+## comprueba a fondo en [code]_verify_player_body()[/code].
+func _verify_player_bodies() -> void:
+	print("--- Contrato del cuerpo (PlayerBody) ---")
+	var scenes: Array[PackedScene] = []
+	for role: Statics.Role in RoleDatabase.get_selectable_roles():
+		var profile: RoleProfile = RoleDatabase.get_profile(role)
+		var instance: Node = profile.body_scene.instantiate() if profile.body_scene else null
+		_check("el cuerpo de %s es un PlayerBody" % profile.display_name, instance is PlayerBody)
+		if instance:
+			instance.free()
+		if profile.body_scene and not scenes.has(profile.body_scene):
+			scenes.append(profile.body_scene)
+	for scene: PackedScene in scenes:
+		await _verify_player_body(scene)
+
+
+## Monta dos cuerpos de [param scene] y comprueba la partición (cabeza y cuerpo no vacíos, los
+## triángulos del original sin perder ni repetir, mismo formato, material, skin y esqueleto, las
+## orejas con la cabeza, compartida entre cuerpos), los restos (cada copia muestra solo su pieza,
+## sin nada que la anime y con la pose del vivo) y el forcejeo: el estado existe, su clip también
+## (Godot 4.7 no avisa de un clip que falta), y [code]set_struggling()[/code] viaja y vuelve.
+func _verify_player_body(scene: PackedScene) -> void:
+	print("--- PlayerBody: %s ---" % scene.resource_path.get_file())
+	# Fuera del árbol no corre _ready(): su malla sigue entera y sirve de referencia.
+	var reference: Node3D = scene.instantiate() as Node3D
+	var holder: Node3D = Node3D.new()
+	get_tree().root.add_child.call_deferred(holder)
+	var first: PlayerBody = scene.instantiate() as PlayerBody
+	var second: PlayerBody = scene.instantiate() as PlayerBody
+	second.position.x = 3.0
+	holder.add_child(first)
+	holder.add_child(second)
+	await get_tree().process_frame
+	_check("se parte en cabeza y cuerpo", first.can_create_remains() and first.head_mesh != null \
+		and first.body_mesh == first.skinned_mesh)
+	if not first.can_create_remains():
+		holder.free()
+		reference.free()
+		return
+	var original: MeshInstance3D = reference.get_node(first.get_path_to(first.skinned_mesh)) as MeshInstance3D
+	var source: Mesh = original.mesh
+	var split: PlayerBody.MeshSplit = first.get_split()
+	var head_triangles: int = _count_triangles(first.head_mesh.mesh)
+	var body_triangles: int = _count_triangles(first.body_mesh.mesh)
+	_check("ni la cabeza ni el cuerpo vacios (%d y %d triangulos)" % [head_triangles, body_triangles],
+		head_triangles > 0 and body_triangles > 0 and split.head.triangles == head_triangles \
+		and split.body.triangles == body_triangles)
+	_check("suman los triangulos del original (%d)" % _count_triangles(source),
+		head_triangles + body_triangles == _count_triangles(source))
+	_check("mismo formato, primitiva y material que el original",
+		_same_surfaces(first.head_mesh.mesh as ArrayMesh, source as ArrayMesh) \
+		and _same_surfaces(first.body_mesh.mesh as ArrayMesh, source as ArrayMesh))
+	_check("la cabeza usa el mismo skin y esqueleto, al lado del cuerpo",
+		first.head_mesh.skin == original.skin and first.head_mesh.skeleton == original.skeleton \
+		and first.head_mesh.get_parent() == first.body_mesh.get_parent())
+	_check("vivo se ven las dos piezas", first.head_mesh.visible and first.body_mesh.visible)
+	var head_index: int = first.skeleton.find_bone(first.head_bone)
+	var ears_in_head: int = _count_dominant(first, split.head, head_index, true)
+	var ears_in_body: int = _count_dominant(first, split.body, head_index, true)
+	var head_in_body: int = _count_dominant(first, split.body, head_index, false)
+	_check("las orejas van con la cabeza (%d vertices en la cabeza, %d en el cuerpo)"
+		% [ears_in_head, ears_in_body], ears_in_head > 0 and ears_in_body == 0)
+	_check("ningun vertice del cuerpo deforma sobre todo con la cabeza (%d)" % head_in_body,
+		head_in_body == 0)
+	_check("los cuerpos comparten la particion", second.head_mesh.mesh == first.head_mesh.mesh \
+		and second.body_mesh.mesh == first.body_mesh.mesh)
+
+	# Que el árbol aplique unos frames de idle: la pose deja de ser el reposo.
+	for i: int in 10:
+		await get_tree().process_frame
+	var remains: PlayerBody.Remains = first.create_remains()
+	_check("create_remains() da cabeza y cuerpo", remains != null and remains.head != null \
+		and remains.body != null)
+	if remains:
+		var head_path: NodePath = first.get_path_to(first.head_mesh)
+		var body_path: NodePath = first.get_path_to(first.body_mesh)
+		_check("la copia de la cabeza solo muestra la cabeza",
+			_is_visible_at(remains.head, head_path) and not _is_visible_at(remains.head, body_path))
+		_check("la del cuerpo solo el cuerpo",
+			_is_visible_at(remains.body, body_path) and not _is_visible_at(remains.body, head_path))
+		_check("sin nada que las anime", not _has_animation_nodes(remains.head) \
+			and not _has_animation_nodes(remains.body))
+		var skeleton_path: NodePath = first.get_path_to(first.skeleton)
+		_check("con la pose del vivo congelada",
+			_same_pose(remains.head.get_node(skeleton_path) as Skeleton3D, first.skeleton) \
+			and _same_pose(remains.body.get_node(skeleton_path) as Skeleton3D, first.skeleton))
+		_check("la caja del cuerpo no esta vacia (%s)" % remains.body_bounds,
+			remains.body_bounds.size.x > 0.1 and remains.body_bounds.size.y > 0.1)
+		remains.head.free()
+		remains.body.free()
+
+	var machine: AnimationNodeStateMachine = first.animation_tree.tree_root as AnimationNodeStateMachine
+	var struggle: AnimationNodeAnimation = machine.get_node(first.struggle_state) as AnimationNodeAnimation \
+		if machine and machine.has_node(first.struggle_state) else null
+	_check("el arbol tiene el estado %s" % first.struggle_state, struggle != null)
+	_check("y su clip existe", struggle != null and first.animation_tree.has_animation(struggle.animation))
+	_check("enlazado con locomotion en los dos sentidos", machine != null \
+		and machine.has_transition(first.locomotion_state, first.struggle_state) \
+		and machine.has_transition(first.struggle_state, first.locomotion_state))
+	var playback: AnimationNodeStateMachinePlayback = first.animation_tree.get(
+		StringName("%s/playback" % first.state_machine_path)) as AnimationNodeStateMachinePlayback
+	first.set_struggling(true)
+	for i: int in 20:
+		await get_tree().process_frame
+	_check("set_struggling(true) viaja al forcejeo", first.is_struggling() \
+		and playback.get_current_node() == first.struggle_state)
+	first.set_struggling(false)
+	for i: int in 20:
+		await get_tree().process_frame
+	_check("y set_struggling(false) vuelve a locomotion", not first.is_struggling() \
+		and playback.get_current_node() == first.locomotion_state)
+	holder.queue_free()
+	reference.free()
+	await get_tree().process_frame
+
+
+## Devuelve los triángulos de todas las superficies de [param mesh].
+func _count_triangles(mesh: Mesh) -> int:
+	var total: int = 0
+	for surface: int in mesh.get_surface_count():
+		var arrays: Array = mesh.surface_get_arrays(surface)
+		var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX] if arrays[Mesh.ARRAY_INDEX] != null \
+			else PackedInt32Array()
+		var count: int = indices.size() if not indices.is_empty() \
+			else (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+		@warning_ignore("integer_division")
+		total += count / 3
+	return total
+
+
+## Devuelve [code]true[/code] si cada superficie de [param piece] tiene el formato, la primitiva
+## y el material de alguna de [param source].
+func _same_surfaces(piece: ArrayMesh, source: ArrayMesh) -> bool:
+	if not piece or not source:
+		return false
+	for surface: int in piece.get_surface_count():
+		var found: bool = false
+		for original: int in source.get_surface_count():
+			found = found or (piece.surface_get_format(surface) == source.surface_get_format(original) \
+				and piece.surface_get_primitive_type(surface) == source.surface_get_primitive_type(original) \
+				and piece.surface_get_material(surface) == source.surface_get_material(original))
+		if not found:
+			return false
+	return true
+
+
+## Cuenta los vértices de [param piece] cuyo hueso de más peso desciende de [param head_index]:
+## con [param ears_only], sin contar la propia cabeza.
+func _count_dominant(body: PlayerBody, piece: PlayerBody.Piece, head_index: int, ears_only: bool) -> int:
+	var skin: Skin = body.skinned_mesh.skin
+	var count: int = 0
+	for vertex: int in piece.positions.size():
+		var best: int = -1
+		var best_weight: float = 0.0
+		for k: int in PlayerBody.MAX_INFLUENCES:
+			var weight: float = piece.weights[vertex * PlayerBody.MAX_INFLUENCES + k]
+			if weight > best_weight:
+				best_weight = weight
+				best = piece.binds[vertex * PlayerBody.MAX_INFLUENCES + k]
+		if best < 0:
+			continue
+		var bone: int = body.skeleton.find_bone(skin.get_bind_name(best)) if skin else best
+		if ears_only and bone == head_index:
+			continue
+		var current: int = bone
+		while current >= 0 and current != head_index:
+			current = body.skeleton.get_bone_parent(current)
+		if current == head_index:
+			count += 1
+	return count
+
+
+## Devuelve [code]true[/code] si el nodo en [param path] bajo [param root] existe y está visible.
+func _is_visible_at(root: Node, path: NodePath) -> bool:
+	var node: Node3D = root.get_node_or_null(path) as Node3D
+	return node != null and node.visible
+
+
+## Devuelve [code]true[/code] si bajo [param root] queda algo que mueva la pose: un
+## [AnimationMixer], un [SkeletonModifier3D] o un [LocomotionAnimator].
+func _has_animation_nodes(root: Node) -> bool:
+	for node: Node in root.find_children("*", "", true, false):
+		if node is AnimationMixer or node is SkeletonModifier3D or node is LocomotionAnimator:
+			return true
+	return false
+
+
+## Devuelve [code]true[/code] si los dos esqueletos tienen la misma pose en todos los huesos.
+func _same_pose(copy: Skeleton3D, live: Skeleton3D) -> bool:
+	if not copy or copy.get_bone_count() != live.get_bone_count():
+		return false
+	for bone: int in live.get_bone_count():
+		if not copy.get_bone_pose(bone).is_equal_approx(live.get_bone_pose(bone)):
+			return false
+	return true
 
 
 ## Mete la pesadilla en el árbol (su modelo se instancia en [code]_ready()[/code]) y comprueba

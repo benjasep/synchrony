@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Genera las animaciones del gato (idle, caminar, correr) en
+## Genera las animaciones del gato (idle, caminar, correr, forcejeo) en
 ## player/bodies/cat_animations.tres, la AnimationLibrary de cat_body.tscn.
 ##
 ##   "$GODOT" --headless --path . --script res://player/bodies/cat_animations_generator.gd
@@ -119,7 +119,15 @@ func _initialize() -> void:
 	library.add_animation(&"idle", _build(IDLE_LENGTH, _idle_pose))
 	library.add_animation(&"caminar", _build(GAIT_CYCLE, _gait_pose.bind(_walk())))
 	library.add_animation(&"correr", _build(GAIT_CYCLE, _gait_pose.bind(_run())))
+	# PROVISIONAL: forcejeo (el estado mientras algo lo tiene atrapado, ver PlayerBody) es una
+	# copia de idle hasta que se haga la animación real. Ya existe para que el estado del árbol
+	# y su clip estén en su sitio: cambiarlo será tocar solo esta línea.
+	library.add_animation(&"forcejeo", _build(IDLE_LENGTH, _idle_pose))
+	# Una librería nueva se guarda sin uid: se conserva el del archivo que se sobrescribe.
+	var uid: int = ResourceLoader.get_resource_uid(OUTPUT_PATH)
 	var error: Error = ResourceSaver.save(library, OUTPUT_PATH)
+	if error == OK and uid != ResourceUID.INVALID_ID:
+		error = ResourceSaver.set_uid(OUTPUT_PATH, uid)
 	body.free()
 	if error != OK:
 		push_error("No se pudo guardar %s (%s)" % [OUTPUT_PATH, error_string(error)])
