@@ -9,10 +9,11 @@ const MAX_CLIENTS: int = 3
 const PORT: int = 5409 # Number between 1024 and 65535.
 const SERVER_ID: int = 1
 
-const WORLD_VISUAL_LAYER: int = 1      ## Máscara de la capa 1: mundo y enemigos físicos.
+const WORLD_VISUAL_LAYER: int = 1      ## Máscara de la capa 1: escenario y objetos del mundo.
 const ETHEREAL_VISUAL_LAYER: int = 2   ## Máscara de la capa 2: enemigos etéreos.
 const VIEWMODEL_VISUAL_LAYER: int = 4  ## Máscara de la capa 3: item empuñado.
 const BODY_VISUAL_LAYER: int = 8       ## Máscara de la capa 4: cuerpos de otros jugadores.
+const PHYSICAL_ENEMY_VISUAL_LAYER: int = 16 ## Capa 5: enemigos físicos, separados de las paredes.
 const PERCEPTION_MASK_VISUAL_LAYER: int = 524288 ## Capa 20: filtro de alcance, solo segunda pasada.
 
 

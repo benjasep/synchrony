@@ -2,11 +2,13 @@ class_name PerceptionComponent
 extends PlayerComponent
 
 const ETHEREAL_RANGE_SHADER: Shader = preload("res://player/data/ethereal_range.gdshader")
+const ECHO_SHADER: Shader = preload("res://player/data/echo_vision.gdshader")
 
 ## Aplica el [VisionMode] del rol a la cámara, solo en el cliente dueño (la percepción no se
 ## replica). Para el vidente arma tres piezas: la cámara principal solo llena el depth, el quad
-## de eco lo convierte en contornos y un [SubViewport] etéreo compone encima, en 2D, lo que el
-## quad taparía (enemigos etéreos, compañeros, viewmodel).
+## de eco lo convierte en contornos y un [SubViewport] etéreo compone encima los bordes de
+## enemigos físicos y etéreos, compañeros y viewmodel, sin texturas ni paredes
+## que los oculten, con el mismo límite esférico que el eco.
 
 @export var camera: Camera3D
 @export var echo_quad: MeshInstance3D
@@ -20,6 +22,7 @@ var vision_mode: VisionMode
 
 var _echo_material: ShaderMaterial
 var _range_material: ShaderMaterial
+var _range_mask_material: ShaderMaterial
 var _range_quad: MeshInstance3D
 var _perception_radius: float = 0.0
 
@@ -48,16 +51,18 @@ func apply_vision_mode(mode: VisionMode) -> void:
 	_apply_ethereal_pass(mode)
 
 
-## Cambia en caliente un uniform del shader de eco; sin post-proceso activo no hace nada. Lo
-## usa [SeerEchoAbility] para el pulso.
+## Cambia un uniform del eco y de las dos pasadas que dibujan los bordes de los actores.
+## Lo usa [SeerEchoAbility] para ampliar todas las capas con el mismo pulso.
 ## Recibe: [param parameter] — nombre del uniform; [param value] — valor nuevo.
 func set_shader_parameter(parameter: StringName, value: Variant) -> void:
 	if _echo_material:
 		_echo_material.set_shader_parameter(parameter, value)
+	if _range_material:
+		_range_material.set_shader_parameter(parameter, value)
+	if _range_mask_material:
+		_range_mask_material.set_shader_parameter(parameter, value)
 	if parameter == &"perception_radius":
 		_perception_radius = float(value)
-		if _range_material:
-			_range_material.set_shader_parameter(parameter, _perception_radius)
 
 
 ## Si el modo tiene segunda pasada, copia cada frame la cámara principal a la etérea. Solo
@@ -131,13 +136,18 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 	_sync_ethereal_camera()
 
 
-## Recorta el alfa de la segunda pasada por distancia real. El material es local
-## a esta cámara y recibe el mismo radio que el eco, incluido el pulso.
+## Reemplaza el color por el mismo eco de la principal y después recorta el alfa
+## para conservar solo bordes. Ambos materiales reciben el alcance, incluido el pulso.
 func _apply_range_mask() -> void:
 	if not _range_quad:
 		_range_material = ShaderMaterial.new()
-		_range_material.shader = ETHEREAL_RANGE_SHADER
-		_range_material.render_priority = Material.RENDER_PRIORITY_MAX
+		_range_material.shader = ECHO_SHADER
+		# La máscara debe correr DESPUÉS del color; con igual prioridad no hay orden garantizado.
+		_range_material.render_priority = Material.RENDER_PRIORITY_MAX - 1
+		_range_mask_material = ShaderMaterial.new()
+		_range_mask_material.shader = ETHEREAL_RANGE_SHADER
+		_range_mask_material.render_priority = Material.RENDER_PRIORITY_MAX
+		_range_material.next_pass = _range_mask_material
 		var quad: QuadMesh = QuadMesh.new()
 		quad.size = Vector2(2.0, 2.0)
 		_range_quad = MeshInstance3D.new()
@@ -149,7 +159,11 @@ func _apply_range_mask() -> void:
 		_range_quad.extra_cull_margin = 16384.0
 		ethereal_camera.add_child(_range_quad)
 		_range_quad.position.z = -1.0
+	for parameter: StringName in vision_mode.shader_parameters:
+		_range_material.set_shader_parameter(parameter, vision_mode.shader_parameters[parameter])
+		_range_mask_material.set_shader_parameter(parameter, vision_mode.shader_parameters[parameter])
 	_range_material.set_shader_parameter(&"perception_radius", _perception_radius)
+	_range_mask_material.set_shader_parameter(&"perception_radius", _perception_radius)
 	_range_quad.show()
 
 

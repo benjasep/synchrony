@@ -2,9 +2,9 @@ class_name VisionMode
 extends Resource
 
 ## Cómo percibe el mundo un jugador; se aplica solo en el cliente dueño. Con shader de eco,
-## [code]cull_mask[/code] solo aporta profundidad: lo que se ve tal cual va en la segunda
-## pasada, [code]ethereal_cull_mask[/code] (0 = ninguna), iluminada solo por su ambiente
-## propio. [code]perception_radius[/code] limita ambas pasadas con un radio esférico
+## [code]cull_mask[/code] aporta la profundidad del escenario; la segunda pasada,
+## [code]ethereal_cull_mask[/code] (0 = ninguna), dibuja los bordes de los actores a través
+## de paredes. [code]perception_radius[/code] limita ambas pasadas con un radio esférico
 ## en metros; 0 = el valor por defecto del shader de eco.
 
 @export_flags_3d_render var cull_mask: int = 0xFFFFF

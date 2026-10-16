@@ -80,6 +80,8 @@ func _verify_data() -> void:
 	# la pasada principal se lo comería el post-proceso.
 	_check("vidente SI ve etereos (segunda pasada)",
 		seer.vision_mode.ethereal_cull_mask & Statics.ETHEREAL_VISUAL_LAYER != 0)
+	_check("vidente SI ve enemigos fisicos a traves de las paredes",
+		seer.vision_mode.ethereal_cull_mask & Statics.PHYSICAL_ENEMY_VISUAL_LAYER != 0)
 	_check("vidente SI ve a sus companeros",
 		seer.vision_mode.ethereal_cull_mask & Statics.BODY_VISUAL_LAYER != 0)
 	_check("vidente SI ve el item que empuna",
@@ -88,6 +90,8 @@ func _verify_data() -> void:
 		seer.vision_mode.ethereal_cull_mask & Statics.WORLD_VISUAL_LAYER == 0)
 
 	for other: RoleProfile in [technician, soldier]:
+		_check("%s SI ve enemigos fisicos en su camara normal" % other.display_name,
+			other.vision_mode.cull_mask & Statics.PHYSICAL_ENEMY_VISUAL_LAYER != 0)
 		_check("%s SI ve el mundo" % other.display_name,
 			other.vision_mode.cull_mask & Statics.WORLD_VISUAL_LAYER != 0)
 		_check("%s NO ve etereos" % other.display_name,
@@ -561,8 +565,8 @@ func _verify_physical_enemy() -> void:
 	_check("no es etereo", not enemy.is_ethereal)
 	_check("trae su modelo y oculta el cubo", enemy.model.get_child_count() > 1 \
 		and not enemy.model_placeholder.visible)
-	_check("todo el modelo en la capa del mundo",
-		_all_meshes_in_layer(enemy.model, Statics.WORLD_VISUAL_LAYER))
+	_check("todo el modelo en la capa de enemigos fisicos",
+		_all_meshes_in_layer(enemy.model, Statics.PHYSICAL_ENEMY_VISUAL_LAYER))
 	enemy.queue_free()
 	await get_tree().process_frame
 

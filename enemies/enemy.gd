@@ -69,10 +69,10 @@ func _ready() -> void:
 		health.died.connect(_handle_died)
 
 
-## Devuelve la capa visual de todo el modelo: la etérea si es etéreo, si no la del mundo. Es lo
-## único que decide quién lo ve.
+## Devuelve la capa visual del modelo: etéreos o enemigos físicos. Ambas se separan del
+## escenario para que el vidente pueda verlos a través de paredes, dentro de su alcance.
 func get_visual_layer() -> int:
-	return Statics.ETHEREAL_VISUAL_LAYER if is_ethereal else Statics.WORLD_VISUAL_LAYER
+	return Statics.ETHEREAL_VISUAL_LAYER if is_ethereal else Statics.PHYSICAL_ENEMY_VISUAL_LAYER
 
 
 ## Devuelve los flags de [enum Statics.DamageType] que le hacen daño: el etéreo si es etéreo,

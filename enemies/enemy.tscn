@@ -33,6 +33,7 @@ shape = SubResource("BoxShape3D_body")
 
 [node name="Placeholder" type="MeshInstance3D" parent="Model"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+layers = 16
 mesh = SubResource("BoxMesh_body")
 
 [node name="Hitbox" type="Area3D" parent="Model/Placeholder"]

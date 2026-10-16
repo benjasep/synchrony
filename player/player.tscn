@@ -124,7 +124,7 @@ size = Vector2i(1280, 720)
 render_target_update_mode = 0
 
 [node name="EtherealCamera" type="Camera3D" parent="EtherealViewport" unique_id=381802067]
-cull_mask = 14
+cull_mask = 30
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=46801409]
 

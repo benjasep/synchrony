@@ -9,7 +9,7 @@
 
 [sub_resource type="Resource" id="Resource_normal_vision"]
 script = ExtResource("2_vision")
-cull_mask = 13
+cull_mask = 29
 ethereal_cull_mask = 0
 shader_parameters = {}
 perception_radius = 0.0

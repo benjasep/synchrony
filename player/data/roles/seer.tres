@@ -9,7 +9,7 @@
 [sub_resource type="Resource" id="Resource_seer_vision"]
 script = ExtResource("2_vision")
 cull_mask = 1
-ethereal_cull_mask = 14
+ethereal_cull_mask = 30
 post_process_shader = ExtResource("5_echo")
 shader_parameters = {
 &"outline_energy": 1.6
