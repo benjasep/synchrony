@@ -5,10 +5,15 @@
 [ext_resource type="Material" uid="uid://d0empcc3xyq" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_B.material" id="2_rxlxu"]
 [ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="3_ky1u2"]
 [ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="6_sq0ec"]
+[ext_resource type="PackedScene" uid="uid://bifd0q06ji8fn" path="res://assets/props/cinta.tscn" id="7_6bql3"]
 [ext_resource type="PackedScene" uid="uid://caci4k7wyu7xu" path="res://assets/props/SM_Motel_BeerBottle.tscn" id="7_ky1u2"]
+[ext_resource type="PackedScene" uid="uid://8oash1b7b8j0" path="res://assets/props/SM_Motel_PillBottle.tscn" id="7_oxd2b"]
 [ext_resource type="PackedScene" uid="uid://bu1mil10fv5b2" path="res://assets/props/SM_Motel_CrushedCan.tscn" id="7_xm46f"]
+[ext_resource type="PackedScene" uid="uid://bua7eg56j7jdn" path="res://assets/props/SM_Motel_Newspaper.tscn" id="8_qjwel"]
 [ext_resource type="PackedScene" uid="uid://bbk7jdh0f75tj" path="res://assets/props/bolsa_realAHORASI.tscn" id="8_sq0ec"]
 [ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="9_75yh5"]
+[ext_resource type="PackedScene" uid="uid://cn0rm4atd5pu7" path="res://assets/props/cama.tscn" id="10_rxlxu"]
+[ext_resource type="PackedScene" uid="uid://buwxdl6xhakad" path="res://assets/props/SM_Motel_ShampooBottle.tscn" id="13_qjwel"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_v478n"]
 _surfaces = [{
@@ -432,6 +437,15 @@ skeleton = NodePath("")
 
 [node name="props" type="Node3D" parent="." unique_id=692888060]
 
+[node name="SM_Motel_CassetteTape" parent="props" unique_id=731590252 instance=ExtResource("7_6bql3")]
+transform = Transform3D(1.1251853, 0, 0.9919467, 0, 1.5, 0, -0.9919467, 0, 1.1251853, 1.9362307, 0, -4.9396863)
+
+[node name="SM_Motel_PillBottle2" parent="props" unique_id=1423379842 instance=ExtResource("7_oxd2b")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.252058, 0, -7.778741)
+
+[node name="SM_Motel_Newspaper2" parent="props" unique_id=359330795 instance=ExtResource("8_qjwel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.3289645, -2.3841858e-07, -3.916811)
+
 [node name="SM_Motel_CrushedCan2" parent="props" unique_id=1276086598 instance=ExtResource("7_xm46f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.069648, 0, -3.8358421)
 
@@ -445,7 +459,7 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.89397025, 0, -8.118262)
 transform = Transform3D(0.042257413, 1.9995536, 0, -1.9995536, 0.042257413, 0, 0, 0, 2, 1.3508177, 0, -8.118262)
 
 [node name="SM_Motel_BeerBottle5" parent="props" unique_id=1623635642 instance=ExtResource("7_ky1u2")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.1934175, 0, -6.875227)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.1934175, 0, -5.818929)
 
 [node name="SM_Motel_BeerBottle6" parent="props" unique_id=418565424 instance=ExtResource("7_ky1u2")]
 transform = Transform3D(0.08169943, -1.9983306, 0, 1.9983306, 0.08169943, 0, 0, 0, 2, 4.918905, 0, -1.8816452)
@@ -467,3 +481,33 @@ transform = Transform3D(0.74632937, 0, 0.6655768, 0, 1, 0, -0.6655768, 0, 0.7463
 
 [node name="SM_Motel_CrushedCan4" parent="props" unique_id=537333900 instance=ExtResource("7_xm46f")]
 transform = Transform3D(0.3372988, 0, -0.94139767, 0, 1, 0, 0.94139767, 0, 0.3372988, 5.0250964, 0, -5.969774)
+
+[node name="SM_Motel_CrushedCan5" parent="props" unique_id=322818797 instance=ExtResource("10_rxlxu")]
+transform = Transform3D(-0.01795748, 0, -0.99983877, 0, 1, 0, 0.99983877, 0, -0.01795748, 0.9039769, 0, -5)
+
+[node name="SM_Motel_Newspaper3" parent="props" unique_id=495089085 instance=ExtResource("8_qjwel")]
+transform = Transform3D(0.87665033, 0, -0.48112804, 0, 1, 0, 0.48112804, 0, 0.87665033, 2.8744671, -2.3841858e-07, -3.5970268)
+
+[node name="SM_Motel_Newspaper4" parent="props" unique_id=270098379 instance=ExtResource("8_qjwel")]
+transform = Transform3D(0.6830202, 0, 0.7303995, 0, 1, 0, -0.7303995, 0, 0.6830202, 3.3025472, -2.3841858e-07, -3.7391431)
+
+[node name="SM_Motel_Newspaper5" parent="props" unique_id=1262016321 instance=ExtResource("8_qjwel")]
+transform = Transform3D(0.8216051, 0, -0.5700571, 0, 1, 0, 0.5700571, 0, 0.8216051, 5.6045923, -2.3841858e-07, -3.916811)
+
+[node name="SM_Motel_Newspaper6" parent="props" unique_id=2084999847 instance=ExtResource("8_qjwel")]
+transform = Transform3D(0.57904786, 0, 0.81529355, 0, 1, 0, -0.81529355, 0, 0.57904786, 1.3755617, -2.3841858e-07, -0.7202587)
+
+[node name="SM_Motel_PillBottle3" parent="props" unique_id=375686552 instance=ExtResource("7_oxd2b")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.252058, 0, -7.149797)
+
+[node name="SM_Motel_PillBottle4" parent="props" unique_id=1688823777 instance=ExtResource("7_oxd2b")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 6.252058, 0, -7.5082345)
+
+[node name="SM_Motel_ShampooBottle2" parent="props" unique_id=1132028982 instance=ExtResource("13_qjwel")]
+transform = Transform3D(0.9374404, 0, -0.3481458, 0, 1, 0, 0.3481458, 0, 0.9374404, 5.9920945, 0, -8.344107)
+
+[node name="SM_Motel_CassetteTape2" parent="props" unique_id=1765615637 instance=ExtResource("7_6bql3")]
+transform = Transform3D(0.6824779, 0, 1.3357484, 0, 1.5, 0, -1.3357484, 0, 0.6824779, 0.53325605, 0, -0.4729371)
+
+[node name="SM_Motel_CassetteTape3" parent="props" unique_id=741983309 instance=ExtResource("7_6bql3")]
+transform = Transform3D(1.0747067, 0, -1.0464252, 0, 1.5, 0, 1.0464252, 0, 1.0747067, 6.052216, 0, -0.8340893)
