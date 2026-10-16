@@ -245,7 +245,7 @@ time = 0.167
 script = ExtResource("6_marker")
 animation = &"apretar_arrancar"
 event = &"separacion"
-time = 0.208
+time = 0.183
 
 [sub_resource type="Resource" id="Resource_event_soltar_restos"]
 script = ExtResource("6_marker")
