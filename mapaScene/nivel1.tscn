@@ -1,22 +1,40 @@
 [gd_scene format=3 uid="uid://bfwdd6qlbx4jt"]
 
+[ext_resource type="PackedScene" uid="uid://3y6s62of233c" path="res://objetos/hospital_scene.tscn" id="1_hymea"]
 [ext_resource type="PackedScene" uid="uid://c0y61nd1aforj" path="res://mapaScene/casa.tscn" id="1_swmnm"]
-[ext_resource type="PackedScene" uid="uid://ch4qq4e3bm5j5" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_7.tscn" id="2_hymea"]
-[ext_resource type="PackedScene" uid="uid://cs5w1gtvfwxoj" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_5.tscn" id="3_v13m4"]
-[ext_resource type="PackedScene" uid="uid://d2oqg5qytcbaf" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_6.tscn" id="4_o0nf2"]
+[ext_resource type="Texture2D" uid="uid://dp68ker5hvwi5" path="res://assets/suelo.jpg" id="4_o0nf2"]
+[ext_resource type="PackedScene" uid="uid://dxa306jcbwo8t" path="res://objetos/iglesia.tscn" id="4_v13m4"]
 [ext_resource type="PackedScene" uid="uid://ci5jsl6im2els" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/roof/roof_a_1x_3.tscn" id="5_v13m4"]
+[ext_resource type="PackedScene" uid="uid://cb0tcec13lsft" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/wall/post_a_c.tscn" id="6_r46fr"]
+[ext_resource type="PackedScene" uid="uid://b2yb7oauhm2sv" path="res://assets/MuscleCar_Asset_LightsOut/MuscleCar_Asset_LightsOut/muscle_car_lowpoly_lightsout_GLB.glb" id="6_vxgx3"]
+[ext_resource type="PackedScene" uid="uid://8qend8i6ae62" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/wall/post_a_d.tscn" id="7_4j8t2"]
+[ext_resource type="PackedScene" uid="uid://vlc5gr0rkm3y" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/floor/hand_rail_rail_c_3m.tscn" id="9_in1lm"]
+[ext_resource type="Material" uid="uid://cjfgi6ppn80jh" path="res://assets/sueloTexture.tres" id="10_r46fr"]
+[ext_resource type="PackedScene" uid="uid://bua7eg56j7jdn" path="res://assets/props/SM_Motel_Newspaper.tscn" id="11_in1lm"]
+[ext_resource type="PackedScene" uid="uid://bbk7jdh0f75tj" path="res://assets/props/bolsa_realAHORASI.tscn" id="12_2a8g7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
-albedo_color = Color(0.75686276, 0.4117647, 0.22745098, 1)
+albedo_texture = ExtResource("4_o0nf2")
 metallic = 0.4
 metallic_specular = 0.37
+uv1_scale = Vector3(50, 50, 50)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yf5fn"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_57qmd"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_a1n5f"]
+size = Vector3(123.92224, 0.30273438, 0.33288574)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a1n5f"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_q034m"]
+
 [node name="StaticBody3D" type="StaticBody3D" unique_id=494792580]
 metadata/_edit_lock_ = true
+
+[node name="HospitalScene" parent="." unique_id=1912447450 instance=ExtResource("1_hymea")]
+transform = Transform3D(-0.0018537471, 0, 0.9999983, 0, 1, 0, -0.9999983, 0, -0.0018537471, -3.957179, 0, 59.717773)
 
 [node name="Nivel" type="Node3D" parent="." unique_id=1546576008]
 
@@ -154,26 +172,6 @@ transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524,
 
 [node name="root_casa10" parent="Nivel/RootNivel4" unique_id=1184741598 instance=ExtResource("1_swmnm")]
 transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524, 0.9999941, 3.6376783e-12, -0.0047791917, -1.668259e-05, -0.99998873, 7.0175495, -0.004531324, -18.461147)
-
-[node name="Build_7" parent="Nivel" unique_id=1289637446 instance=ExtResource("2_hymea")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1267881, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_8" parent="Nivel" unique_id=1172872012 instance=ExtResource("2_hymea")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.952491, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_9" parent="Nivel" unique_id=758022318 instance=ExtResource("2_hymea")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.244586, 0.5, 41.86692)
-metadata/_edit_lock_ = true
-
-[node name="Build_5" parent="Nivel" unique_id=1072212382 instance=ExtResource("3_v13m4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.34367, 1, 43.773006)
-metadata/_edit_lock_ = true
-
-[node name="Build_6" parent="Nivel" unique_id=803163406 instance=ExtResource("4_o0nf2")]
-transform = Transform3D(0.007093326, 0, -0.99997485, 0, 1, 0, 0.99997485, 0, 0.007093326, -26.695702, 1, 39.984917)
-metadata/_edit_lock_ = true
 
 [node name="cuadraCasa" type="Node3D" parent="Nivel" unique_id=1597621400]
 metadata/_edit_lock_ = true
@@ -406,3 +404,500 @@ metadata/_edit_lock_ = true
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_57qmd")
 metadata/_edit_lock_ = true
+
+[node name="letreros" type="Node3D" parent="Nivel" unique_id=1479516025]
+
+[node name="Iglesia" parent="." unique_id=1925671312 instance=ExtResource("4_v13m4")]
+transform = Transform3D(-2.1855694e-08, 0, 0.5, 0, 0.5, 0, -0.5, 0, -2.1855694e-08, -63.875, 0, 4.837)
+
+[node name="postes" type="Node3D" parent="." unique_id=44247703]
+
+[node name="Post_A_C" parent="postes" unique_id=850633637 instance=ExtResource("6_r46fr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.821835, 0, 5.9376283)
+
+[node name="Post_A_C2" parent="postes" unique_id=1873004036 instance=ExtResource("6_r46fr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.68692, 0, 5.851081)
+
+[node name="Post_A_D" parent="postes" unique_id=1255265887 instance=ExtResource("7_4j8t2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0172677, 0, -23.948404)
+
+[node name="Post_A_D2" parent="postes" unique_id=74643009 instance=ExtResource("7_4j8t2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.86041, 0, -21.954983)
+
+[node name="Post_A_D3" parent="postes" unique_id=870911606 instance=ExtResource("7_4j8t2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.47829, 7.4505806e-07, 33.19075)
+
+[node name="Post_A_C3" parent="postes" unique_id=1699389371 instance=ExtResource("6_r46fr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.732915, -0.14379025, -50.563213)
+
+[node name="Post_A_C4" parent="postes" unique_id=1445252355 instance=ExtResource("6_r46fr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.145897, 0, -53.672375)
+
+[node name="autos" type="Node3D" parent="." unique_id=513111307]
+
+[node name="muscle_car_lowpoly_lightsout_GLB9" parent="autos" unique_id=1546944336 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -25.582829, 0, 42.934124)
+
+[node name="muscle_car_lowpoly_lightsout_GLB14" parent="autos" unique_id=838298869 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -33.459373, 0, 2.2167263)
+
+[node name="muscle_car_lowpoly_lightsout_GLB10" parent="autos" unique_id=667746936 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, -50.256527, 0, -7.448057)
+
+[node name="muscle_car_lowpoly_lightsout_GLB12" parent="autos" unique_id=1299513335 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 46.000114, 0, -9.264309)
+
+[node name="muscle_car_lowpoly_lightsout_GLB20" parent="autos" unique_id=392408190 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.8746197, 0, -0.4848096, 0, 1, 0, 0.4848096, 0, 0.8746197, 55.7246, 0, 9.571491)
+
+[node name="muscle_car_lowpoly_lightsout_GLB23" parent="autos" unique_id=702101751 instance=ExtResource("6_vxgx3")]
+transform = Transform3D(0.9563048, 0, 0.2923717, 0, 1, 0, -0.2923717, 0, 0.9563048, 29.472, 0, 55.217476)
+
+[node name="vallas9" type="Node3D" parent="." unique_id=1214613893]
+
+[node name="vallas" type="Node3D" parent="vallas9" unique_id=1056456074]
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas" unique_id=83677005 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas" unique_id=132740814 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas" unique_id=2113099105 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas" unique_id=382603017 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas" unique_id=1991009724 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas" unique_id=1356687368 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas" unique_id=1888239150 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas" unique_id=1871082831 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas" unique_id=1049339942 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas" unique_id=454879631 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas" unique_id=2053691174 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas2" type="Node3D" parent="vallas9" unique_id=1254622047]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.373371, 0, 0)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas2" unique_id=2080059298 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas2" unique_id=900072364 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas2" unique_id=343302793 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas2" unique_id=1739247434 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas2" unique_id=693299483 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas2" unique_id=1251929470 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas2" unique_id=948135841 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas2" unique_id=684404526 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas2" unique_id=1612922528 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas2" unique_id=1024489900 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas2" unique_id=1180202347 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas3" type="Node3D" parent="vallas9" unique_id=10063664]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.705616, 0, 0)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas3" unique_id=1956842725 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas3" unique_id=1801582182 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas3" unique_id=567442906 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas3" unique_id=1223546645 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas3" unique_id=1610706003 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas3" unique_id=590590951 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas3" unique_id=1833181341 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas3" unique_id=1898941022 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas3" unique_id=2107422468 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas3" unique_id=2079606195 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas3" unique_id=955019148 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas4" type="Node3D" parent="vallas9" unique_id=396148774]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.969006, 0, 0)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas4" unique_id=1050050209 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas4" unique_id=1341579407 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas4" unique_id=1626531931 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas4" unique_id=2130819966 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas4" unique_id=68121021 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas4" unique_id=607435621 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas4" unique_id=1283133901 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas4" unique_id=1424825390 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas4" unique_id=898862920 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas4" unique_id=402570048 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas4" unique_id=362179186 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas5" type="Node3D" parent="vallas9" unique_id=1232817173]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -124.0087)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas5" unique_id=784624154 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas5" unique_id=1331590846 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas5" unique_id=1847090664 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas5" unique_id=919315164 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas5" unique_id=1631598624 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas5" unique_id=479099361 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas5" unique_id=1562846716 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas5" unique_id=2026620475 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas5" unique_id=1159068789 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas5" unique_id=1741471883 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas5" unique_id=120875402 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas6" type="Node3D" parent="vallas9" unique_id=1026254742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.373371, 0, -124.0087)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas6" unique_id=1577984948 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas6" unique_id=1408508131 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas6" unique_id=1957162616 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas6" unique_id=362536855 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas6" unique_id=1008860751 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas6" unique_id=1863879958 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas6" unique_id=856203445 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas6" unique_id=1271404869 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas6" unique_id=1809160220 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas6" unique_id=1410597061 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas6" unique_id=36178147 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas7" type="Node3D" parent="vallas9" unique_id=1979996143]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.705616, 0, -124.0087)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas7" unique_id=413512290 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas7" unique_id=894097672 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas7" unique_id=343040800 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas7" unique_id=1684179747 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas7" unique_id=2049497408 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas7" unique_id=154026255 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas7" unique_id=2095725256 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas7" unique_id=1379976947 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas7" unique_id=1491467405 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas7" unique_id=956748610 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas7" unique_id=1156731716 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="vallas8" type="Node3D" parent="vallas9" unique_id=1625093754]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.969006, 0, -124.0087)
+
+[node name="HandRail_Rail_C_3m" parent="vallas9/vallas8" unique_id=782125172 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.31066, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m2" parent="vallas9/vallas8" unique_id=670453227 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.53361, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m3" parent="vallas9/vallas8" unique_id=567525156 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.64138, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m4" parent="vallas9/vallas8" unique_id=1204887871 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.715153, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m5" parent="vallas9/vallas8" unique_id=525428932 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.797707, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m6" parent="vallas9/vallas8" unique_id=1236552505 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.93661, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m7" parent="vallas9/vallas8" unique_id=1590462661 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.044432, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m8" parent="vallas9/vallas8" unique_id=1874113642 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.27363, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m9" parent="vallas9/vallas8" unique_id=1261044022 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.375536, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m10" parent="vallas9/vallas8" unique_id=1369762583 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.534149, 0, 69.43268)
+
+[node name="HandRail_Rail_C_3m11" parent="vallas9/vallas8" unique_id=432266140 instance=ExtResource("9_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.715818, 0, 69.43268)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="vallas9" unique_id=603978526]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="vallas9/StaticBody3D" unique_id=1878018392]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.617615, 1.4461706, 69.42874)
+shape = SubResource("BoxShape3D_a1n5f")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="vallas9/StaticBody3D" unique_id=2003822800]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.617615, 1.4461706, -54.6164)
+shape = SubResource("BoxShape3D_a1n5f")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1336343745]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1765122236]
+transform = Transform3D(79.99999, 0, 0, 0, 9.938398, 1.893125, 0, -0.38875633, 48.396984, -0.33, 2, 127.07)
+material_override = ExtResource("10_r46fr")
+mesh = SubResource("PlaneMesh_a1n5f")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=606288048]
+transform = Transform3D(-79.99903, -0.0019036264, 0.23698594, 0, 9.938398, 1.8931248, -0.39173666, 0.38875163, -48.396404, -1.8127042, 1.3559475, -127.40613)
+material_override = ExtResource("10_r46fr")
+mesh = SubResource("PlaneMesh_a1n5f")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=2109758171]
+transform = Transform3D(108.866875, -0.0988154, 0, 5.385439, 1.9975574, 0, 0, 0, 257, 186.46376, 4.2861614, 0)
+material_override = ExtResource("10_r46fr")
+mesh = SubResource("PlaneMesh_q034m")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=926203176]
+transform = Transform3D(-108.86002, 0.09880916, 2.8809392, 5.385438, 1.9975573, 0, -1.2203846, 0.0011077087, -256.98383, -186.65321, 4.964464, 0)
+material_override = ExtResource("10_r46fr")
+mesh = SubResource("PlaneMesh_q034m")
+
+[node name="propsMapa" type="Node3D" parent="." unique_id=988790983]
+
+[node name="SM_Motel_Newspaper2" parent="propsMapa" unique_id=359330795 instance=ExtResource("11_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.060401, 0, 0.9447453)
+
+[node name="bolsaREAL" parent="propsMapa" unique_id=459535344 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6805616, 0, 0.50584626)
+
+[node name="bolsaREAL2" parent="propsMapa" unique_id=1530640634 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.943978, 0, 3.8914683)
+
+[node name="bolsaREAL3" parent="propsMapa" unique_id=1103554964 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4971414, 0, 2.3506277)
+
+[node name="bolsaREAL4" parent="propsMapa" unique_id=1960384522 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6805616, 0, 9.821942)
+
+[node name="bolsaREAL5" parent="propsMapa" unique_id=2050979442 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2037888, 0, 6.493805)
+
+[node name="bolsaREAL6" parent="propsMapa" unique_id=1565212705 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.734768, 0, 4.8407955)
+
+[node name="bolsaREAL7" parent="propsMapa" unique_id=1016931489 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.472206, 0, 8.158507)
+
+[node name="bolsaREAL8" parent="propsMapa" unique_id=1682594968 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.647725, 0, 5.254072)
+
+[node name="bolsaREAL9" parent="propsMapa" unique_id=2105949953 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.64752, 0, 8.803354)
+
+[node name="bolsaREAL10" parent="propsMapa" unique_id=1960613272 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3908906, 0, -12.492939)
+
+[node name="bolsaREAL11" parent="propsMapa" unique_id=460101520 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.646986, 0, -35.02254)
+
+[node name="bolsaREAL12" parent="propsMapa" unique_id=1039825803 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.624443, 0, -26.897932)
+
+[node name="bolsaREAL13" parent="propsMapa" unique_id=1907445381 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7692323, 0, 32.784607)
+
+[node name="bolsaREAL14" parent="propsMapa" unique_id=1420691407 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.306634, 0, 34.386063)
+
+[node name="bolsaREAL15" parent="propsMapa" unique_id=522421461 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.448635, 0, -4.5709686)
+
+[node name="bolsaREAL16" parent="propsMapa" unique_id=2065566472 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.593582, 0, 34.7205)
+
+[node name="bolsaREAL17" parent="propsMapa" unique_id=804427309 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.745, 0, 35.458748)
+
+[node name="SM_Motel_Newspaper3" parent="propsMapa" unique_id=55775320 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.5181092, 0, -0.8553145, 0, 1, 0, 0.8553145, 0, 0.5181092, -1.060401, 0, 1.6655662)
+
+[node name="SM_Motel_Newspaper4" parent="propsMapa" unique_id=667397630 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.8051519, 0, 0.59306866, 0, 1, 0, -0.59306866, 0, 0.8051519, -8.803469, 0, 2.0978472)
+
+[node name="SM_Motel_Newspaper5" parent="propsMapa" unique_id=584633269 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.18078105, 0, -0.98352337, 0, 1, 0, 0.98352337, 0, 0.18078105, -13.228428, 0, 9.272533)
+
+[node name="SM_Motel_Newspaper6" parent="propsMapa" unique_id=308600355 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.81545186, 0, -0.5788249, 0, 1, 0, 0.5788249, 0, 0.81545186, 6.8272867, 0, 0.9447453)
+
+[node name="SM_Motel_Newspaper7" parent="propsMapa" unique_id=2095806432 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.84407747, 0, 0.5362212, 0, 1, 0, -0.5362212, 0, 0.84407747, -4.4723444, 0, -6.7958965)
+
+[node name="SM_Motel_Newspaper8" parent="propsMapa" unique_id=1936231789 instance=ExtResource("11_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4536276, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper9" parent="propsMapa" unique_id=292996296 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.6259692, 0, 0.7798478, 0, 1, 0, -0.7798478, 0, 0.6259692, -4.7326756, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper10" parent="propsMapa" unique_id=1198329773 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.78134954, 0, -0.62409365, 0, 1, 0, 0.62409365, 0, 0.78134954, -8.449455, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper11" parent="propsMapa" unique_id=811747766 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.21555175, 0, 0.9764924, 0, 1, 0, -0.9764924, 0, -0.21555175, -20.20671, 0, -25.40982)
+
+[node name="SM_Motel_Newspaper12" parent="propsMapa" unique_id=230729003 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.98544365, 0, 0.17000227, 0, 1, 0, -0.17000227, 0, 0.98544365, -30.445385, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper13" parent="propsMapa" unique_id=305663392 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.43104094, 0, 0.9023324, 0, 1, 0, -0.9023324, 0, 0.43104094, -32.17633, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper14" parent="propsMapa" unique_id=548494921 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.8099104, 0, -0.5865538, 0, 1, 0, 0.5865538, 0, -0.8099104, -39.246487, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper15" parent="propsMapa" unique_id=843901806 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.781299, 0, -0.6241569, 0, 1, 0, 0.6241569, 0, -0.781299, 4.3669615, 0, -22.139704)
+
+[node name="SM_Motel_Newspaper16" parent="propsMapa" unique_id=935529324 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.96924126, 0, 0.2461125, 0, 1, 0, -0.2461125, 0, 0.96924126, 4.9693384, 0, -25.621342)
+
+[node name="SM_Motel_Newspaper17" parent="propsMapa" unique_id=1911962501 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.9426476, 0, -0.33378962, 0, 1, 0, 0.33378962, 0, -0.9426476, 15.189369, 0, -25.381527)
+
+[node name="SM_Motel_Newspaper18" parent="propsMapa" unique_id=873240425 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.9242715, 0, 0.38173592, 0, 1, 0, -0.38173592, 0, -0.9242715, 27.86333, 0, -22.87417)
+
+[node name="SM_Motel_Newspaper19" parent="propsMapa" unique_id=721593812 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.14265499, 0, 0.9897725, 0, 1, 0, -0.9897725, 0, 0.14265499, -27.993801, 0, 3.895177)
+
+[node name="SM_Motel_Newspaper20" parent="propsMapa" unique_id=1896456542 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.86936146, 0, 0.4941768, 0, 1, 0, -0.4941768, 0, 0.86936146, -31.527336, 0, 6.3990817)
+
+[node name="SM_Motel_Newspaper21" parent="propsMapa" unique_id=1550130403 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.84075403, 0, 0.54141724, 0, 1, 0, -0.54141724, 0, -0.84075403, -35.28859, 0, 4.742023)
+
+[node name="SM_Motel_Newspaper22" parent="propsMapa" unique_id=972262715 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.859233, 0, 0.5115845, 0, 1, 0, -0.5115845, 0, 0.859233, -19.552353, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper23" parent="propsMapa" unique_id=1628156109 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.9255477, 0, -0.37863097, 0, 1, 0, 0.37863097, 0, 0.9255477, -8.482513, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper24" parent="propsMapa" unique_id=1860464492 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.82213736, 0, -0.5692893, 0, 1, 0, 0.5692893, 0, 0.82213736, -24.297249, 0, 35.821926)
+
+[node name="SM_Motel_Newspaper25" parent="propsMapa" unique_id=1086373667 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.9014597, 0, -0.43286318, 0, 1, 0, 0.43286318, 0, 0.9014597, -33.743176, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper26" parent="propsMapa" unique_id=1334653439 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.7283192, 0, -0.68523806, 0, 1, 0, 0.68523806, 0, 0.7283192, 7.803787, 0, 35.519463)

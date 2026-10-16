@@ -1,0 +1,495 @@
+[gd_scene format=3 uid="uid://3y6s62of233c"]
+
+[ext_resource type="PackedScene" uid="uid://bg7lnq64lqu7b" path="res://objetos/base_hospital.tscn" id="1_raps2"]
+[ext_resource type="PackedScene" uid="uid://c2phq0gui8vkk" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/Bucket/Bucket.fbx" id="1_w3h3u"]
+[ext_resource type="PackedScene" uid="uid://gtmjhvy00wyi" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Furniture/Bed_02/Bed_02.fbx" id="2_raps2"]
+[ext_resource type="PackedScene" uid="uid://di10urp36642a" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Furniture/Nightstand/Nightstand.fbx" id="3_i1qg4"]
+[ext_resource type="PackedScene" uid="uid://cki4ptxlmmhpd" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Furniture/Screen/Screen.fbx" id="4_721pk"]
+[ext_resource type="PackedScene" uid="uid://b5prfj2k1fi6r" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/AirVent/AirVent.fbx" id="5_pdusg"]
+[ext_resource type="PackedScene" uid="uid://bwn23gpycgrfc" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/IV_Stand/IV_Stand.fbx" id="6_yv4wt"]
+[ext_resource type="PackedScene" uid="uid://yh31e6yg426s" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/Picture_01/Picture_01.fbx" id="7_of5fk"]
+[ext_resource type="PackedScene" uid="uid://bu6ahqx3oqyk4" path="res://assets/HauntedHospital_1_1/HauntedHospital_1_1/HH_Assets_FBX/FBX/Misc/WheelChair/WheelChair.fbx" id="8_hd7no"]
+
+[node name="HospitalScene" type="Node3D" unique_id=1912447450]
+
+[node name="root_casa" parent="." unique_id=2107952373 instance=ExtResource("1_raps2")]
+transform = Transform3D(-1.3113416e-07, 0, 2, 0, 3, 0, -3, 0, -8.742278e-08, 16.4, 0, 11)
+
+[node name="Bucket" parent="." unique_id=1409246584 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.29309952, 0.0035972595, -0.80713207)
+
+[node name="Bed_02" parent="." unique_id=747218120 instance=ExtResource("2_raps2")]
+
+[node name="Nightstand" parent="." unique_id=390926315 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.86739516, 0, -1.2026441)
+
+[node name="Screen" parent="." unique_id=1521512329 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5811547)
+
+[node name="AirVent" parent="." unique_id=62938441 instance=ExtResource("5_pdusg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.272866, 1.8526442, 0.77089775)
+
+[node name="IV_Stand" parent="." unique_id=1387176732 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5717218, 0, 0.93415546)
+
+[node name="Picture_01" parent="." unique_id=614916473 instance=ExtResource("7_of5fk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2433578, 1.7778044, -0.7178031)
+
+[node name="WheelChair" parent="." unique_id=95469630 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, 0.9736452)
+
+[node name="Bucket2" parent="." unique_id=952361941 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.29309952, 0.0035972595, 2.5965064)
+
+[node name="Bed_03" parent="." unique_id=1906083638 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.4036384)
+
+[node name="Nightstand2" parent="." unique_id=1622096257 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.86739516, 0, 2.2009943)
+
+[node name="Screen2" parent="." unique_id=604341427 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.984793)
+
+[node name="AirVent2" parent="." unique_id=845639529 instance=ExtResource("5_pdusg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.272866, 1.8526442, 4.174536)
+
+[node name="IV_Stand2" parent="." unique_id=2017064686 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5717218, 0, 4.337794)
+
+[node name="Picture_02" parent="." unique_id=1000264965 instance=ExtResource("7_of5fk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2433578, 1.7778044, 2.6858354)
+
+[node name="WheelChair2" parent="." unique_id=1662897786 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, 4.3772836)
+
+[node name="Bucket3" parent="." unique_id=1446249733 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.29309952, 0.0035972595, -4.1356235)
+
+[node name="Bed_04" parent="." unique_id=2107880922 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3.3284914)
+
+[node name="Nightstand3" parent="." unique_id=9680545 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.86739516, 0, -4.5311356)
+
+[node name="Screen3" parent="." unique_id=1363967918 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.7473367)
+
+[node name="AirVent3" parent="." unique_id=496162938 instance=ExtResource("5_pdusg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.272866, 1.8526442, -2.5575938)
+
+[node name="IV_Stand3" parent="." unique_id=2026849173 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5717218, 0, -2.394336)
+
+[node name="Picture_03" parent="." unique_id=1952616312 instance=ExtResource("7_of5fk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2433578, 1.7778044, -4.0462947)
+
+[node name="WheelChair3" parent="." unique_id=5246261 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, -2.3548462)
+
+[node name="Bucket4" parent="." unique_id=1993604117 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.29309952, 0.0035972595, 5.906967)
+
+[node name="Bed_05" parent="." unique_id=849254728 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.7140994)
+
+[node name="Nightstand4" parent="." unique_id=122923653 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.86739516, 0, 5.5114555)
+
+[node name="Screen4" parent="." unique_id=596334789 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8.295254)
+
+[node name="AirVent4" parent="." unique_id=1123770442 instance=ExtResource("5_pdusg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.272866, 1.8526442, 7.4849973)
+
+[node name="IV_Stand4" parent="." unique_id=549400505 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5717218, 0, 7.6482553)
+
+[node name="Picture_04" parent="." unique_id=1391807524 instance=ExtResource("7_of5fk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2433578, 1.7778044, 5.9962964)
+
+[node name="WheelChair4" parent="." unique_id=392641470 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, 7.687745)
+
+[node name="Bucket5" parent="." unique_id=40104903 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.29309952, 0.0035972595, -7.31331)
+
+[node name="Bed_06" parent="." unique_id=568068496 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.506178)
+
+[node name="Nightstand5" parent="." unique_id=1306828211 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.86739516, 0, -7.7088223)
+
+[node name="Screen5" parent="." unique_id=1095227664 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.925023)
+
+[node name="AirVent5" parent="." unique_id=668610424 instance=ExtResource("5_pdusg")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.272866, 1.8526442, -5.73528)
+
+[node name="IV_Stand5" parent="." unique_id=366790274 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5717218, 0, -5.5720224)
+
+[node name="Picture_05" parent="." unique_id=1002889748 instance=ExtResource("7_of5fk")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.2433578, 1.7778044, -7.223981)
+
+[node name="WheelChair5" parent="." unique_id=33834134 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 0, 0, -5.5325327)
+
+[node name="Bucket6" parent="." unique_id=433933346 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.749652, 0.0035972595, -0.80713207)
+
+[node name="Bed_07" parent="." unique_id=1074451995 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 0)
+
+[node name="Nightstand6" parent="." unique_id=1750094818 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1753561, 0, -1.2026441)
+
+[node name="Screen6" parent="." unique_id=1261191348 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 1.5811547)
+
+[node name="IV_Stand6" parent="." unique_id=704861629 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4710295, 0, 0.93415546)
+
+[node name="WheelChair6" parent="." unique_id=2033756110 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 3.0427513, 0, 0.9736452)
+
+[node name="Bucket7" parent="." unique_id=1364737671 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.749652, 0.0035972595, 2.5965064)
+
+[node name="Bed_08" parent="." unique_id=1664431571 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 3.4036384)
+
+[node name="Nightstand7" parent="." unique_id=1294463427 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1753561, 0, 2.2009943)
+
+[node name="Screen7" parent="." unique_id=1399288404 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 4.984793)
+
+[node name="IV_Stand7" parent="." unique_id=856398198 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4710295, 0, 4.337794)
+
+[node name="WheelChair7" parent="." unique_id=1067856219 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 3.0427513, 0, 4.3772836)
+
+[node name="Bucket8" parent="." unique_id=256080913 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.749652, 0.0035972595, -4.1356235)
+
+[node name="Bed_09" parent="." unique_id=789145708 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, -3.3284914)
+
+[node name="Nightstand8" parent="." unique_id=1669395601 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1753561, 0, -4.5311356)
+
+[node name="Screen8" parent="." unique_id=1588281140 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, -1.7473367)
+
+[node name="IV_Stand8" parent="." unique_id=1290643288 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4710295, 0, -2.394336)
+
+[node name="WheelChair8" parent="." unique_id=585612816 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 3.0427513, 0, -2.3548462)
+
+[node name="Bucket9" parent="." unique_id=2115515707 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.749652, 0.0035972595, 5.906967)
+
+[node name="Bed_10" parent="." unique_id=2116676027 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 6.7140994)
+
+[node name="Nightstand9" parent="." unique_id=1656130952 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1753561, 0, 5.5114555)
+
+[node name="Screen9" parent="." unique_id=1907467646 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, 8.295254)
+
+[node name="IV_Stand9" parent="." unique_id=2112272893 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4710295, 0, 7.6482553)
+
+[node name="WheelChair9" parent="." unique_id=468033151 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 3.0427513, 0, 7.687745)
+
+[node name="Bucket10" parent="." unique_id=336313718 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 2.749652, 0.0035972595, -7.31331)
+
+[node name="Bed_11" parent="." unique_id=232745881 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, -6.506178)
+
+[node name="Nightstand10" parent="." unique_id=231109000 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1753561, 0, -7.7088223)
+
+[node name="Screen10" parent="." unique_id=1316135695 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0427513, 0, -4.925023)
+
+[node name="IV_Stand10" parent="." unique_id=1174377381 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.4710295, 0, -5.5720224)
+
+[node name="WheelChair10" parent="." unique_id=1376552961 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 3.0427513, 0, -5.5325327)
+
+[node name="Bucket11" parent="." unique_id=334404231 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.9766836, 0.0035972595, -0.80713207)
+
+[node name="Bed_12" parent="." unique_id=20741321 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 0)
+
+[node name="Nightstand11" parent="." unique_id=1854869068 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.4023876, 0, -1.2026441)
+
+[node name="Screen11" parent="." unique_id=938040048 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 1.5811547)
+
+[node name="IV_Stand11" parent="." unique_id=153012229 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.698061, 0, 0.93415546)
+
+[node name="WheelChair11" parent="." unique_id=812514876 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 6.269783, 0, 0.9736452)
+
+[node name="Bucket12" parent="." unique_id=1118364729 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.9766836, 0.0035972595, 2.5965064)
+
+[node name="Bed_13" parent="." unique_id=1895484496 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 3.4036384)
+
+[node name="Nightstand12" parent="." unique_id=1775846445 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.4023876, 0, 2.2009943)
+
+[node name="Screen12" parent="." unique_id=436968949 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 4.984793)
+
+[node name="IV_Stand12" parent="." unique_id=667724374 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.698061, 0, 4.337794)
+
+[node name="WheelChair12" parent="." unique_id=1233628853 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 6.269783, 0, 4.3772836)
+
+[node name="Bucket13" parent="." unique_id=122652376 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.9766836, 0.0035972595, -4.1356235)
+
+[node name="Bed_14" parent="." unique_id=767055974 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, -3.3284914)
+
+[node name="Nightstand13" parent="." unique_id=1954931266 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.4023876, 0, -4.5311356)
+
+[node name="Screen13" parent="." unique_id=427438568 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, -1.7473367)
+
+[node name="IV_Stand13" parent="." unique_id=1712530763 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.698061, 0, -2.394336)
+
+[node name="WheelChair13" parent="." unique_id=662427536 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 6.269783, 0, -2.3548462)
+
+[node name="Bucket14" parent="." unique_id=227861899 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.9766836, 0.0035972595, 5.906967)
+
+[node name="Bed_15" parent="." unique_id=1369905608 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 6.7140994)
+
+[node name="Nightstand14" parent="." unique_id=1953669691 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.4023876, 0, 5.5114555)
+
+[node name="Screen14" parent="." unique_id=1872199514 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, 8.295254)
+
+[node name="IV_Stand14" parent="." unique_id=1920217025 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.698061, 0, 7.6482553)
+
+[node name="WheelChair14" parent="." unique_id=902402066 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 6.269783, 0, 7.687745)
+
+[node name="Bucket15" parent="." unique_id=1033749292 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 5.9766836, 0.0035972595, -7.31331)
+
+[node name="Bed_16" parent="." unique_id=598204480 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, -6.506178)
+
+[node name="Nightstand15" parent="." unique_id=427070137 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 5.4023876, 0, -7.7088223)
+
+[node name="Screen15" parent="." unique_id=681942409 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.269783, 0, -4.925023)
+
+[node name="IV_Stand15" parent="." unique_id=1078449050 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.698061, 0, -5.5720224)
+
+[node name="WheelChair15" parent="." unique_id=677384224 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 6.269783, 0, -5.5325327)
+
+[node name="Bucket16" parent="." unique_id=1337978516 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.60325, 0.0035972595, -0.80713207)
+
+[node name="Bed_17" parent="." unique_id=560627844 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 0)
+
+[node name="Nightstand16" parent="." unique_id=1924943490 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.028954, 0, -1.2026441)
+
+[node name="Screen16" parent="." unique_id=602163626 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 1.5811547)
+
+[node name="IV_Stand16" parent="." unique_id=714754978 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.324627, 0, 0.93415546)
+
+[node name="WheelChair16" parent="." unique_id=1570937637 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 9.896349, 0, 0.9736452)
+
+[node name="Bucket17" parent="." unique_id=909260827 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.60325, 0.0035972595, 2.5965064)
+
+[node name="Bed_18" parent="." unique_id=410889927 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 3.4036384)
+
+[node name="Nightstand17" parent="." unique_id=1784176886 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.028954, 0, 2.2009943)
+
+[node name="Screen17" parent="." unique_id=192546979 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 4.984793)
+
+[node name="IV_Stand17" parent="." unique_id=1472580337 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.324627, 0, 4.337794)
+
+[node name="WheelChair17" parent="." unique_id=1267454055 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 9.896349, 0, 4.3772836)
+
+[node name="Bucket18" parent="." unique_id=36772751 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.60325, 0.0035972595, -4.1356235)
+
+[node name="Bed_19" parent="." unique_id=881407437 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, -3.3284914)
+
+[node name="Nightstand18" parent="." unique_id=633438919 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.028954, 0, -4.5311356)
+
+[node name="Screen18" parent="." unique_id=36334864 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, -1.7473367)
+
+[node name="IV_Stand18" parent="." unique_id=1645004196 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.324627, 0, -2.394336)
+
+[node name="WheelChair18" parent="." unique_id=845680066 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 9.896349, 0, -2.3548462)
+
+[node name="Bucket19" parent="." unique_id=648962393 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.60325, 0.0035972595, 5.906967)
+
+[node name="Bed_20" parent="." unique_id=402696131 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 6.7140994)
+
+[node name="Nightstand19" parent="." unique_id=2129672019 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.028954, 0, 5.5114555)
+
+[node name="Screen19" parent="." unique_id=1003432296 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, 8.295254)
+
+[node name="IV_Stand19" parent="." unique_id=445748148 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.324627, 0, 7.6482553)
+
+[node name="WheelChair19" parent="." unique_id=436806938 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 9.896349, 0, 7.687745)
+
+[node name="Bucket20" parent="." unique_id=1745008637 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 9.60325, 0.0035972595, -7.31331)
+
+[node name="Bed_21" parent="." unique_id=758330013 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, -6.506178)
+
+[node name="Nightstand20" parent="." unique_id=1643598423 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 9.028954, 0, -7.7088223)
+
+[node name="Screen20" parent="." unique_id=991674755 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.896349, 0, -4.925023)
+
+[node name="IV_Stand20" parent="." unique_id=1623270161 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.324627, 0, -5.5720224)
+
+[node name="WheelChair20" parent="." unique_id=912617529 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 9.896349, 0, -5.5325327)
+
+[node name="Bucket21" parent="." unique_id=536907861 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13.017843, 0.0035972595, -0.80713207)
+
+[node name="Bed_22" parent="." unique_id=2112461344 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 0)
+
+[node name="Nightstand21" parent="." unique_id=648558105 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.443547, 0, -1.2026441)
+
+[node name="Screen21" parent="." unique_id=992742379 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 1.5811547)
+
+[node name="IV_Stand21" parent="." unique_id=2036933822 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.739221, 0, 0.93415546)
+
+[node name="WheelChair21" parent="." unique_id=1764028487 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 13.310943, 0, 0.9736452)
+
+[node name="Bucket22" parent="." unique_id=1795819512 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13.017843, 0.0035972595, 2.5965064)
+
+[node name="Bed_23" parent="." unique_id=1302314033 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 3.4036384)
+
+[node name="Nightstand22" parent="." unique_id=483335980 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.443547, 0, 2.2009943)
+
+[node name="Screen22" parent="." unique_id=1132280232 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 4.984793)
+
+[node name="IV_Stand22" parent="." unique_id=851778607 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.739221, 0, 4.337794)
+
+[node name="WheelChair22" parent="." unique_id=2143152856 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 13.310943, 0, 4.3772836)
+
+[node name="Bucket23" parent="." unique_id=2077042559 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13.017843, 0.0035972595, -4.1356235)
+
+[node name="Bed_24" parent="." unique_id=1186655226 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, -3.3284914)
+
+[node name="Nightstand23" parent="." unique_id=5201746 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.443547, 0, -4.5311356)
+
+[node name="Screen23" parent="." unique_id=46587629 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, -1.7473367)
+
+[node name="IV_Stand23" parent="." unique_id=463438594 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.739221, 0, -2.394336)
+
+[node name="WheelChair23" parent="." unique_id=1308785671 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 13.310943, 0, -2.3548462)
+
+[node name="Bucket24" parent="." unique_id=1795435701 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13.017843, 0.0035972595, 5.906967)
+
+[node name="Bed_25" parent="." unique_id=351000545 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 6.7140994)
+
+[node name="Nightstand24" parent="." unique_id=1134929408 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.443547, 0, 5.5114555)
+
+[node name="Screen24" parent="." unique_id=1263572186 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, 8.295254)
+
+[node name="IV_Stand24" parent="." unique_id=710474217 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.739221, 0, 7.6482553)
+
+[node name="WheelChair24" parent="." unique_id=793272250 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 13.310943, 0, 7.687745)
+
+[node name="Bucket25" parent="." unique_id=1959864464 instance=ExtResource("1_w3h3u")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13.017843, 0.0035972595, -7.31331)
+
+[node name="Bed_26" parent="." unique_id=1869094229 instance=ExtResource("2_raps2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, -6.506178)
+
+[node name="Nightstand25" parent="." unique_id=1052899355 instance=ExtResource("3_i1qg4")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 12.443547, 0, -7.7088223)
+
+[node name="Screen25" parent="." unique_id=545487072 instance=ExtResource("4_721pk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.310943, 0, -4.925023)
+
+[node name="IV_Stand25" parent="." unique_id=758683362 instance=ExtResource("6_yv4wt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.739221, 0, -5.5720224)
+
+[node name="WheelChair25" parent="." unique_id=318501382 instance=ExtResource("8_hd7no")]
+transform = Transform3D(-0.2, 0, -3.019916e-08, 0, 0.2, 0, 3.019916e-08, 0, -0.2, 13.310943, 0, -5.5325327)
