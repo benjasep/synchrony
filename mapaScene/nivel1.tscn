@@ -10,6 +10,8 @@
 [ext_resource type="PackedScene" uid="uid://8qend8i6ae62" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/wall/post_a_d.tscn" id="7_4j8t2"]
 [ext_resource type="PackedScene" uid="uid://vlc5gr0rkm3y" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/floor/hand_rail_rail_c_3m.tscn" id="9_in1lm"]
 [ext_resource type="Material" uid="uid://cjfgi6ppn80jh" path="res://assets/sueloTexture.tres" id="10_r46fr"]
+[ext_resource type="PackedScene" uid="uid://bua7eg56j7jdn" path="res://assets/props/SM_Motel_Newspaper.tscn" id="11_in1lm"]
+[ext_resource type="PackedScene" uid="uid://bbk7jdh0f75tj" path="res://assets/props/bolsa_realAHORASI.tscn" id="12_2a8g7"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
 albedo_texture = ExtResource("4_o0nf2")
@@ -771,3 +773,131 @@ mesh = SubResource("PlaneMesh_q034m")
 transform = Transform3D(-108.86002, 0.09880916, 2.8809392, 5.385438, 1.9975573, 0, -1.2203846, 0.0011077087, -256.98383, -186.65321, 4.964464, 0)
 material_override = ExtResource("10_r46fr")
 mesh = SubResource("PlaneMesh_q034m")
+
+[node name="propsMapa" type="Node3D" parent="." unique_id=988790983]
+
+[node name="SM_Motel_Newspaper2" parent="propsMapa" unique_id=359330795 instance=ExtResource("11_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.060401, 0, 0.9447453)
+
+[node name="bolsaREAL" parent="propsMapa" unique_id=459535344 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6805616, 0, 0.50584626)
+
+[node name="bolsaREAL2" parent="propsMapa" unique_id=1530640634 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.943978, 0, 3.8914683)
+
+[node name="bolsaREAL3" parent="propsMapa" unique_id=1103554964 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4971414, 0, 2.3506277)
+
+[node name="bolsaREAL4" parent="propsMapa" unique_id=1960384522 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.6805616, 0, 9.821942)
+
+[node name="bolsaREAL5" parent="propsMapa" unique_id=2050979442 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2037888, 0, 6.493805)
+
+[node name="bolsaREAL6" parent="propsMapa" unique_id=1565212705 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.734768, 0, 4.8407955)
+
+[node name="bolsaREAL7" parent="propsMapa" unique_id=1016931489 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.472206, 0, 8.158507)
+
+[node name="bolsaREAL8" parent="propsMapa" unique_id=1682594968 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.647725, 0, 5.254072)
+
+[node name="bolsaREAL9" parent="propsMapa" unique_id=2105949953 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -38.64752, 0, 8.803354)
+
+[node name="bolsaREAL10" parent="propsMapa" unique_id=1960613272 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3908906, 0, -12.492939)
+
+[node name="bolsaREAL11" parent="propsMapa" unique_id=460101520 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.646986, 0, -35.02254)
+
+[node name="bolsaREAL12" parent="propsMapa" unique_id=1039825803 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.624443, 0, -26.897932)
+
+[node name="bolsaREAL13" parent="propsMapa" unique_id=1907445381 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7692323, 0, 32.784607)
+
+[node name="bolsaREAL14" parent="propsMapa" unique_id=1420691407 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.306634, 0, 34.386063)
+
+[node name="bolsaREAL15" parent="propsMapa" unique_id=522421461 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -44.448635, 0, -4.5709686)
+
+[node name="bolsaREAL16" parent="propsMapa" unique_id=2065566472 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.593582, 0, 34.7205)
+
+[node name="bolsaREAL17" parent="propsMapa" unique_id=804427309 instance=ExtResource("12_2a8g7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -33.745, 0, 35.458748)
+
+[node name="SM_Motel_Newspaper3" parent="propsMapa" unique_id=55775320 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.5181092, 0, -0.8553145, 0, 1, 0, 0.8553145, 0, 0.5181092, -1.060401, 0, 1.6655662)
+
+[node name="SM_Motel_Newspaper4" parent="propsMapa" unique_id=667397630 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.8051519, 0, 0.59306866, 0, 1, 0, -0.59306866, 0, 0.8051519, -8.803469, 0, 2.0978472)
+
+[node name="SM_Motel_Newspaper5" parent="propsMapa" unique_id=584633269 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.18078105, 0, -0.98352337, 0, 1, 0, 0.98352337, 0, 0.18078105, -13.228428, 0, 9.272533)
+
+[node name="SM_Motel_Newspaper6" parent="propsMapa" unique_id=308600355 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.81545186, 0, -0.5788249, 0, 1, 0, 0.5788249, 0, 0.81545186, 6.8272867, 0, 0.9447453)
+
+[node name="SM_Motel_Newspaper7" parent="propsMapa" unique_id=2095806432 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.84407747, 0, 0.5362212, 0, 1, 0, -0.5362212, 0, 0.84407747, -4.4723444, 0, -6.7958965)
+
+[node name="SM_Motel_Newspaper8" parent="propsMapa" unique_id=1936231789 instance=ExtResource("11_in1lm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4536276, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper9" parent="propsMapa" unique_id=292996296 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.6259692, 0, 0.7798478, 0, 1, 0, -0.7798478, 0, 0.6259692, -4.7326756, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper10" parent="propsMapa" unique_id=1198329773 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.78134954, 0, -0.62409365, 0, 1, 0, 0.62409365, 0, 0.78134954, -8.449455, 0, -27.781185)
+
+[node name="SM_Motel_Newspaper11" parent="propsMapa" unique_id=811747766 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.21555175, 0, 0.9764924, 0, 1, 0, -0.9764924, 0, -0.21555175, -20.20671, 0, -25.40982)
+
+[node name="SM_Motel_Newspaper12" parent="propsMapa" unique_id=230729003 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.98544365, 0, 0.17000227, 0, 1, 0, -0.17000227, 0, 0.98544365, -30.445385, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper13" parent="propsMapa" unique_id=305663392 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.43104094, 0, 0.9023324, 0, 1, 0, -0.9023324, 0, 0.43104094, -32.17633, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper14" parent="propsMapa" unique_id=548494921 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.8099104, 0, -0.5865538, 0, 1, 0, 0.5865538, 0, -0.8099104, -39.246487, 0, -26.726658)
+
+[node name="SM_Motel_Newspaper15" parent="propsMapa" unique_id=843901806 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.781299, 0, -0.6241569, 0, 1, 0, 0.6241569, 0, -0.781299, 4.3669615, 0, -22.139704)
+
+[node name="SM_Motel_Newspaper16" parent="propsMapa" unique_id=935529324 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.96924126, 0, 0.2461125, 0, 1, 0, -0.2461125, 0, 0.96924126, 4.9693384, 0, -25.621342)
+
+[node name="SM_Motel_Newspaper17" parent="propsMapa" unique_id=1911962501 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.9426476, 0, -0.33378962, 0, 1, 0, 0.33378962, 0, -0.9426476, 15.189369, 0, -25.381527)
+
+[node name="SM_Motel_Newspaper18" parent="propsMapa" unique_id=873240425 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.9242715, 0, 0.38173592, 0, 1, 0, -0.38173592, 0, -0.9242715, 27.86333, 0, -22.87417)
+
+[node name="SM_Motel_Newspaper19" parent="propsMapa" unique_id=721593812 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.14265499, 0, 0.9897725, 0, 1, 0, -0.9897725, 0, 0.14265499, -27.993801, 0, 3.895177)
+
+[node name="SM_Motel_Newspaper20" parent="propsMapa" unique_id=1896456542 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.86936146, 0, 0.4941768, 0, 1, 0, -0.4941768, 0, 0.86936146, -31.527336, 0, 6.3990817)
+
+[node name="SM_Motel_Newspaper21" parent="propsMapa" unique_id=1550130403 instance=ExtResource("11_in1lm")]
+transform = Transform3D(-0.84075403, 0, 0.54141724, 0, 1, 0, -0.54141724, 0, -0.84075403, -35.28859, 0, 4.742023)
+
+[node name="SM_Motel_Newspaper22" parent="propsMapa" unique_id=972262715 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.859233, 0, 0.5115845, 0, 1, 0, -0.5115845, 0, 0.859233, -19.552353, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper23" parent="propsMapa" unique_id=1628156109 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.9255477, 0, -0.37863097, 0, 1, 0, 0.37863097, 0, 0.9255477, -8.482513, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper24" parent="propsMapa" unique_id=1860464492 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.82213736, 0, -0.5692893, 0, 1, 0, 0.5692893, 0, 0.82213736, -24.297249, 0, 35.821926)
+
+[node name="SM_Motel_Newspaper25" parent="propsMapa" unique_id=1086373667 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.9014597, 0, -0.43286318, 0, 1, 0, 0.43286318, 0, 0.9014597, -33.743176, 0, 32.54389)
+
+[node name="SM_Motel_Newspaper26" parent="propsMapa" unique_id=1334653439 instance=ExtResource("11_in1lm")]
+transform = Transform3D(0.7283192, 0, -0.68523806, 0, 1, 0, 0.68523806, 0, 0.7283192, 7.803787, 0, 35.519463)
