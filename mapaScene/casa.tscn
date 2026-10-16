@@ -5,6 +5,9 @@
 [ext_resource type="Material" uid="uid://d0empcc3xyq" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_B.material" id="2_rxlxu"]
 [ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="3_ky1u2"]
 [ext_resource type="Material" uid="uid://b5gin2hbi8sqv" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/WoodFloor_A.material" id="6_sq0ec"]
+[ext_resource type="PackedScene" uid="uid://caci4k7wyu7xu" path="res://assets/props/SM_Motel_BeerBottle.tscn" id="7_ky1u2"]
+[ext_resource type="PackedScene" uid="uid://bu1mil10fv5b2" path="res://assets/props/SM_Motel_CrushedCan.tscn" id="7_xm46f"]
+[ext_resource type="PackedScene" uid="uid://bbk7jdh0f75tj" path="res://assets/props/bolsa_realAHORASI.tscn" id="8_sq0ec"]
 [ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="9_75yh5"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_v478n"]
@@ -426,3 +429,41 @@ shape = SubResource("BoxShape3D_yf5fn")
 transform = Transform3D(2.27619, 0, 0, 0, -0.9999958, 0.008467242, 0, 0.0029267892, 2.8930097, 3.4874792, 2.9834738, -4.5048256)
 mesh = SubResource("ArrayMesh_strkq")
 skeleton = NodePath("")
+
+[node name="props" type="Node3D" parent="." unique_id=692888060]
+
+[node name="SM_Motel_CrushedCan2" parent="props" unique_id=1276086598 instance=ExtResource("7_xm46f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.069648, 0, -3.8358421)
+
+[node name="SM_Motel_BeerBottle2" parent="props" unique_id=1684764714 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.5701642, 0, -8.118262)
+
+[node name="SM_Motel_BeerBottle3" parent="props" unique_id=1161265206 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0.89397025, 0, -8.118262)
+
+[node name="SM_Motel_BeerBottle4" parent="props" unique_id=1253279807 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(0.042257413, 1.9995536, 0, -1.9995536, 0.042257413, 0, 0, 0, 2, 1.3508177, 0, -8.118262)
+
+[node name="SM_Motel_BeerBottle5" parent="props" unique_id=1623635642 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 5.1934175, 0, -6.875227)
+
+[node name="SM_Motel_BeerBottle6" parent="props" unique_id=418565424 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(0.08169943, -1.9983306, 0, 1.9983306, 0.08169943, 0, 0, 0, 2, 4.918905, 0, -1.8816452)
+
+[node name="SM_Motel_BeerBottle7" parent="props" unique_id=239753010 instance=ExtResource("7_ky1u2")]
+transform = Transform3D(0.05182565, -1.2676316, -1.5460997, 1.9983306, 0.08169943, 0, 0.06315773, -1.5448091, 1.2686906, 4.918905, 0, -1.2827789)
+
+[node name="bolsaREAL" parent="props" unique_id=459535344 instance=ExtResource("8_sq0ec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.978043, 0, -1.301353)
+
+[node name="bolsaREAL2" parent="props" unique_id=2065646799 instance=ExtResource("8_sq0ec")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.510067, 0, -1.301353)
+
+[node name="bolsaREAL3" parent="props" unique_id=213486627 instance=ExtResource("8_sq0ec")]
+transform = Transform3D(1, 0, 0, 0, 0.44590107, 0.89508224, 0, -0.89508224, 0.44590107, 5.738284, 0, -0.85699606)
+
+[node name="SM_Motel_CrushedCan3" parent="props" unique_id=1230835831 instance=ExtResource("7_xm46f")]
+transform = Transform3D(0.74632937, 0, 0.6655768, 0, 1, 0, -0.6655768, 0, 0.74632937, 2.0877433, 0, -1.7757401)
+
+[node name="SM_Motel_CrushedCan4" parent="props" unique_id=537333900 instance=ExtResource("7_xm46f")]
+transform = Transform3D(0.3372988, 0, -0.94139767, 0, 1, 0, 0.94139767, 0, 0.3372988, 5.0250964, 0, -5.969774)

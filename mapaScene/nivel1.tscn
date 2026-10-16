@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://b2yb7oauhm2sv" path="res://assets/MuscleCar_Asset_LightsOut/MuscleCar_Asset_LightsOut/muscle_car_lowpoly_lightsout_GLB.glb" id="6_vxgx3"]
 [ext_resource type="PackedScene" uid="uid://8qend8i6ae62" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/wall/post_a_d.tscn" id="7_4j8t2"]
 [ext_resource type="PackedScene" uid="uid://vlc5gr0rkm3y" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/floor/hand_rail_rail_c_3m.tscn" id="9_in1lm"]
-[ext_resource type="Material" uid="uid://bdg22yqtwl1dv" path="res://assets/LoafbrrAssets/GothicLikeStructures/Materials/hospital.material" id="10_2a8g7"]
+[ext_resource type="Material" uid="uid://cjfgi6ppn80jh" path="res://assets/sueloTexture.tres" id="10_r46fr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
 albedo_texture = ExtResource("4_o0nf2")
@@ -754,17 +754,20 @@ shape = SubResource("BoxShape3D_a1n5f")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D" unique_id=1765122236]
 transform = Transform3D(79.99999, 0, 0, 0, 9.938398, 1.893125, 0, -0.38875633, 48.396984, -0.33, 2, 127.07)
-material_override = ExtResource("10_2a8g7")
+material_override = ExtResource("10_r46fr")
 mesh = SubResource("PlaneMesh_a1n5f")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Node3D" unique_id=606288048]
 transform = Transform3D(-79.99903, -0.0019036264, 0.23698594, 0, 9.938398, 1.8931248, -0.39173666, 0.38875163, -48.396404, -1.8127042, 1.3559475, -127.40613)
+material_override = ExtResource("10_r46fr")
 mesh = SubResource("PlaneMesh_a1n5f")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="Node3D" unique_id=2109758171]
 transform = Transform3D(108.866875, -0.0988154, 0, 5.385439, 1.9975574, 0, 0, 0, 257, 186.46376, 4.2861614, 0)
+material_override = ExtResource("10_r46fr")
 mesh = SubResource("PlaneMesh_q034m")
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="Node3D" unique_id=926203176]
 transform = Transform3D(-108.86002, 0.09880916, 2.8809392, 5.385438, 1.9975573, 0, -1.2203846, 0.0011077087, -256.98383, -186.65321, 4.964464, 0)
+material_override = ExtResource("10_r46fr")
 mesh = SubResource("PlaneMesh_q034m")
