@@ -19,6 +19,7 @@ signal equipment_changed(item: Equipment)
 @export var body_placeholder: MeshInstance3D
 @export var hud_layer: CanvasLayer
 @export var synchronizer: MultiplayerSynchronizer
+@export var inventory_hud_scene: PackedScene
 
 @export_group("Componentes")
 @export var movement: MovementComponent
@@ -33,6 +34,8 @@ var data: Statics.PlayerData
 var profile: RoleProfile
 var ability: PlayerAbility
 var hud: Node
+var inventory_hud: InventoryHUD
+
 ## El modelo instanciado del rol si cumple el contrato de [PlayerBody] (forcejeo y restos);
 ## [code]null[/code] si el rol no trae modelo o no es un [PlayerBody].
 var player_body: PlayerBody = null
@@ -228,11 +231,31 @@ func _spawn_ability() -> void:
 
 
 ## Instancia el HUD del rol dentro de [code]hud_layer[/code], solo en el peer dueño.
+"""
 func _spawn_hud() -> void:
 	if not is_multiplayer_authority() or not profile.hud_scene or not hud_layer:
 		return
 	hud = profile.hud_scene.instantiate()
 	hud_layer.add_child(hud)
+"""
+
+func _spawn_hud() -> void:
+	if not is_multiplayer_authority() or not hud_layer:
+		return
+	if profile.hud_scene:
+		hud = profile.hud_scene.instantiate()
+		hud_layer.add_child(hud)
+	_spawn_inventory_hud()
+	
+func _spawn_inventory_hud() -> void:
+	if not inventory_hud_scene or not inventory:
+		return
+	inventory_hud = inventory_hud_scene.instantiate() as InventoryHUD
+	if not inventory_hud:
+		push_error("inventory_hud_scene no es un InventoryHUD")
+		return
+	hud_layer.add_child(inventory_hud)
+	inventory_hud.setup(inventory)
 
 
 ## Conecta las señales de salud y de captura a sus manejadores y reemite como

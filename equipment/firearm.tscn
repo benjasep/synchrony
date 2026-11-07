@@ -1,29 +1,24 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://b86jff1g6rkc4"]
 
 [ext_resource type="Script" uid="uid://tg4txojnkp5n" path="res://equipment/firearm.gd" id="1_firearm"]
+[ext_resource type="Texture2D" uid="uid://basvi02wemo7d" path="res://assets/texturesItems/iconRevolver.png" id="2_bj4ya"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_body"]
 size = Vector3(0.06, 0.12, 0.3)
 
-[node name="Firearm" type="Node3D" node_paths=PackedStringArray("model", "muzzle")]
+[node name="Firearm" type="Node3D" unique_id=737752918 node_paths=PackedStringArray("muzzle", "model")]
 script = ExtResource("1_firearm")
+muzzle = NodePath("Model/Muzzle")
 tag = 1
 display_name = "Revólver"
+icon = ExtResource("2_bj4ya")
 model = NodePath("Model")
-muzzle = NodePath("Model/Muzzle")
-damage = 25.0
-range_meters = 60.0
-base_spread = 0.01
-base_recoil = 0.03
-fire_rate = 4.0
-magazine_size = 8
-base_reload_time = 2.0
 
-[node name="Model" type="Node3D" parent="."]
+[node name="Model" type="Node3D" parent="." unique_id=1749675128]
 
-[node name="Mesh" type="MeshInstance3D" parent="Model"]
+[node name="Mesh" type="MeshInstance3D" parent="Model" unique_id=309206174]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
 mesh = SubResource("BoxMesh_body")
 
-[node name="Muzzle" type="Marker3D" parent="Model"]
+[node name="Muzzle" type="Marker3D" parent="Model" unique_id=548791111]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.3)

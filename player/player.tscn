@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://dpoljythbv1gq"]
 
 [ext_resource type="Script" uid="uid://b6bc2dfk7racl" path="res://player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://rajytxmifblc" path="res://interfaz/interfaz_hud.tscn" id="2_hg6s5"]
 [ext_resource type="Script" uid="uid://g4m2lrssb5t2" path="res://player/components/movement_component.gd" id="2_movement"]
 [ext_resource type="Script" uid="uid://b8qogrys7ni1k" path="res://player/components/view_component.gd" id="3_view"]
 [ext_resource type="Script" uid="uid://culxrf5y8boij" path="res://player/components/interaction_component.gd" id="4_interaction"]
 [ext_resource type="Script" uid="uid://bjgvc47nqm8wb" path="res://player/components/inventory_component.gd" id="5_inventory"]
 [ext_resource type="Script" uid="uid://b3i7yjq833e26" path="res://player/components/health_component.gd" id="6_health"]
 [ext_resource type="Script" uid="uid://cm0huseiov012" path="res://player/components/perception_component.gd" id="7_perception"]
-[ext_resource type="Script" path="res://player/components/capture_component.gd" id="8_capture"]
+[ext_resource type="Script" uid="uid://8k6iqep5x070" path="res://player/components/capture_component.gd" id="8_capture"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
@@ -42,6 +43,7 @@ body = NodePath("Body")
 body_placeholder = NodePath("Body/Mesh")
 hud_layer = NodePath("HUD")
 synchronizer = NodePath("Synchronizer")
+inventory_hud_scene = ExtResource("2_hg6s5")
 movement = NodePath("Components/Movement")
 view = NodePath("Components/View")
 interaction = NodePath("Components/Interaction")
@@ -113,7 +115,7 @@ ethereal_camera = NodePath("../../EtherealViewport/EtherealCamera")
 ethereal_view = NodePath("../../HUD/EtherealView")
 player = NodePath("../..")
 
-[node name="Capture" type="Node" parent="Components" node_paths=PackedStringArray("player")]
+[node name="Capture" type="Node" parent="Components" unique_id=589991271 node_paths=PackedStringArray("player")]
 script = ExtResource("8_capture")
 player = NodePath("../..")
 
