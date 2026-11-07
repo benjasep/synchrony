@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://rajytxmifblc"]
 
-[ext_resource type="Script" uid="uid://dgv7i4r0w4pgr" path="res://interfaz/interfaz_hud.gd" id="1_b60p1"]
+[ext_resource type="Script" uid="uid://dgv7i4r0w4pgr" path="res://HUD/interfaz_hud.gd" id="1_b60p1"]
 
 [node name="Control" type="Control" unique_id=881046851]
 layout_mode = 3

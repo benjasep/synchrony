@@ -1,10 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://bjbmfckstgb1m"]
 
 [ext_resource type="Script" uid="uid://c3y8pkc0x1mi7" path="res://player/abilities/seer_echo_ability.gd" id="1_echo"]
 
-[node name="SeerEchoAbility" type="Node"]
+[node name="SeerEchoAbility" type="Node" unique_id=518964879]
 script = ExtResource("1_echo")
 cooldown = 6.0
 duration = 2.5
-pulse_radius = 25.0
-pulse_speed = 12.0

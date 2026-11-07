@@ -9,6 +9,7 @@ extends Node3D
 signal equipped(player: Player)
 signal unequipped(player: Player)
 signal used
+signal charge_changed(ratio: float)
 
 @export var tag: Statics.EquipmentTag = Statics.EquipmentTag.NONE
 @export var display_name: String = ""
@@ -101,6 +102,8 @@ func get_state() -> Dictionary:
 func set_state(_state: Dictionary) -> void:
 	pass
 
+func get_charge_ratio() -> float:
+	return -1.0
 
 ## Acción principal (clic izquierdo). La base solo emite [code]used[/code]; las subclases la
 ## sobrescriben.

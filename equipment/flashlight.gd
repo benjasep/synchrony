@@ -6,7 +6,8 @@ extends Equipment
 ## ajenas rinde menos y parpadea, según la [LightProficiency] del portador.
 
 signal toggled(is_on: bool)
-signal battery_changed(ratio: float)
+##signal battery_changed(ratio: float)
+##signal charge_changed(ratio: float)
 
 @export var light: SpotLight3D
 
@@ -49,7 +50,7 @@ func set_state(state: Dictionary) -> void:
 	_reset_flicker()
 	if light:
 		light.visible = is_on
-	battery_changed.emit(battery / max_battery)
+	charge_changed.emit(battery / max_battery)
 
 
 ## Recalcula alcance y energía del haz con la competencia del nuevo portador.
@@ -68,7 +69,9 @@ func use() -> void:
 		return
 	set_light_state.rpc(not is_on)
 	used.emit()
-
+	
+func get_charge_ratio() -> float:
+	return battery / max_battery
 
 ## Enciende o apaga la luz y emite [code]toggled[/code]. Es un RPC a todos los peers porque
 ## la luz es estado del mundo. Ignora la orden de encender si no queda batería.
@@ -93,7 +96,7 @@ func _process(delta: float) -> void:
 		return
 
 	battery = maxf(battery - base_drain * _get_drain_multiplier() * delta, 0.0)
-	battery_changed.emit(battery / max_battery)
+	charge_changed.emit(battery / max_battery)
 
 	if battery <= 0.0:
 		if multiplayer.is_server() or is_equipped():

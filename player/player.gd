@@ -255,7 +255,7 @@ func _spawn_inventory_hud() -> void:
 		push_error("inventory_hud_scene no es un InventoryHUD")
 		return
 	hud_layer.add_child(inventory_hud)
-	inventory_hud.setup(inventory)
+	inventory_hud.setup(inventory, ability)
 
 
 ## Conecta las señales de salud y de captura a sus manejadores y reemite como

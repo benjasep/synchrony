@@ -6,6 +6,7 @@ extends Node
 
 signal activated
 signal deactivated
+signal cooldown_changed(ratio: float)
 
 @export var cooldown: float = 0.0
 @export var duration: float = 0.0
@@ -30,6 +31,10 @@ func setup(owner_player: Player) -> void:
 func can_activate() -> bool:
 	return player != null and not is_active and _cooldown_left <= 0.0
 
+func get_cooldown_ratio() -> float:
+	if cooldown <= 0.0:
+		return 1.0
+	return 1.0 - _cooldown_left / cooldown
 
 ## Activa la habilidad si se puede: arranca la duración y el enfriamiento, llama a
 ## [code]_on_activated()[/code] y emite [code]activated[/code].
@@ -39,6 +44,7 @@ func activate() -> void:
 	is_active = true
 	_duration_left = duration
 	_cooldown_left = cooldown
+	cooldown_changed.emit(get_cooldown_ratio())
 	_on_activated()
 	activated.emit()
 
@@ -59,6 +65,7 @@ func deactivate() -> void:
 ## Recibe: [param delta] — segundos del frame.
 func _process(delta: float) -> void:
 	if _cooldown_left > 0.0:
+		cooldown_changed.emit(get_cooldown_ratio())
 		_cooldown_left = maxf(_cooldown_left - delta, 0.0)
 	if is_active and duration > 0.0:
 		_duration_left -= delta
