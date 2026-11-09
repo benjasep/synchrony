@@ -29,7 +29,7 @@ func _ready() -> void:
 	Game.instance.player_updated.connect(func(_id: int) -> void: _update_ready_button())
 	Game.instance.vote_updated.connect(func(_id: int) -> void: _handle_vote_updated())
 	if multiplayer.is_server():
-		start_timer.timeout.connect(func() -> void: _start_game.rpc())
+		start_timer.timeout.connect(func() -> void: _start_game.rpc(Game.instance.selected_level))
 	_handle_players_updated()
 	role_button.visible = Game.instance.use_roles
 	back_button.pressed.connect(_handle_back_pressed)
@@ -149,12 +149,16 @@ func _stop_timer() -> void:
 	
 
 
-## Al acabar la cuenta atrás, quita el «listo» propio y cambia a [code]Game.main_scene[/code].
+## Al acabar la cuenta atrás, todos cargan el mapa seleccionado por el anfitrión.
 ## RPC del servidor que se ejecuta en todos los peers.
 @rpc("reliable", "call_local")
-func _start_game() -> void:
+func _start_game(level: StringName) -> void:
+	var scene: PackedScene = Game.instance.get_level_scene(level)
+	if not scene:
+		push_error("Lobby: mapa desconocido: %s" % level)
+		return
 	Game.instance.set_current_player_vote(false)
-	get_tree().change_scene_to_packed(Game.instance.main_scene)
+	get_tree().change_scene_to_packed(scene)
 
 
 ## Comprueba las condiciones de inicio de [code]Game[/code]: mínimo de jugadores y, si se usan

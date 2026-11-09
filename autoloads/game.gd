@@ -19,8 +19,10 @@ static var instance: Game
 @export var fill_screen: bool = true
 @export var test_players: Array[PlayerDataResource] = [] # first one is server
 @export var main_scene: PackedScene
+@export var playable_levels: Dictionary[StringName, PackedScene] = {}
 
 var players: Array[Statics.PlayerData] = []
+var selected_level: StringName = &""
 var change_window_scale : bool = true :
 	set(value):
 		var last_value: bool = change_window_scale
@@ -55,6 +57,13 @@ func _ready() -> void:
 	if not OS.is_debug_build():
 		multiplayer_test = false
 		player_id.hide()
+
+
+## Resuelve la selección del menú o la que envió el anfitrión.
+func get_level_scene(level: StringName) -> PackedScene:
+	if level.is_empty():
+		return main_scene
+	return playable_levels.get(level) as PackedScene
 
 
 ## Ordena [code]players[/code] por [code]index[/code] ascendente.

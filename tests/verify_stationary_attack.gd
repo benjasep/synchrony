@@ -16,9 +16,9 @@ func _ready() -> void:
 	var nightmare: Enemy = greybox.get_node("Enemies/Pesadilla") as Enemy
 	var scene_driver: AttackDriver = nightmare.get_node("StationaryAttack") as AttackDriver
 	_check("solo la pesadilla tiene ataque automatico", not ghost.has_node("StationaryAttack"))
-	_check("Greybox conecta la pesadilla al combate y al spawner", scene_driver.combat == nightmare.get_node("Combat") \
-		and scene_driver.player_spawner == greybox.get_node("PlayerSpawner"))
-	_check("sin agarre que desplace al enemigo en esta prueba", scene_driver.combat.grab == null)
+	_check("Greybox hereda un solo ataque automático conectado al combate",
+		scene_driver.combat == nightmare.get_node("Combat") and nightmare.find_children("StationaryAttack*").size() == 1)
+	_check("Greybox conserva el remate de la pesadilla", scene_driver.combat.grab == nightmare.get_node("Grab"))
 	greybox.free()
 	var spawner: PlayerSpawner = (load("res://player/player_spawner.tscn") as PackedScene).instantiate() as PlayerSpawner
 	spawner.debug_role = Statics.Role.SEER
@@ -32,12 +32,10 @@ func _ready() -> void:
 	var enemy: Enemy = (load("res://enemies/pesadilla/pesadilla.tscn") as PackedScene).instantiate() as Enemy
 	add_child(enemy)
 	var combat: EnemyCombat = enemy.get_node("Combat") as EnemyCombat
-	# Misma configuración local de Greybox: golpes, sin el remate que alinea y mueve.
+	# Aísla el golpe para probar el daño y la posición sin el desplazamiento del remate.
 	combat.grab = null
-	var driver: AttackDriver = AttackDriver.new()
-	driver.combat = combat
-	driver.player_spawner = spawner
-	enemy.add_child(driver)
+	var driver: AttackDriver = enemy.get_node("StationaryAttack") as AttackDriver
+	_check("la escena base trae su propio ataque", driver.combat == combat)
 	var origin: Vector3 = enemy.global_position
 	var initial_health: float = player.health.current_health
 	await get_tree().create_timer(0.8).timeout

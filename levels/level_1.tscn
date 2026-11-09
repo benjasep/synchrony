@@ -1,0 +1,65 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://tests/test_level.tscn" id="1_map"]
+[ext_resource type="PackedScene" path="res://mission/mission_director.tscn" id="2_director"]
+[ext_resource type="Resource" path="res://mission/missions/level_1_mission.tres" id="3_mission"]
+[ext_resource type="Script" path="res://mission/objective_zone.gd" id="4_objective"]
+[ext_resource type="PackedScene" path="res://mission/extraction_zone.tscn" id="5_extraction"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beam"]
+shading_mode = 0
+albedo_color = Color(0.35, 1, 0.55, 1)
+
+[sub_resource type="Environment" id="Environment_level_1"]
+background_mode = 1
+background_color = Color(0.025, 0.035, 0.06, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.52, 0.68, 1)
+ambient_light_energy = 0.2
+
+[node name="Level1" instance=ExtResource("1_map")]
+
+[node name="Sun" parent="." index="1"]
+light_color = Color(0.65, 0.74, 0.95, 1)
+light_energy = 0.25
+
+[node name="Pesadilla" parent="Enemies" index="1"]
+position = Vector3(8, 0, 14)
+
+[node name="PlayerSpawner" parent="." index="4"]
+debug_player_count = 1
+
+[node name="MissionDirector" parent="." index="5" instance=ExtResource("2_director")]
+mission = ExtResource("3_mission")
+
+[node name="ObjectiveZones" type="Node3D" parent="." index="6"]
+
+[node name="SouthStreet" type="Node3D" parent="ObjectiveZones"]
+script = ExtResource("4_objective")
+
+[node name="Pickup" type="Marker3D" parent="ObjectiveZones/SouthStreet"]
+position = Vector3(5, 0, 8)
+
+[node name="WestStreet" type="Node3D" parent="ObjectiveZones"]
+script = ExtResource("4_objective")
+
+[node name="Pickup" type="Marker3D" parent="ObjectiveZones/WestStreet"]
+position = Vector3(-8, 0, 15)
+
+[node name="Crossing" type="Node3D" parent="ObjectiveZones"]
+script = ExtResource("4_objective")
+tag = &"level_1_card"
+
+[node name="Pickup" type="Marker3D" parent="ObjectiveZones/Crossing"]
+position = Vector3(12, 0, 17)
+
+[node name="Extraction" parent="." index="7" instance=ExtResource("5_extraction")]
+position = Vector3(20, 0, 7)
+
+[node name="Beam" parent="Extraction/Indicator" index="1"]
+material_override = SubResource("StandardMaterial3D_beam")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="8"]
+environment = SubResource("Environment_level_1")
+
+[editable path="Extraction"]

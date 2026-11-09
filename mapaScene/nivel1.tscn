@@ -1,9 +1,6 @@
 [gd_scene format=3 uid="uid://bfwdd6qlbx4jt"]
 
 [ext_resource type="PackedScene" uid="uid://c0y61nd1aforj" path="res://mapaScene/casa.tscn" id="1_swmnm"]
-[ext_resource type="PackedScene" uid="uid://ch4qq4e3bm5j5" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_7.tscn" id="2_hymea"]
-[ext_resource type="PackedScene" uid="uid://cs5w1gtvfwxoj" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_5.tscn" id="3_v13m4"]
-[ext_resource type="PackedScene" uid="uid://d2oqg5qytcbaf" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/Builds/build_6.tscn" id="4_o0nf2"]
 [ext_resource type="PackedScene" uid="uid://ci5jsl6im2els" path="res://mapaScene/LoafbrrAssets/ModularWoodStructures/scenes/parts/roof/roof_a_1x_3.tscn" id="5_v13m4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vxgx3"]
@@ -155,23 +152,23 @@ transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524,
 [node name="root_casa10" parent="Nivel/RootNivel4" unique_id=1184741598 instance=ExtResource("1_swmnm")]
 transform = Transform3D(-0.99998254, -0.0034906114, 0.0047792224, -0.0034906524, 0.9999941, 3.6376783e-12, -0.0047791917, -1.668259e-05, -0.99998873, 7.0175495, -0.004531324, -18.461147)
 
-[node name="Build_7" parent="Nivel" unique_id=1289637446 instance=ExtResource("2_hymea")]
+[node name="Build_7" parent="Nivel" unique_id=1289637446 instance=ExtResource("1_swmnm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1267881, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_8" parent="Nivel" unique_id=1172872012 instance=ExtResource("2_hymea")]
+[node name="Build_8" parent="Nivel" unique_id=1172872012 instance=ExtResource("1_swmnm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.952491, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_9" parent="Nivel" unique_id=758022318 instance=ExtResource("2_hymea")]
+[node name="Build_9" parent="Nivel" unique_id=758022318 instance=ExtResource("1_swmnm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.244586, 0.5, 41.86692)
 metadata/_edit_lock_ = true
 
-[node name="Build_5" parent="Nivel" unique_id=1072212382 instance=ExtResource("3_v13m4")]
+[node name="Build_5" parent="Nivel" unique_id=1072212382 instance=ExtResource("1_swmnm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.34367, 1, 43.773006)
 metadata/_edit_lock_ = true
 
-[node name="Build_6" parent="Nivel" unique_id=803163406 instance=ExtResource("4_o0nf2")]
+[node name="Build_6" parent="Nivel" unique_id=803163406 instance=ExtResource("1_swmnm")]
 transform = Transform3D(0.007093326, 0, -0.99997485, 0, 1, 0, 0.99997485, 0, 0.007093326, -26.695702, 1, 39.984917)
 metadata/_edit_lock_ = true
 

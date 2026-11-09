@@ -44,7 +44,7 @@ func _ready() -> void:
 	overlay.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	main_viewport.add_child(overlay)
 	perception.ethereal_view = overlay
-	perception.apply_vision_mode(RoleDatabase.get_profile(Statics.Role.SEER).vision_mode)
+	perception.apply_vision_mode(preload("res://player/data/echo_vision.tres"))
 	wall = MeshInstance3D.new()
 	var wall_mesh: BoxMesh = BoxMesh.new()
 	wall_mesh.size = Vector3(40, 40, 0.5)
@@ -86,6 +86,7 @@ func _ready() -> void:
 	await RenderingServer.frame_post_draw
 	var image: Image = ethereal.get_texture().get_image()
 	_check("fondo etereo transparente", image.get_pixel(128, 128).a < 0.01)
+	await _verify_pickup_colors()
 	for role: Statics.Role in [Statics.Role.SOLDIER, Statics.Role.TECHNICIAN]:
 		perception.apply_vision_mode(RoleDatabase.get_profile(role).vision_mode)
 		target.show()
@@ -99,6 +100,45 @@ func _ready() -> void:
 		await _expect_normal_visibility("rol %d sigue sin ver etereos" % role, Vector3(0, 0, -2), false)
 	print(">>> Radio del vidente: %d fallos" % failures)
 	get_tree().quit(failures)
+
+
+func _verify_pickup_colors() -> void:
+	var scene: PackedScene = preload("res://equipment/equipment_pickup.tscn")
+	var pickup: EquipmentPickup = scene.instantiate() as EquipmentPickup
+	pickup.setup("res://equipment/evidence_report.tscn", {})
+	pickup.position = Vector3(0, 0, -2)
+	pickup.rotation.x = PI / 2.0
+	main_viewport.add_child(pickup)
+	await _expect_pickup_color("evidencia verde", true, true)
+	var center: Color = main_viewport.get_texture().get_image().get_pixel(128, 128)
+	_check("la evidencia conserva su interior negro", maxf(center.r, center.g) < 0.01)
+	perception.set_shader_parameter(&"perception_radius", 1.0)
+	await _expect_pickup_color("evidencia fuera del alcance", true, false)
+	perception.set_shader_parameter(&"perception_radius", 12.0)
+	wall.show()
+	pickup.position.z = -4.0
+	await _expect_pickup_color("evidencia oculta por la pared", true, false)
+	wall.hide()
+	pickup.position.z = -2.0
+	pickup.rotation.x = 0.0
+	pickup.setup("res://equipment/firearm.tscn", {})
+	await _expect_pickup_color("equipo de clase amarillo", false, true)
+	pickup.queue_free()
+
+
+func _expect_pickup_color(label: String, green: bool, expected: bool) -> void:
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	var image: Image = main_viewport.get_texture().get_image()
+	for y: int in range(96, 160):
+		for x: int in range(96, 160):
+			var color: Color = image.get_pixel(x, y)
+			var matches: bool = color.g > maxf(color.r, color.b) + 0.15 if green \
+				else minf(color.r, color.g) > color.b + 0.15
+			if matches:
+				_check(label, expected)
+				return
+	_check(label, not expected)
 
 
 func _expect_normal_visibility(label: String, position: Vector3, visible_expected: bool) -> void:

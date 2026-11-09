@@ -105,6 +105,10 @@ func set_state(_state: Dictionary) -> void:
 func get_charge_ratio() -> float:
 	return -1.0
 
+## Poder disponible mientras este objeto está en mano, si lo tiene.
+func get_ability() -> PlayerAbility:
+	return null
+
 ## Acción principal (clic izquierdo). La base solo emite [code]used[/code]; las subclases la
 ## sobrescriben.
 func use() -> void:

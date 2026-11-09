@@ -37,6 +37,8 @@ var _reaction: HitReaction
 ## Busca los componentes de ataque y de reacción, arma a los maniquíes y anuncia las teclas. El
 ## spawner, hijo de esta escena, ya generó a los jugadores en su propio [code]_ready()[/code].
 func _ready() -> void:
+	# Esta escena dispara los ataques a mano con F1 y F2.
+	pesadilla.get_node("StationaryAttack").set_physics_process(false)
 	_combat = pesadilla.get_node_or_null("Combat") as EnemyCombat
 	_melee = pesadilla.get_node_or_null("Melee") as MeleeAttack
 	_grab = pesadilla.get_node_or_null("Grab") as GrabAttack

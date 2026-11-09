@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ddy40pfuimdwf"]
+
+[ext_resource type="Script" uid="uid://ry450nlfe0rs" path="res://HUD/pickup_highlight.gd" id="1_h6r2u"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=1031537581]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_h6r2u")
+
+[node name="Icon" type="TextureRect" parent="." unique_id=1505968031]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="[E] Recoger" type="Label" parent="." unique_id=1368867459]
+layout_mode = 2

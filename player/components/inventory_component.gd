@@ -257,7 +257,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			return
 	if not active_item:
 		return
-	if Input.is_action_just_pressed(&"use_item"):
+	if event.is_action_pressed(&"use_item"):
 		active_item.use()
 	elif Input.is_action_just_pressed(&"alt_use_item"):
 		active_item.alt_use()

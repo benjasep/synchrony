@@ -1,0 +1,23 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://levels/greybox_level.tscn" id="1_map"]
+[ext_resource type="PackedScene" path="res://levels/level_1.tscn" id="2_next"]
+
+[node name="Tutorial" instance=ExtResource("1_map")]
+
+[node name="MissionDirector" parent="." index="1"]
+next_level = ExtResource("2_next")
+
+[node name="TutorialInstructions" type="CanvasLayer" parent="." index="10"]
+layer = 2
+
+[node name="Instructions" type="Label" parent="TutorialInstructions"]
+anchor_right = 1.0
+offset_top = 16.0
+offset_bottom = 70.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+text = "TUTORIAL\nRecoge los dos informes y el carnet. Luego reúnete con tu equipo en la extracción."
+horizontal_alignment = 1

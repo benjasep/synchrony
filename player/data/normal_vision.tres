@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="VisionMode" format=3]
+
+[ext_resource type="Script" path="res://player/data/vision_mode.gd" id="1_vision"]
+
+[resource]
+script = ExtResource("1_vision")
+cull_mask = 93

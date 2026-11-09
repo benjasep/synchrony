@@ -8,7 +8,8 @@ extends Interactable
 @export var scene_path: String = ""
 @export var item_state: Dictionary = {}
 
-var _preview: Node3D
+var _preview: Equipment
+const PICKUP_ECHO_SHADER: Shader = preload("res://equipment/pickup_echo_marker.gdshader")
 
 
 ## Fuerza la capa de interacción (vía [code]super()[/code]) y construye la vista previa.
@@ -69,5 +70,40 @@ func _build_preview() -> void:
 	add_child(_preview)
 	if instance.model:
 		instance.model.show()
+		_add_echo_markers(instance.model, instance.tag)
 	if prompt == "Interactuar" and instance.display_name:
 		prompt = "Recoger %s" % instance.display_name
+
+func get_pickup_icon() -> Texture2D:
+	if not is_instance_valid(_preview):
+		return null
+	return _preview.icon
+
+func _add_echo_markers(model: Node3D, tag: Statics.EquipmentTag) -> void:
+	var is_evidence: bool = tag == Statics.EquipmentTag.EVIDENCE
+	if tag not in [Statics.EquipmentTag.EVIDENCE, Statics.EquipmentTag.FIREARM,
+			Statics.EquipmentTag.LIGHT_SOURCE, Statics.EquipmentTag.CARD_DECK]:
+		return
+
+	var material: ShaderMaterial = ShaderMaterial.new()
+	material.shader = PICKUP_ECHO_SHADER
+	material.set_shader_parameter(&"mission_pickup", is_evidence)
+
+	var meshes: Array[Node] = model.find_children("*", "MeshInstance3D", true, false)
+	if model is MeshInstance3D:
+		meshes.push_front(model)
+
+	for node: Node in meshes:
+		var source: MeshInstance3D = node as MeshInstance3D
+		if not source.mesh:
+			continue
+
+		# La versión del vidente aporta profundidad y la categoría al post-proceso.
+		source.layers = Statics.PICKUP_MODEL_VISUAL_LAYER
+		var marker: MeshInstance3D = MeshInstance3D.new()
+		marker.mesh = source.mesh
+		marker.material_override = material
+		marker.layers = Statics.PICKUP_ECHO_VISUAL_LAYER
+		marker.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		marker.gi_mode = GeometryInstance3D.GI_MODE_DISABLED
+		source.add_child(marker)

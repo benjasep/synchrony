@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VisionMode" format=3]
+
+[ext_resource type="Script" path="res://player/data/vision_mode.gd" id="1_vision"]
+[ext_resource type="Shader" path="res://player/data/echo_vision.gdshader" id="2_echo"]
+
+[resource]
+script = ExtResource("1_vision")
+cull_mask = 33
+ethereal_cull_mask = 30
+post_process_shader = ExtResource("2_echo")
+shader_parameters = Dictionary[StringName, Variant]({
+&"outline_energy": 1.6
+})
+perception_radius = 12.0
+ethereal_ambient_energy = 1.4

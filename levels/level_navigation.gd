@@ -97,6 +97,8 @@ func _on_bake_finished() -> void:
 func _on_map_changed(map: RID) -> void:
 	if not _waiting_for_map or map != get_navigation_map():
 		return
+	if NavigationServer3D.map_get_iteration_id(map) == 0:
+		return
 	var vertices: PackedVector3Array = navigation_mesh.get_vertices()
 	if vertices.is_empty():
 		return

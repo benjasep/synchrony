@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" path="res://mission/extraction_zone.tscn" id="4_extraction"]
 [ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="5_pesadilla"]
 [ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="6_ghost"]
-[ext_resource type="Script" uid="uid://dwvfkb6sfqqmj" path="res://enemies/components/stationary_attack.gd" id="7_attack"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_i83pu"]
 resource_local_to_scene = true
@@ -110,11 +109,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 8)
 
 [node name="Pesadilla" parent="Enemies" index="0" unique_id=1274475120 instance=ExtResource("5_pesadilla")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 12)
-
-[node name="StationaryAttack" type="Node" parent="Enemies/Pesadilla" index="7" unique_id=1015711153 node_paths=PackedStringArray("combat", "player_spawner")]
-script = ExtResource("7_attack")
-combat = NodePath("../Combat")
-player_spawner = NodePath("../../../PlayerSpawner")
 
 [node name="Ghost" parent="Enemies" index="1" unique_id=766181386 instance=ExtResource("6_ghost")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -12)

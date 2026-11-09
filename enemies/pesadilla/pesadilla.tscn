@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://dglkputjuqyv" path="res://enemies/pesadilla/pesadilla_animation.tscn" id="2_model"]
 [ext_resource type="Script" path="res://enemies/components/grab_attack.gd" id="3_grab"]
+[ext_resource type="Script" uid="uid://dwvfkb6sfqqmj" path="res://enemies/components/stationary_attack.gd" id="4_attack"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pesadilla"]
 size = Vector3(1.9, 1.8, 1.5)
@@ -26,3 +27,7 @@ grab = NodePath("../Grab")
 [node name="Grab" type="Node" parent="." node_paths=PackedStringArray("enemy")]
 script = ExtResource("3_grab")
 enemy = NodePath("..")
+
+[node name="StationaryAttack" type="Node" parent="." node_paths=PackedStringArray("combat")]
+script = ExtResource("4_attack")
+combat = NodePath("../Combat")

@@ -1,0 +1,25 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://equipment/card_deck.gd" id="1_deck"]
+[ext_resource type="Texture2D" path="res://assets/texturesItems/iconCardDeck.svg" id="2_icon"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_deck"]
+albedo_color = Color(0.68, 0.35, 0.22, 1)
+roughness = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_deck"]
+material = SubResource("StandardMaterial3D_deck")
+size = Vector3(0.11, 0.035, 0.16)
+
+[node name="CardDeck" type="Node3D" node_paths=PackedStringArray("model")]
+script = ExtResource("1_deck")
+tag = 7
+display_name = "Mazo de cartas"
+icon = ExtResource("2_icon")
+model = NodePath("Model")
+
+[node name="Model" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="Model"]
+position = Vector3(0, 0.0175, 0)
+mesh = SubResource("BoxMesh_deck")

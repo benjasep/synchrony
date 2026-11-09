@@ -68,26 +68,28 @@ func _verify_data() -> void:
 	_check("tag sin default cae al fallback", soldier.get_proficiency(Statics.EquipmentTag.RITUAL_TOOL) != null)
 
 	print("--- Percepcion: el vidente reconstruye, los demas miran ---")
+	var deck_handling: CardDeckProficiency = seer.get_proficiency(Statics.EquipmentTag.CARD_DECK) as CardDeckProficiency
+	var seer_echo: VisionMode = deck_handling.echo_vision
 	# La cámara del vidente SÍ dibuja el mundo, y eso no contradice que sea
 	# ciego: es la única forma de tener su profundidad en el depth buffer. Lo
 	# que ve es el eco que el shader saca de ahí; el color del mundo queda
 	# tapado por el quad.
-	_check("la camara del vidente solo dibuja el mundo (fuente del depth)",
-		seer.vision_mode.cull_mask == Statics.WORLD_VISUAL_LAYER)
-	_check("el vidente tiene shader de eco", seer.vision_mode.post_process_shader != null)
-	_check("y un alcance limitado", seer.vision_mode.perception_radius > 0.0)
+	_check("la camara del vidente dibuja el mundo y los bordes de recogibles",
+		seer_echo.cull_mask == (Statics.WORLD_VISUAL_LAYER | Statics.PICKUP_ECHO_VISUAL_LAYER))
+	_check("el mazo tiene shader de eco", seer_echo.post_process_shader != null)
+	_check("el mazo tiene un alcance limitado", seer_echo.perception_radius > 0.0)
 	# Todo lo que el vidente ve "bien" llega por la segunda pasada: si cayera en
 	# la pasada principal se lo comería el post-proceso.
 	_check("vidente SI ve etereos (segunda pasada)",
-		seer.vision_mode.ethereal_cull_mask & Statics.ETHEREAL_VISUAL_LAYER != 0)
+		seer_echo.ethereal_cull_mask & Statics.ETHEREAL_VISUAL_LAYER != 0)
 	_check("vidente SI ve enemigos fisicos a traves de las paredes",
-		seer.vision_mode.ethereal_cull_mask & Statics.PHYSICAL_ENEMY_VISUAL_LAYER != 0)
+		seer_echo.ethereal_cull_mask & Statics.PHYSICAL_ENEMY_VISUAL_LAYER != 0)
 	_check("vidente SI ve a sus companeros",
-		seer.vision_mode.ethereal_cull_mask & Statics.BODY_VISUAL_LAYER != 0)
+		seer_echo.ethereal_cull_mask & Statics.BODY_VISUAL_LAYER != 0)
 	_check("vidente SI ve el item que empuna",
-		seer.vision_mode.ethereal_cull_mask & Statics.VIEWMODEL_VISUAL_LAYER != 0)
+		seer_echo.ethereal_cull_mask & Statics.VIEWMODEL_VISUAL_LAYER != 0)
 	_check("la segunda pasada NO repite el mundo",
-		seer.vision_mode.ethereal_cull_mask & Statics.WORLD_VISUAL_LAYER == 0)
+		seer_echo.ethereal_cull_mask & Statics.WORLD_VISUAL_LAYER == 0)
 
 	for other: RoleProfile in [technician, soldier]:
 		_check("%s SI ve enemigos fisicos en su camara normal" % other.display_name,
@@ -591,7 +593,11 @@ func _verify_ethereal_enemy() -> void:
 	_check("un metro mas alto que la version de dos metros", is_equal_approx(bounds.size.y, 3.03499981))
 	_check("modelo apoyado en el suelo", absf(bounds.position.y) < 0.01)
 	for role: Statics.Role in RoleDatabase.get_selectable_roles():
-		var mode: VisionMode = RoleDatabase.get_profile(role).vision_mode
+		var profile: RoleProfile = RoleDatabase.get_profile(role)
+		var mode: VisionMode = profile.vision_mode
+		if role == Statics.Role.SEER:
+			var handling: CardDeckProficiency = profile.get_proficiency(Statics.EquipmentTag.CARD_DECK) as CardDeckProficiency
+			mode = handling.echo_vision
 		var sees_enemy: bool = (mode.cull_mask | mode.ethereal_cull_mask) & Statics.ETHEREAL_VISUAL_LAYER != 0
 		_check("visibilidad correcta para %s" % RoleDatabase.get_role_name(role), sees_enemy == (role == Statics.Role.SEER))
 	enemy.queue_free()
@@ -708,8 +714,8 @@ func _verify_seer_view() -> void:
 		and seer.perception.ethereal_camera != null \
 		and seer.perception.ethereal_view != null)
 
-	_check("la camara dibuja el mundo (depth del eco)",
-		seer.camera.cull_mask == Statics.WORLD_VISUAL_LAYER)
+	_check("la camara dibuja el mundo y los bordes de recogibles",
+		seer.camera.cull_mask == (Statics.WORLD_VISUAL_LAYER | Statics.PICKUP_ECHO_VISUAL_LAYER))
 	_check("el quad de eco esta visible", seer.perception.echo_quad.visible)
 	var material: ShaderMaterial = seer.perception.echo_quad.material_override as ShaderMaterial
 	_check("con material de shader", material != null)
@@ -747,7 +753,7 @@ func _verify_seer_view() -> void:
 	# El SubViewport no es un Node3D: la cadena de transformadas se corta ahí y
 	# sin la copia manual la segunda cámara se queda en el origen.
 	seer.global_position = Vector3(3.0, 0.0, -7.0)
-	await get_tree().process_frame
+	await get_tree().create_timer(0.0).timeout
 	_check("la camara eterea sigue a la principal",
 		seer.perception.ethereal_camera.global_position.is_equal_approx(seer.camera.global_position))
 
@@ -769,8 +775,77 @@ func _verify_seer_view() -> void:
 	_check("el item empunado pasa a la capa de viewmodel", gun != null \
 		and gun.model != null and _all_meshes_in_layer(gun.model, Statics.VIEWMODEL_VISUAL_LAYER))
 
+	await _verify_card_deck(seer, soldier)
 	seer.queue_free()
 	soldier.queue_free()
+
+
+func _verify_card_deck(seer: Player, soldier: Player) -> void:
+	const DECK_PATH: String = "res://equipment/card_deck.tscn"
+	var deck: Equipment = seer.inventory.active_item
+	_check("el vidente empieza con el mazo equipado",
+		deck != null and deck.tag == Statics.EquipmentTag.CARD_DECK)
+	if not deck:
+		return
+	var full_echo: VisionMode = seer.perception.vision_mode
+	var full_pulse: SeerEchoAbility = deck.get_ability() as SeerEchoAbility
+	var full_pulse_radius: float = full_pulse.pulse_radius
+	_check("el vidente empieza con eco de 12 m y pulso de 25 m",
+		is_equal_approx(full_echo.perception_radius, 12.0) and is_equal_approx(full_pulse_radius, 25.0))
+	var use_event: InputEventAction = InputEventAction.new()
+	use_event.action = &"use_item"
+	use_event.pressed = true
+	seer.inventory._unhandled_input(use_event)
+	use_event.action = &"slot_2"
+	seer.inventory._unhandled_input(use_event)
+	_check("el clic y una ranura vacía mantienen la vista de eco", seer.perception.vision_mode == full_echo)
+	seer.inventory.add_item_from_scene("res://equipment/evidence_report.tscn", {})
+	seer.inventory.request_equip(1)
+	_check("el cambio empieza con un fundido y no desactiva el eco de golpe", seer.perception.vision_mode == full_echo)
+	await seer.perception._vision_transition.finished
+	_check("el fundido del vidente dura 1,5 s",
+		absf(seer.perception._vision_transition.get_total_elapsed_time() - 1.5) < 0.15)
+	_check("equipar otro objeto restaura la vista normal", seer.perception.vision_mode == seer.profile.vision_mode
+		and not seer.perception.echo_quad.visible and not full_pulse.can_activate())
+	seer.inventory.request_equip(0)
+	await seer.perception._vision_transition.finished
+	_check("volver a empuñar el mazo restaura el eco", seer.perception.vision_mode == full_echo)
+	seer.inventory.request_drop(0)
+	await seer.perception._vision_transition.finished
+	_check("soltar el mazo restaura la vista normal", seer.perception.vision_mode == seer.profile.vision_mode)
+
+	var normal_fov: float = soldier.camera.fov
+	var handling: CardDeckProficiency = soldier.profile.get_proficiency(Statics.EquipmentTag.CARD_DECK) as CardDeckProficiency
+	var expected_echo: float = full_echo.perception_radius * handling.radius_multiplier
+	var expected_pulse: float = full_pulse_radius * handling.radius_multiplier
+	_check("el militar puede recoger el mazo", soldier.inventory.add_item_from_scene(DECK_PATH, {}))
+	soldier.inventory.request_equip(1)
+	soldier.inventory.request_equip(0)
+	await soldier.perception._vision_transition.finished
+	_check("un cambio rápido de ranura cancela el paso a eco", soldier.perception.vision_mode == soldier.profile.vision_mode)
+	soldier.inventory.request_equip(1)
+	var half_pulse: SeerEchoAbility = soldier.inventory.active_item.get_ability() as SeerEchoAbility
+	_check("el pulso espera a que se aplique la visión de eco", not half_pulse.can_activate())
+	await soldier.perception._vision_transition.finished
+	_check("el fundido del militar dura 3 s",
+		absf(soldier.perception._vision_transition.get_total_elapsed_time() - 3.0) < 0.15)
+	_check("el eco del militar está visible", soldier.perception.echo_quad.visible)
+	var soldier_radius: float = soldier.perception.vision_mode.perception_radius
+	_check("el radio del eco del militar aplica su multiplicador (%.2f m)" % soldier_radius,
+		is_equal_approx(soldier_radius, expected_echo))
+	_check("el radio del pulso del militar aplica su multiplicador (%.2f m)" % half_pulse.pulse_radius,
+		is_equal_approx(half_pulse.pulse_radius, expected_pulse))
+	_check("el mazo conserva el campo visual angular", is_equal_approx(soldier.camera.fov, normal_fov))
+	half_pulse.activate()
+	half_pulse._process(1.2)
+	var material: ShaderMaterial = soldier.perception.echo_quad.material_override as ShaderMaterial
+	var active_radius: float = material.get_shader_parameter(&"perception_radius")
+	_check("el pulso del mazo amplía el eco del militar (%.2f m)" % active_radius,
+		is_equal_approx(active_radius, expected_pulse))
+	soldier.inventory.request_equip(0)
+	await soldier.perception._vision_transition.finished
+	_check("guardar el mazo restaura la vista normal y desactiva el pulso",
+		soldier.perception.vision_mode == soldier.profile.vision_mode and not half_pulse.can_activate())
 
 
 ## Imprime el resultado de una comprobación y suma un fallo si no se cumple.

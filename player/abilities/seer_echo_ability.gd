@@ -2,21 +2,33 @@ class_name SeerEchoAbility
 extends PlayerAbility
 
 ## Pulso de eco del vidente: expande temporalmente el radio de percepción del shader de eco.
-## Su visión base no vive aquí, sino en su [VisionMode], que aplica [PerceptionComponent].
+## El mazo le da su [VisionMode] y ajusta el pulso según la competencia del portador.
 
 @export var pulse_radius: float = 25.0
 @export var pulse_speed: float = 12.0
 
-var _base_radius: float = 0.0
+var echo_mode: VisionMode
+
+var _equipped: bool = false
 var _current_radius: float = 0.0
 
 
-## Toma como radio base el [code]perception_radius[/code] del [VisionMode] del jugador (0 si
-## no lo hay) y arranca desde él.
 func _on_setup() -> void:
-	if player and player.perception and player.perception.vision_mode:
-		_base_radius = player.perception.vision_mode.perception_radius
-	_current_radius = _base_radius
+	_current_radius = echo_mode.perception_radius
+
+
+func set_equipped(equipped: bool) -> void:
+	_equipped = equipped
+	if not _equipped:
+		deactivate()
+		_current_radius = echo_mode.perception_radius
+		if player.perception.vision_mode == echo_mode:
+			player.perception.set_shader_parameter(&"perception_radius", _current_radius)
+
+
+func can_activate() -> bool:
+	return _equipped and super() and player.perception.vision_mode == echo_mode \
+		and not player.health.is_dead and not player.is_captured()
 
 
 ## No hace nada todavía: [code]_process()[/code] expande el radio mientras está activa.
@@ -30,8 +42,8 @@ func _on_activated() -> void:
 ## Recibe: [param delta] — segundos del frame.
 func _process(delta: float) -> void:
 	super(delta)
-	if not player or not player.perception:
+	if not _equipped or player.perception.vision_mode != echo_mode:
 		return
-	var target: float = pulse_radius if is_active else _base_radius
+	var target: float = pulse_radius if is_active else echo_mode.perception_radius
 	_current_radius = move_toward(_current_radius, target, pulse_speed * delta)
 	player.perception.set_shader_parameter(&"perception_radius", _current_radius)

@@ -2,7 +2,7 @@ class_name PerceptionComponent
 extends PlayerComponent
 
 const ETHEREAL_RANGE_SHADER: Shader = preload("res://player/data/ethereal_range.gdshader")
-const ECHO_SHADER: Shader = preload("res://player/data/echo_vision.gdshader")
+const ETHEREAL_OUTLINE_SHADER: Shader = preload("res://player/data/ethereal_outline.gdshader")
 
 ## Aplica el [VisionMode] del rol a la cámara, solo en el cliente dueño (la percepción no se
 ## replica). Para el vidente arma tres piezas: la cámara principal solo llena el depth, el quad
@@ -25,15 +25,48 @@ var _range_material: ShaderMaterial
 var _range_mask_material: ShaderMaterial
 var _range_quad: MeshInstance3D
 var _perception_radius: float = 0.0
+var _vision_transition: Tween
+var _vision_target: VisionMode
+var _vision_fade: ColorRect
 
 
 ## Aplica el [VisionMode] del perfil solo en el dueño; en las copias remotas no toca la vista.
 ## Recibe: [param profile] — perfil del rol; con [code]null[/code] no aplica nada.
 func configure(profile: RoleProfile) -> void:
 	super(profile)
-	if not is_owner() or not profile:
+	if not is_owner() or not profile or vision_mode:
 		return
 	apply_vision_mode(profile.vision_mode)
+
+
+## Cambia de cámara bajo un fundido. El equipamiento inicial aplica su vista directamente.
+func transition_vision_mode(mode: VisionMode, duration: float) -> void:
+	if not vision_mode or duration <= 0.0 or not player.hud_layer:
+		apply_vision_mode(mode)
+		return
+	if _vision_transition and _vision_transition.is_running():
+		if _vision_target == mode:
+			return
+		_vision_transition.kill()
+	elif vision_mode == mode:
+		return
+
+	if not _vision_fade:
+		_vision_fade = ColorRect.new()
+		_vision_fade.color = Color(0.0, 0.0, 0.0, 0.0)
+		_vision_fade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_vision_fade.z_index = 100
+		player.hud_layer.add_child(_vision_fade)
+		_vision_fade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_vision_fade.show()
+	_vision_target = mode
+	_vision_transition = create_tween()
+	var half_duration: float = duration * 0.5
+	if vision_mode != mode:
+		_vision_transition.tween_property(_vision_fade, ^"color:a", 1.0, half_duration)
+		_vision_transition.tween_callback(apply_vision_mode.bind(mode))
+	_vision_transition.tween_property(_vision_fade, ^"color:a", 0.0, half_duration)
+	_vision_transition.tween_callback(_vision_fade.hide)
 
 
 ## Guarda el modo y aplica su [code]cull_mask[/code] a la cámara, el post-proceso y la segunda
@@ -141,7 +174,7 @@ func _apply_ethereal_pass(mode: VisionMode) -> void:
 func _apply_range_mask() -> void:
 	if not _range_quad:
 		_range_material = ShaderMaterial.new()
-		_range_material.shader = ECHO_SHADER
+		_range_material.shader = ETHEREAL_OUTLINE_SHADER
 		# La máscara debe correr DESPUÉS del color; con igual prioridad no hay orden garantizado.
 		_range_material.render_priority = Material.RENDER_PRIORITY_MAX - 1
 		_range_mask_material = ShaderMaterial.new()

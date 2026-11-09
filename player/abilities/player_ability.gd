@@ -1,8 +1,7 @@
 class_name PlayerAbility
 extends Node
 
-## Capacidad innata de un rol, instanciada desde [code]RoleProfile.ability_scene[/code]. A
-## diferencia del [Equipment], no se transfiere: nadie puede heredarla recogiendo un objeto.
+## Capacidad de un jugador. Puede venir de su perfil o del equipo que empuña.
 
 signal activated
 signal deactivated
@@ -65,8 +64,8 @@ func deactivate() -> void:
 ## Recibe: [param delta] — segundos del frame.
 func _process(delta: float) -> void:
 	if _cooldown_left > 0.0:
-		cooldown_changed.emit(get_cooldown_ratio())
 		_cooldown_left = maxf(_cooldown_left - delta, 0.0)
+		cooldown_changed.emit(get_cooldown_ratio())
 	if is_active and duration > 0.0:
 		_duration_left -= delta
 		if _duration_left <= 0.0:

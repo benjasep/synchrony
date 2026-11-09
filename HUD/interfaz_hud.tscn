@@ -10,3 +10,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_b60p1")
+
+[node name="PickupPrompt" type="Label" parent="." unique_id=983811183]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "[E] Recoger"
+horizontal_alignment = 1
+vertical_alignment = 2

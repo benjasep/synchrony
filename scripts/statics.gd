@@ -14,6 +14,8 @@ const ETHEREAL_VISUAL_LAYER: int = 2   ## Máscara de la capa 2: enemigos etére
 const VIEWMODEL_VISUAL_LAYER: int = 4  ## Máscara de la capa 3: item empuñado.
 const BODY_VISUAL_LAYER: int = 8       ## Máscara de la capa 4: cuerpos de otros jugadores.
 const PHYSICAL_ENEMY_VISUAL_LAYER: int = 16 ## Capa 5: enemigos físicos, separados de las paredes.
+const PICKUP_ECHO_VISUAL_LAYER: int = 32 ## Capa 6: marcas opacas para colorear el eco.
+const PICKUP_MODEL_VISUAL_LAYER: int = 64 ## Capa 7: modelos normales de recogibles con marca.
 const PERCEPTION_MASK_VISUAL_LAYER: int = 524288 ## Capa 20: filtro de alcance, solo segunda pasada.
 
 
@@ -49,6 +51,7 @@ enum EquipmentTag {
 	MAP,
 	RITUAL_TOOL,
 	EVIDENCE,
+	CARD_DECK,
 }
 
 

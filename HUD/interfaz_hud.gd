@@ -40,41 +40,49 @@ extends Control
 ## Píxeles que se corre la barra de enfriamiento a la derecha desde el centro (negativo = a la
 ## izquierda). Nunca sale del ancho de las ranuras.
 @export var cooldown_bar_shift: int = 200
+@onready var _pickup_prompt: Label = $PickupPrompt
 
 var _inventory: InventoryComponent
 var _charge_source: Equipment = null
 var _panels: Array[PanelContainer] = []
 var _icons: Array[TextureRect] = []
 var _charge_bar: ProgressBar
-var _cooldown_bar: ProgressBar = null
+var _cooldown_bar: ProgressBar
+var _cooldown_holder: MarginContainer
+var _innate_ability: PlayerAbility
+var _cooldown_source: PlayerAbility
 var _normal_style: StyleBoxFlat
 var _active_style: StyleBoxFlat
+var _interaction: InteractionComponent
 
 
 ## Ocupa toda la pantalla pero no intercepta el ratón.
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_pickup_prompt.hide()
 
 
 ## Construye las ranuras y las barras, las pinta con lo que ya hay (el loadout inicial se
 ## entrega antes de que exista el HUD) y se suscribe a los cambios del inventario y de la
 ## habilidad. Solo actúa la primera vez.
 ## Recibe: [param inventory] — inventario del jugador dueño de este HUD; [param ability] — su
-## habilidad, o [code]null[/code] si el rol no tiene y entonces no se dibuja la barra de
-## enfriamiento.
-func setup(inventory: InventoryComponent, ability: PlayerAbility = null) -> void:
+## habilidad innata, si el rol tiene una.
+func setup(inventory: InventoryComponent, ability: PlayerAbility = null, interaction: InteractionComponent = null) -> void:
 	if _inventory or not inventory:
 		return
 	_inventory = inventory
+	_interaction = interaction
+	_innate_ability = ability
+	_pickup_prompt.text = _get_pickup_prompt_text()
+	_pickup_prompt.reset_size()
+	_pickup_prompt.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_pickup_prompt.position.y += 32.0
 	_build_styles()
-	_build_layout(inventory.max_slots, ability != null)
+	_build_layout(inventory.max_slots)
 	inventory.item_added.connect(_on_inventory_changed)
 	inventory.item_removed.connect(_on_inventory_changed)
 	inventory.item_equipped.connect(_on_inventory_changed)
-	if ability:
-		ability.cooldown_changed.connect(_on_cooldown_changed)
-		_cooldown_bar.value = ability.get_cooldown_ratio()
 	_refresh()
 
 
@@ -125,9 +133,8 @@ func _make_bar(fill_color: Color) -> ProgressBar:
 ## enfriamiento (si hay habilidad), la de carga (oculta hasta que haga falta) y la fila de
 ## ranuras. La barra de carga se estira al ancho de la fila; la de enfriamiento es más corta,
 ## va un poco más arriba y corrida respecto al centro.
-## Recibe: [param slot_count] — cuántas ranuras dibujar; [param with_ability] — si hay que
-## crear la barra de enfriamiento.
-func _build_layout(slot_count: int, with_ability: bool) -> void:
+## Recibe: [param slot_count] — cuántas ranuras dibujar.
+func _build_layout(slot_count: int) -> void:
 	var margin: MarginContainer = MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.add_theme_constant_override(&"margin_bottom", bottom_margin)
@@ -141,21 +148,18 @@ func _build_layout(slot_count: int, with_ability: bool) -> void:
 	column.add_theme_constant_override(&"separation", bar_gap)
 	margin.add_child(column)
 
-	if with_ability:
-		_cooldown_bar = _make_bar(cooldown_color)
-		_cooldown_bar.custom_minimum_size = Vector2(cooldown_bar_width, bar_height)
-		_cooldown_bar.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		# Margen inferior: la sube. Margen izquierdo: la coloca desde el borde izquierdo de las
-		# ranuras (centro más el corrimiento), sin dejarla salir por ningún lado.
-		var row_width: float = slot_count * slot_size.x + maxi(slot_count - 1, 0) * slot_spacing
-		var free_width: int = maxi(roundi(row_width) - cooldown_bar_width, 0)
-		var left_margin: int = clampi(roundi(free_width / 2.0) + cooldown_bar_shift, 0, free_width)
-		var cooldown_holder: MarginContainer = MarginContainer.new()
-		cooldown_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		cooldown_holder.add_theme_constant_override(&"margin_left", left_margin)
-		cooldown_holder.add_theme_constant_override(&"margin_bottom", cooldown_bar_lift)
-		cooldown_holder.add_child(_cooldown_bar)
-		column.add_child(cooldown_holder)
+	_cooldown_bar = _make_bar(cooldown_color)
+	_cooldown_bar.custom_minimum_size = Vector2(cooldown_bar_width, bar_height)
+	_cooldown_bar.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	var row_width: float = slot_count * slot_size.x + maxi(slot_count - 1, 0) * slot_spacing
+	var free_width: int = maxi(roundi(row_width) - cooldown_bar_width, 0)
+	var left_margin: int = clampi(roundi(free_width / 2.0) + cooldown_bar_shift, 0, free_width)
+	_cooldown_holder = MarginContainer.new()
+	_cooldown_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_cooldown_holder.add_theme_constant_override(&"margin_left", left_margin)
+	_cooldown_holder.add_theme_constant_override(&"margin_bottom", cooldown_bar_lift)
+	_cooldown_holder.add_child(_cooldown_bar)
+	column.add_child(_cooldown_holder)
 
 	_charge_bar = _make_bar(charge_color)
 	_charge_bar.visible = false
@@ -201,6 +205,20 @@ func _refresh() -> void:
 		var is_active: bool = item != null and item == _inventory.active_item
 		_panels[i].add_theme_stylebox_override(&"panel", _active_style if is_active else _normal_style)
 	_bind_charge_source(_inventory.active_item)
+	var item_ability: PlayerAbility = _inventory.active_item.get_ability() if _inventory.active_item else null
+	_bind_cooldown_source(item_ability if item_ability else _innate_ability)
+
+
+func _bind_cooldown_source(source: PlayerAbility) -> void:
+	if source != _cooldown_source:
+		if is_instance_valid(_cooldown_source):
+			_cooldown_source.cooldown_changed.disconnect(_on_cooldown_changed)
+		_cooldown_source = source
+		if _cooldown_source:
+			_cooldown_source.cooldown_changed.connect(_on_cooldown_changed)
+	_cooldown_holder.visible = is_instance_valid(_cooldown_source)
+	if _cooldown_holder.visible:
+		_cooldown_bar.value = _cooldown_source.get_cooldown_ratio()
 
 
 ## Cambia el item cuya carga muestra la barra: se desuscribe del anterior, se suscribe al nuevo
@@ -240,3 +258,30 @@ func _on_charge_changed(ratio: float) -> void:
 ## Recibe: [param ratio] — fracción de enfriamiento recuperada.
 func _on_cooldown_changed(ratio: float) -> void:
 	_cooldown_bar.value = ratio
+
+func _physics_process(_delta: float) -> void:
+	var target: Interactable = null
+	if _interaction:
+		target = _interaction.current_target
+
+	_pickup_prompt.visible = (
+		is_instance_valid(target)
+		and target is EquipmentPickup
+		and target.can_interact(_interaction.player)
+	)
+
+func _get_pickup_prompt_text() -> String:
+	for event: InputEvent in InputMap.action_get_events(&"interact"):
+		var key_event: InputEventKey = event as InputEventKey
+		if not key_event:
+			continue
+
+		var keycode: Key = key_event.keycode
+		if keycode == KEY_NONE:
+			keycode = key_event.physical_keycode
+			if DisplayServer.get_name() != "headless":
+				keycode = DisplayServer.keyboard_get_keycode_from_physical(keycode)
+		if keycode != KEY_NONE:
+			return "[%s] Recoger" % OS.get_keycode_string(keycode)
+
+	return "Recoger"

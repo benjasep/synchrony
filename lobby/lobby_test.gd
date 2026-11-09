@@ -2,7 +2,9 @@ extends Node
 
 ## Arnés de multijugador local (con [code]Game.multiplayer_test[/code]): la primera instancia
 ## hospeda y las demás se unen a localhost, los jugadores salen de
-## [code]Game.test_players[/code] y se salta directamente a [code]main_scene[/code].
+## [code]Game.test_players[/code] y se salta directamente al mapa del anfitrión.
+
+const LOOPBACK_ADDRESS: String = "127.0.0.1"
 
 var player_index: int = 1
 
@@ -39,7 +41,13 @@ func _ready() -> void:
 ## primera celda y conecta el temporizador de arranque.
 ## Devuelve: [code]true[/code] si se creó el servidor (el puerto estaba libre).
 func _try_host() -> bool:
+	# Si ya hay un anfitrión, pasa directo al cliente sin provocar un error de ENet.
+	var port_probe: PacketPeerUDP = PacketPeerUDP.new()
+	if port_probe.bind(Statics.PORT, LOOPBACK_ADDRESS) != OK:
+		return false
+	port_probe.close()
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	peer.set_bind_ip(LOOPBACK_ADDRESS)
 	var err: Error = peer.create_server(Statics.PORT, Statics.MAX_CLIENTS)
 	if err == OK:
 		multiplayer.multiplayer_peer = peer
@@ -54,7 +62,7 @@ func _try_host() -> bool:
 ## Devuelve: [code]true[/code] si se creó el peer; si llega a conectar se sabe después.
 func _try_join() -> bool:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	var err: Error = peer.create_client("localhost", Statics.PORT)
+	var err: Error = peer.create_client(LOOPBACK_ADDRESS, Statics.PORT)
 	if err == OK:
 		multiplayer.multiplayer_peer = peer
 	return err == OK
@@ -66,6 +74,9 @@ func _try_join() -> bool:
 ## Recibe: [param id] — id de peer del que se conectó.
 func _on_peer_connected(id: int) -> void:
 	if multiplayer.is_server():
+		if player_index >= Game.instance.players.size():
+			multiplayer.multiplayer_peer.disconnect_peer(id)
+			return
 		Game.instance.players[player_index].id = id
 		for i: int in Game.instance.players.size():
 			_send_player_data_id.rpc(i, Game.instance.players[i].id)
@@ -88,14 +99,21 @@ func _send_player_data_id(index: int, id: int) -> void:
 
 ## Al vencer el temporizador, el servidor arranca la partida en todos los peers.
 func _on_start_game_timeout() -> void:
-	_start_game.rpc()
+	_start_game.rpc(Game.instance.selected_level)
 
 
-## Cambia a [code]Game.main_scene[/code]. RPC del servidor que se ejecuta en todos los peers,
+## Cambia al mapa elegido por el servidor. RPC que se ejecuta en todos los peers,
 ## él incluido.
 @rpc("reliable", "call_local")
-func _start_game() -> void:
-	get_tree().change_scene_to_packed(Game.instance.main_scene)
+func _start_game(level: StringName) -> void:
+	var scene: PackedScene = Game.instance.get_level_scene(level)
+	if not scene:
+		push_error("Prueba local: mapa desconocido: %s" % level)
+		return
+	Game.instance.players = Game.instance.players.filter(
+		func(player: Statics.PlayerData) -> bool: return player.id != 0
+	)
+	get_tree().change_scene_to_packed(scene)
 
 
 ## Si [code]Game.fill_screen[/code] está activo, reparte la pantalla en una cuadrícula casi
@@ -103,7 +121,7 @@ func _start_game() -> void:
 ## barra de título.
 ## Recibe: [param index] — posición del jugador (0 = servidor).
 func _update_window_placement(index: int) -> void:
-	if not Game.instance.fill_screen:
+	if not Game.instance.fill_screen or Engine.is_embedded_in_editor() or DisplayServer.get_name() == "headless":
 		return
 	var columns: int = ceil(sqrt(Game.instance.players.size()))
 	var rows: int = ceil(1.0 * Game.instance.players.size() / columns)

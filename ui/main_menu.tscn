@@ -32,6 +32,12 @@ grow_vertical = 2
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_constants/separation = 12
+
+[node name="LevelTabs" type="HBoxContainer" parent="MarginContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="Host" type="Button" parent="MarginContainer/VBoxContainer2" unique_id=923655091]
 unique_name_in_owner = true

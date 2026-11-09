@@ -17,7 +17,8 @@ float view_depth(vec2 uv, mat4 inv_projection) {
 }
 
 // RGB: color del borde. Alfa: intensidad con alcance esférico y desvanecimiento.
-vec4 vision_outline(vec2 uv, vec2 viewport_size, mat4 inv_projection) {
+vec4 vision_outline(vec2 uv, vec2 viewport_size, mat4 inv_projection, out vec2 edge_source_uv) {
+	edge_source_uv = uv;
 	float distance_to_camera = length(vision_view_position(depth_texture, uv, inv_projection));
 	if (distance_to_camera >= perception_radius) {
 		return vec4(outline_color.rgb * outline_energy, 0.0);
@@ -30,6 +31,22 @@ vec4 vision_outline(vec2 uv, vec2 viewport_size, mat4 inv_projection) {
 	float down = view_depth(uv + vec2(0.0, texel.y), inv_projection);
 	float silhouette = max(max(abs(left - center), abs(right - center)),
 		max(abs(up - center), abs(down - center))) / max(center, 0.001);
+	// En una silueta, la superficie más cercana es la que origina el borde.
+	// Esto también atribuye al objeto el píxel de contorno que cae fuera de su malla.
+	if (silhouette > outline_threshold) {
+		float nearest = min(min(left, right), min(up, down));
+		if (nearest < center) {
+			if (nearest == left) {
+				edge_source_uv.x -= texel.x;
+			} else if (nearest == right) {
+				edge_source_uv.x += texel.x;
+			} else if (nearest == up) {
+				edge_source_uv.y -= texel.y;
+			} else {
+				edge_source_uv.y += texel.y;
+			}
+		}
+	}
 	float crease = (abs(left + right - 2.0 * center)
 		+ abs(up + down - 2.0 * center)) / max(center, 0.001);
 	float outline = max(
@@ -37,4 +54,9 @@ vec4 vision_outline(vec2 uv, vec2 viewport_size, mat4 inv_projection) {
 		smoothstep(crease_threshold, crease_threshold * 2.0, crease));
 	float fade = 1.0 - smoothstep(perception_radius * fade_start, perception_radius, distance_to_camera);
 	return vec4(outline_color.rgb * outline_energy, outline * fade);
+}
+
+vec4 vision_outline(vec2 uv, vec2 viewport_size, mat4 inv_projection) {
+	vec2 edge_source_uv;
+	return vision_outline(uv, viewport_size, inv_projection, edge_source_uv);
 }

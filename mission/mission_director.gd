@@ -24,8 +24,10 @@ static var instance: MissionDirector
 @export var check_interval: float = 0.2
 ## Segundos que se ve la pantalla de fin antes de salir de la partida.
 @export var end_screen_seconds: float = 6.0
-## Al acabar, vuelve a la sala de espera (con lobby) o recarga el nivel (sin lobby).
+## Al acabar, carga el siguiente nivel si se ganó o vuelve al flujo de salida habitual.
 @export var return_after_end: bool = true
+## Nivel que se abre al ganar. Vacío si este nivel cierra la partida.
+@export var next_level: PackedScene
 
 @export_group("Nodos")
 @export var end_screen: CanvasLayer
@@ -117,7 +119,7 @@ func plan_placements(zones: Array[ObjectiveZone]) -> Array[Placement]:
 ## de [PlayerSpawner], elige la zona final y empieza a vigilar. Solo exige lo que llegó a
 ## colocarse: un objeto sin sitio no puede impedir la victoria.
 func _start() -> void:
-	if is_running or has_ended or not multiplayer.is_server() or not PlayerSpawner.instance:
+	if not is_inside_tree() or is_running or has_ended or not multiplayer.is_server() or not PlayerSpawner.instance:
 		return
 	if rng_seed != 0:
 		_rng.seed = rng_seed
@@ -219,16 +221,24 @@ func _freeze_local_player() -> void:
 			player.view.set_process_unhandled_input(false)
 
 
-## Sale de la partida terminada. Con sesión de lobby manda el servidor y lleva a todos a la sala
-## de espera; sin lobby (nivel suelto con F6) recarga la escena actual.
+## Avanza si se ganó y hay otro nivel. De lo contrario, vuelve al lobby o recarga con F6.
 func _leave_match() -> void:
 	if not is_inside_tree():
+		return
+	if won and next_level:
+		if multiplayer.is_server():
+			_advance_to_next_level.rpc()
 		return
 	if not Game.instance.players.is_empty():
 		if multiplayer.is_server():
 			Lobby.instance.go_to_lobby.rpc()
 	else:
 		get_tree().reload_current_scene()
+
+
+@rpc("authority", "call_local", "reliable")
+func _advance_to_next_level() -> void:
+	get_tree().change_scene_to_packed(next_level)
 
 
 ## Devuelve los objetivos válidos de la misión, una entrada por copia y en orden de colocación:

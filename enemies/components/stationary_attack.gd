@@ -1,11 +1,10 @@
 class_name StationaryAttack
 extends Node
 
-## Activa el combate contra el jugador atacable más cercano, sin perseguirlo ni
-## desplazar al enemigo. Solo se añade a las instancias que deban atacar quietas.
+## Activa el combate contra el jugador atacable más cercano sin perseguirlo.
+## El remate sigue usando la secuencia del agarre.
 ## El servidor decide; MeleeAttack replica el golpe y HealthComponent replica el daño.
 @export var combat: EnemyCombat
-@export var player_spawner: PlayerSpawner
 @export_range(0.05, 1.0, 0.05) var check_interval: float = 0.2
 
 var _check_left: float = 0.0
@@ -18,14 +17,15 @@ func _physics_process(delta: float) -> void:
 	if _check_left > 0.0:
 		return
 	_check_left = check_interval
-	if not combat or not is_instance_valid(combat.enemy) or not is_instance_valid(player_spawner):
+	var spawner: PlayerSpawner = PlayerSpawner.instance
+	if not combat or not is_instance_valid(combat.enemy) or not is_instance_valid(spawner):
 		return
 	var enemy: Enemy = combat.enemy
 	if enemy.is_retreated or not enemy.is_visible_in_tree() or combat.is_busy():
 		return
 	var nearest: Player = null
 	var nearest_distance: float = INF
-	for candidate: Player in player_spawner.players.values():
+	for candidate: Player in spawner.players.values():
 		if not combat.can_attack(candidate):
 			continue
 		var distance: float = enemy.global_position.distance_squared_to(candidate.global_position)
