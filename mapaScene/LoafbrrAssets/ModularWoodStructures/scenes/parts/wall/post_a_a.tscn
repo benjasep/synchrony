@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=4 uid="uid://br11l3qq80eii"]
+[gd_scene format=4 uid="uid://br11l3qq80eii"]
 
 [ext_resource type="Material" uid="uid://dj3ao63cfysdy" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/GeneralWoodTrim_A.material" id="1_umirw"]
 

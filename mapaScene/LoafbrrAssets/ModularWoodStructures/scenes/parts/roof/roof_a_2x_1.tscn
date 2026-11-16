@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=4 uid="uid://d4jydwxip2its"]
+[gd_scene format=4 uid="uid://d4jydwxip2its"]
 
 [ext_resource type="Material" uid="uid://cff2jtli24ctg" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/Roof_A.material" id="1_78nfm"]
 [ext_resource type="Material" uid="uid://cthe1ujqiqs6y" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_A.material" id="2_r4ho0"]

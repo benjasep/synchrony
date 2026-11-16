@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://bh21vm3j4dmgo"]
+[gd_scene format=4 uid="uid://bh21vm3j4dmgo"]
 
 [ext_resource type="Material" uid="uid://doefotjvkvoid" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodSiding_B_A.material" id="1_xx4v4"]
 [ext_resource type="Material" uid="uid://d0empcc3xyq" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/WoodPlanks_B.material" id="2_rrb8x"]

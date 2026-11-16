@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://c58t5qv67qmgo"]
+[gd_scene format=3 uid="uid://c58t5qv67qmgo"]
 
 [ext_resource type="PackedScene" uid="uid://rj5e4kckt5fe" path="res://Assets/LoafbrrAssets/ModularWoodStructures/glb/ModularWoodenStructures.glb" id="1_5a653"]
 [ext_resource type="Material" uid="uid://dc8hpgmfkdvka" path="res://Assets/LoafbrrAssets/ModularWoodStructures/material/DoorAtlas_A.material" id="2_4ctsy"]
