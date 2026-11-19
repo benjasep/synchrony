@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://mission/objective_zone.gd" id="1_zone"]
+[ext_resource type="Script" path="res://scripts/passage.gd" id="9_passage"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
 albedo_color = Color(0.52, 0.55, 0.62, 1)
@@ -109,6 +110,11 @@ shape = SubResource("BoxShape3D_altar")
 
 [node name="Mesh" type="MeshInstance3D" parent="Altar"]
 mesh = SubResource("BoxMesh_altar")
+
+[node name="Door" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+script = ExtResource("9_passage")
+size = Vector2(2, 2.4)
 
 [node name="ObjectiveZone" type="Node3D" parent="."]
 script = ExtResource("1_zone")

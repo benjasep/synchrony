@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://scripts/grab_rig.gd" id="7_grab_rig"]
 [ext_resource type="Script" path="res://scripts/melee_rig.gd" id="8_melee_rig"]
 [ext_resource type="Script" path="res://scripts/hit_reaction_rig.gd" id="9_hit_reaction_rig"]
+[ext_resource type="Script" path="res://scripts/squeeze_modifier.gd" id="10_squeeze"]
+[ext_resource type="Script" path="res://scripts/squeeze_limb.gd" id="11_squeeze_limb"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
 animation = &"idle"
@@ -166,6 +168,22 @@ fadein_time = 0.03
 fadeout_time = 0.12
 break_loop_at_end = true
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_arrastre_bajo"]
+animation = &"arrastre_bajo"
+use_custom_timeline = true
+timeline_length = 1.0
+loop_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_colarse_estrecho"]
+animation = &"colarse_estrecho"
+use_custom_timeline = true
+timeline_length = 1.0
+loop_mode = 1
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_bajo"]
+
+[sub_resource type="AnimationNodeBlend2" id="AnimationNodeBlend2_estrecho"]
+
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_root"]
 graph_offset = Vector2(-120, -40)
 nodes/main/node = SubResource("AnimationNodeStateMachine_root")
@@ -182,8 +200,16 @@ nodes/reacciones_b/node = SubResource("AnimationNodeTransition_reacciones_b")
 nodes/reacciones_b/position = Vector2(440, 360)
 nodes/reaccion_b/node = SubResource("AnimationNodeOneShot_reaccion_b")
 nodes/reaccion_b/position = Vector2(660, 0)
+nodes/arrastre_bajo/node = SubResource("AnimationNodeAnimation_arrastre_bajo")
+nodes/arrastre_bajo/position = Vector2(0, -360)
+nodes/bajo/node = SubResource("AnimationNodeBlend2_bajo")
+nodes/bajo/position = Vector2(220, -180)
+nodes/colarse_estrecho/node = SubResource("AnimationNodeAnimation_colarse_estrecho")
+nodes/colarse_estrecho/position = Vector2(220, -360)
+nodes/estrecho/node = SubResource("AnimationNodeBlend2_estrecho")
+nodes/estrecho/position = Vector2(440, -180)
 nodes/output/position = Vector2(880, 0)
-node_connections = [&"reacciones_a", 0, &"dano_cuerpo_a", &"reaccion_a", 0, &"main", &"reaccion_a", 1, &"reacciones_a", &"reacciones_b", 0, &"dano_cuerpo_b", &"reaccion_b", 0, &"reaccion_a", &"reaccion_b", 1, &"reacciones_b", &"output", 0, &"reaccion_b"]
+node_connections = [&"bajo", 0, &"main", &"bajo", 1, &"arrastre_bajo", &"estrecho", 0, &"bajo", &"estrecho", 1, &"colarse_estrecho", &"reacciones_a", 0, &"dano_cuerpo_a", &"reaccion_a", 0, &"estrecho", &"reaccion_a", 1, &"reacciones_a", &"reacciones_b", 0, &"dano_cuerpo_b", &"reaccion_b", 0, &"reaccion_a", &"reaccion_b", 1, &"reacciones_b", &"output", 0, &"reaccion_b"]
 
 [sub_resource type="Resource" id="Resource_leg_hind_l"]
 script = ExtResource("4_leg")
@@ -216,6 +242,38 @@ middle_bone = &"antebrazo.R"
 end_bone = &"muneca.R"
 contact_bone = &"medio_punta.R"
 is_front = true
+
+[sub_resource type="Resource" id="Resource_squeeze_hind_l"]
+script = ExtResource("11_squeeze_limb")
+root_bone = &"muslo.L"
+middle_bone = &"canilla_1.L"
+end_bone = &"canilla_2.L"
+tip_bones = Array[StringName]([&"dedo_punta_medio.L", &"dedo_punta_izq.L", &"dedo_punta_der.L"])
+planted_bones = Array[StringName]([&"falange_media.L", &"falange_izq.L", &"falange_der.L"])
+
+[sub_resource type="Resource" id="Resource_squeeze_hind_r"]
+script = ExtResource("11_squeeze_limb")
+root_bone = &"muslo.R"
+middle_bone = &"canilla_1.R"
+end_bone = &"canilla_2.R"
+tip_bones = Array[StringName]([&"dedo_punta_medio.R", &"dedo_punta_izq.R", &"dedo_punta_der.R"])
+planted_bones = Array[StringName]([&"falange_media.R", &"falange_izq.R", &"falange_der.R"])
+
+[sub_resource type="Resource" id="Resource_squeeze_front_l"]
+script = ExtResource("11_squeeze_limb")
+root_bone = &"brazo.L"
+middle_clearance = 0.14
+middle_bone = &"antebrazo.L"
+end_bone = &"muneca.L"
+tip_bones = Array[StringName]([&"pulgar_punta.L", &"indice_punta.L", &"medio_punta.L", &"anular_punta.L"])
+
+[sub_resource type="Resource" id="Resource_squeeze_front_r"]
+script = ExtResource("11_squeeze_limb")
+root_bone = &"brazo.R"
+middle_clearance = 0.14
+middle_bone = &"antebrazo.R"
+end_bone = &"muneca.R"
+tip_bones = Array[StringName]([&"pulgar_punta.R", &"indice_punta.R", &"medio_punta.R", &"anular_punta.R"])
 
 [sub_resource type="Resource" id="Resource_event_contacto"]
 script = ExtResource("6_marker")
@@ -336,6 +394,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.041482687, 0, 0.26910472)
 [node name="FootPlacement" type="SkeletonModifier3D" parent="pesadilla/Armature/Skeleton3D"]
 script = ExtResource("3_foot")
 legs = Array[ExtResource("4_leg")]([SubResource("Resource_leg_hind_l"), SubResource("Resource_leg_hind_r"), SubResource("Resource_leg_front_l"), SubResource("Resource_leg_front_r")])
+
+[node name="SqueezeModifier" type="SkeletonModifier3D" parent="pesadilla/Armature/Skeleton3D" node_paths=PackedStringArray("tree")]
+script = ExtResource("10_squeeze")
+tree = NodePath("../../../../AnimationTree")
+limbs = Array[ExtResource("11_squeeze_limb")]([SubResource("Resource_squeeze_hind_l"), SubResource("Resource_squeeze_hind_r"), SubResource("Resource_squeeze_front_l"), SubResource("Resource_squeeze_front_r")])
 
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=1583920482]
 root_node = NodePath("../pesadilla")

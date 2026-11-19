@@ -3,17 +3,206 @@
 [ext_resource type="PackedScene" path="res://enemies/enemy.tscn" id="1_base"]
 [ext_resource type="PackedScene" uid="uid://dglkputjuqyv" path="res://enemies/pesadilla/pesadilla_animation.tscn" id="2_model"]
 [ext_resource type="Script" path="res://enemies/components/grab_attack.gd" id="3_grab"]
-[ext_resource type="Script" uid="uid://dwvfkb6sfqqmj" path="res://enemies/components/stationary_attack.gd" id="4_attack"]
+[ext_resource type="Script" path="res://enemies/components/nav_locomotion.gd" id="5_locomotion"]
+[ext_resource type="Script" path="res://enemies/ai/enemy_senses.gd" id="6_senses"]
+[ext_resource type="Script" path="res://enemies/ai/enemy_memory.gd" id="7_memory"]
+[ext_resource type="Script" path="res://enemies/ai/enemy_brain.gd" id="8_brain"]
+[ext_resource type="Script" path="res://enemies/ai/enemy_transition.gd" id="9_transition"]
+[ext_resource type="Script" path="res://enemies/ai/enemy_condition.gd" id="10_condition"]
+[ext_resource type="Script" path="res://enemies/ai/selectors/closest_target_selector.gd" id="11_closest"]
+[ext_resource type="Script" path="res://enemies/ai/states/patrol_state.gd" id="12_patrol"]
+[ext_resource type="Script" path="res://enemies/ai/states/investigate_state.gd" id="13_investigate"]
+[ext_resource type="Script" path="res://enemies/ai/states/stalk_state.gd" id="14_stalk"]
+[ext_resource type="Script" path="res://enemies/ai/states/charge_state.gd" id="15_charge"]
+[ext_resource type="Script" path="res://enemies/ai/states/retreat_state.gd" id="16_retreat"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/retreated_condition.gd" id="17_retreated"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/health_below_condition.gd" id="18_health_below"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/heard_stimulus_condition.gd" id="19_heard"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/player_perceived_condition.gd" id="20_player_perceived"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/state_finished_condition.gd" id="21_finished"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/no_target_condition.gd" id="22_no_target"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/target_lost_condition.gd" id="23_target_lost"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/time_in_state_condition.gd" id="24_time_in_state"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/target_perceived_condition.gd" id="25_target_perceived"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/all_of_condition.gd" id="26_all_of"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/none_of_condition.gd" id="27_none_of"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/hit_in_zone_condition.gd" id="28_hit_in_zone"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/attacking_condition.gd" id="29_attacking"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/target_reachable_condition.gd" id="30_target_reachable"]
+[ext_resource type="Script" path="res://enemies/ai/conditions/belief_certainty_condition.gd" id="31_belief_certainty"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_pesadilla"]
 size = Vector3(1.9, 1.8, 1.5)
 
-[node name="Pesadilla" instance=ExtResource("1_base")]
+[sub_resource type="BoxShape3D" id="BoxShape3D_squeeze"]
+size = Vector3(1.6, 0.6, 0.4)
+
+[sub_resource type="Resource" id="Resource_cond_retreated"]
+script = ExtResource("17_retreated")
+retreated = true
+
+[sub_resource type="Resource" id="Resource_cond_present"]
+script = ExtResource("17_retreated")
+retreated = false
+
+[sub_resource type="Resource" id="Resource_cond_low_health"]
+script = ExtResource("18_health_below")
+ratio = 0.5
+
+[sub_resource type="Resource" id="Resource_cond_heard"]
+script = ExtResource("19_heard")
+
+[sub_resource type="Resource" id="Resource_cond_player_perceived"]
+script = ExtResource("20_player_perceived")
+
+[sub_resource type="Resource" id="Resource_cond_finished"]
+script = ExtResource("21_finished")
+
+[sub_resource type="Resource" id="Resource_cond_no_target"]
+script = ExtResource("22_no_target")
+
+[sub_resource type="Resource" id="Resource_cond_target_lost"]
+script = ExtResource("23_target_lost")
+seconds = 1.5
+
+[sub_resource type="Resource" id="Resource_cond_stalk_time"]
+script = ExtResource("24_time_in_state")
+min_seconds = 3.0
+max_seconds = 6.0
+
+[sub_resource type="Resource" id="Resource_cond_target_perceived"]
+script = ExtResource("25_target_perceived")
+
+[sub_resource type="Resource" id="Resource_cond_target_reachable"]
+script = ExtResource("30_target_reachable")
+allow_squeeze = false
+
+[sub_resource type="Resource" id="Resource_cond_stalk_ready"]
+script = ExtResource("26_all_of")
+conditions = Array[ExtResource("10_condition")]([SubResource("Resource_cond_stalk_time"), SubResource("Resource_cond_target_perceived"), SubResource("Resource_cond_target_reachable")])
+
+[sub_resource type="Resource" id="Resource_cond_certainty_spent"]
+script = ExtResource("31_belief_certainty")
+topics = Array[StringName]([&"rastro", &"ruido"])
+below = 0.05
+
+[sub_resource type="Resource" id="Resource_cond_weak_spot_hit"]
+script = ExtResource("28_hit_in_zone")
+zones = Array[int]([2])
+
+[sub_resource type="Resource" id="Resource_cond_attacking"]
+script = ExtResource("29_attacking")
+
+[sub_resource type="Resource" id="Resource_cond_not_attacking"]
+script = ExtResource("27_none_of")
+conditions = Array[ExtResource("10_condition")]([SubResource("Resource_cond_attacking")])
+
+[sub_resource type="Resource" id="Resource_cond_charge_cut"]
+script = ExtResource("26_all_of")
+conditions = Array[ExtResource("10_condition")]([SubResource("Resource_cond_weak_spot_hit"), SubResource("Resource_cond_not_attacking")])
+
+[sub_resource type="Resource" id="Resource_t_retreated"]
+script = ExtResource("9_transition")
+to = &"Retirada"
+condition = SubResource("Resource_cond_retreated")
+priority = 100
+
+[sub_resource type="Resource" id="Resource_t_low_health"]
+script = ExtResource("9_transition")
+to = &"Retirada"
+condition = SubResource("Resource_cond_low_health")
+priority = 90
+
+[sub_resource type="Resource" id="Resource_t_return"]
+script = ExtResource("9_transition")
+from = &"Retirada"
+to = &"Patrulla"
+condition = SubResource("Resource_cond_present")
+
+[sub_resource type="Resource" id="Resource_t_patrol_stalk"]
+script = ExtResource("9_transition")
+from = &"Patrulla"
+to = &"Acecho"
+condition = SubResource("Resource_cond_player_perceived")
+priority = 20
+
+[sub_resource type="Resource" id="Resource_t_patrol_investigate"]
+script = ExtResource("9_transition")
+from = &"Patrulla"
+to = &"Investigar"
+condition = SubResource("Resource_cond_heard")
+priority = 10
+
+[sub_resource type="Resource" id="Resource_t_investigate_stalk"]
+script = ExtResource("9_transition")
+from = &"Investigar"
+to = &"Acecho"
+condition = SubResource("Resource_cond_player_perceived")
+priority = 20
+
+[sub_resource type="Resource" id="Resource_t_investigate_patrol"]
+script = ExtResource("9_transition")
+from = &"Investigar"
+to = &"Patrulla"
+condition = SubResource("Resource_cond_finished")
+
+[sub_resource type="Resource" id="Resource_t_investigate_give_up"]
+script = ExtResource("9_transition")
+from = &"Investigar"
+to = &"Patrulla"
+condition = SubResource("Resource_cond_certainty_spent")
+
+[sub_resource type="Resource" id="Resource_t_stalk_patrol"]
+script = ExtResource("9_transition")
+from = &"Acecho"
+to = &"Patrulla"
+condition = SubResource("Resource_cond_no_target")
+priority = 30
+
+[sub_resource type="Resource" id="Resource_t_stalk_investigate"]
+script = ExtResource("9_transition")
+from = &"Acecho"
+to = &"Investigar"
+condition = SubResource("Resource_cond_target_lost")
+priority = 20
+
+[sub_resource type="Resource" id="Resource_t_stalk_charge"]
+script = ExtResource("9_transition")
+from = &"Acecho"
+to = &"Carga"
+condition = SubResource("Resource_cond_stalk_ready")
+priority = 10
+
+[sub_resource type="Resource" id="Resource_t_charge_stalk"]
+script = ExtResource("9_transition")
+from = &"Carga"
+to = &"Acecho"
+condition = SubResource("Resource_cond_finished")
+priority = 20
+
+[sub_resource type="Resource" id="Resource_t_charge_cut"]
+script = ExtResource("9_transition")
+from = &"Carga"
+to = &"Acecho"
+condition = SubResource("Resource_cond_charge_cut")
+priority = 10
+memory_event = &"carga_cortada"
+
+[sub_resource type="Resource" id="Resource_selector"]
+script = ExtResource("11_closest")
+
+[node name="Pesadilla" node_paths=PackedStringArray("squeeze_collision") instance=ExtResource("1_base")]
 model_scene = ExtResource("2_model")
+squeeze_collision = NodePath("SqueezeCollision")
 
 [node name="Collision" parent="." index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.9, 0.27)
 shape = SubResource("BoxShape3D_pesadilla")
+
+[node name="SqueezeCollision" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1, 0.3, 0.27)
+shape = SubResource("BoxShape3D_squeeze")
+disabled = true
 
 [node name="Health" parent="." index="2"]
 max_health = 300.0
@@ -28,6 +217,48 @@ grab = NodePath("../Grab")
 script = ExtResource("3_grab")
 enemy = NodePath("..")
 
-[node name="StationaryAttack" type="Node" parent="." node_paths=PackedStringArray("combat")]
-script = ExtResource("4_attack")
+[node name="Locomotion" type="Node" parent="." node_paths=PackedStringArray("enemy", "combat")]
+script = ExtResource("5_locomotion")
+enemy = NodePath("..")
 combat = NodePath("../Combat")
+forward = Vector3(-1, 0, 0)
+midline_offset = Vector3(0, 0, 0.27)
+
+[node name="Senses" type="Node" parent="." node_paths=PackedStringArray("enemy")]
+script = ExtResource("6_senses")
+enemy = NodePath("..")
+eye_height = 1.1
+forward = Vector3(-1, 0, 0)
+
+[node name="Memory" type="Node" parent="." node_paths=PackedStringArray("enemy", "senses", "combat", "locomotion")]
+script = ExtResource("7_memory")
+enemy = NodePath("..")
+senses = NodePath("../Senses")
+combat = NodePath("../Combat")
+locomotion = NodePath("../Locomotion")
+
+[node name="Brain" type="Node" parent="." node_paths=PackedStringArray("enemy", "senses", "memory", "locomotion", "combat")]
+script = ExtResource("8_brain")
+initial_state = &"Patrulla"
+transitions = Array[ExtResource("9_transition")]([SubResource("Resource_t_retreated"), SubResource("Resource_t_low_health"), SubResource("Resource_t_return"), SubResource("Resource_t_patrol_stalk"), SubResource("Resource_t_patrol_investigate"), SubResource("Resource_t_investigate_stalk"), SubResource("Resource_t_investigate_patrol"), SubResource("Resource_t_investigate_give_up"), SubResource("Resource_t_stalk_patrol"), SubResource("Resource_t_stalk_investigate"), SubResource("Resource_t_stalk_charge"), SubResource("Resource_t_charge_stalk"), SubResource("Resource_t_charge_cut")])
+target_selector = SubResource("Resource_selector")
+enemy = NodePath("..")
+senses = NodePath("../Senses")
+memory = NodePath("../Memory")
+locomotion = NodePath("../Locomotion")
+combat = NodePath("../Combat")
+
+[node name="Patrulla" type="Node" parent="Brain"]
+script = ExtResource("12_patrol")
+
+[node name="Investigar" type="Node" parent="Brain"]
+script = ExtResource("13_investigate")
+
+[node name="Acecho" type="Node" parent="Brain"]
+script = ExtResource("14_stalk")
+
+[node name="Carga" type="Node" parent="Brain"]
+script = ExtResource("15_charge")
+
+[node name="Retirada" type="Node" parent="Brain"]
+script = ExtResource("16_retreat")

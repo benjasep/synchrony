@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://mission/mission_director.tscn" id="2_director"]
 [ext_resource type="Resource" path="res://mission/missions/test_mission.tres" id="3_mission"]
 [ext_resource type="Script" path="res://levels/level_navigation.gd" id="4_navigation"]
+[ext_resource type="Script" path="res://scripts/stimulus_bus.gd" id="5_stimuli"]
 
 [sub_resource type="NavigationMesh" id="NavigationMesh_level"]
 resource_local_to_scene = true
@@ -17,6 +18,18 @@ agent_height = 1.1
 agent_radius = 0.4
 agent_max_climb = 0.1
 
+[sub_resource type="NavigationMesh" id="NavigationMesh_enemy"]
+resource_local_to_scene = true
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.2
+cell_height = 0.1
+agent_height = 1.8
+agent_radius = 1.0
+agent_max_climb = 0.1
+
 [node name="LevelBase" type="Node3D"]
 
 [node name="PlayerSpawner" parent="." instance=ExtResource("1_spawner")]
@@ -27,3 +40,14 @@ mission = ExtResource("3_mission")
 [node name="Navigation" type="NavigationRegion3D" parent="."]
 navigation_mesh = SubResource("NavigationMesh_level")
 script = ExtResource("4_navigation")
+
+[node name="Stimuli" type="Node" parent="."]
+script = ExtResource("5_stimuli")
+
+[node name="EnemyNavigation" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_enemy")
+script = ExtResource("4_navigation")
+agent = &"pesadilla"
+dedicated_map = true
+uses_passages = true
+passage_fits = Array[Vector2]([Vector2(0.7, 1.4), Vector2(1.6, 0.9)])

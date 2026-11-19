@@ -1,5 +1,7 @@
 extends Node
 
+## Comprueba la campaña: el menú de mapas, el tutorial, el paso al Nivel 1 y su disposición.
+
 const TUTORIAL_PATH: String = "res://levels/tutorial.tscn"
 const LEVEL_1_PATH: String = "res://levels/level_1.tscn"
 const REPORT_PATH: String = "res://equipment/evidence_report.tscn"
@@ -8,13 +10,14 @@ const CARD_PATH: String = "res://equipment/evidence_id_card.tscn"
 var failures: int = 0
 
 
+## Lanza la comprobación en diferido.
 func _ready() -> void:
 	_run.call_deferred()
 
 
+## Recorre la campaña del menú al Nivel 1 y sale con el número de fallos.
 func _run() -> void:
 	var tree: SceneTree = get_tree()
-	# Deja el verificador en la raíz mientras el juego cambia sus escenas activas.
 	tree.current_scene = null
 	tree.create_timer(10.0).timeout.connect(func() -> void: tree.quit(1))
 	_check("el tutorial sigue siendo el mapa por defecto", Game.instance.main_scene.resource_path == TUTORIAL_PATH)
@@ -39,6 +42,7 @@ func _run() -> void:
 	tree.quit(failures)
 
 
+## Comprueba que las pestañas del menú seleccionan cada mapa.
 func _verify_map_tabs() -> void:
 	var tree: SceneTree = get_tree()
 	tree.change_scene_to_file("res://ui/main_menu.tscn")
@@ -57,6 +61,7 @@ func _verify_map_tabs() -> void:
 	_check("seleccionar un mapa conserva el menú para crear la partida", tree.current_scene == menu)
 
 
+## Simula un clic en el borde derecho de [param tab].
 func _click_tab_edge(tab: Button) -> void:
 	var position: Vector2 = tab.get_global_transform_with_canvas() * Vector2(tab.size.x - 3.0, tab.size.y * 0.5)
 	for pressed: bool in [true, false]:
@@ -68,16 +73,17 @@ func _click_tab_edge(tab: Button) -> void:
 		get_viewport().push_input(event, true)
 
 
+## Comprueba la pesadilla, las puertas y las paredes del Nivel 1.
 func _verify_level_1_layout(level: Node) -> void:
 	await get_tree().physics_frame
 	var player: Player = PlayerSpawner.instance.get_player(multiplayer.get_unique_id())
 	var enemy: Enemy = level.get_node("Enemies/Pesadilla") as Enemy
-	var attack: StationaryAttack = enemy.get_node("StationaryAttack") as StationaryAttack
-	_check("la Pesadilla del Nivel 1 hereda el ataque automático", attack.combat.enemy == enemy)
+	var brain: EnemyBrain = enemy.get_node("Brain") as EnemyBrain
+	_check("la Pesadilla del Nivel 1 hereda el cerebro, activo", brain.enemy == enemy and brain.active)
 	for child: Node in level.get_node("SpawnPoints").get_children():
 		var spawn: Marker3D = child as Marker3D
 		_check("la Pesadilla está fuera del alcance del punto %s" % spawn.name,
-			enemy.global_position.distance_to(spawn.global_position) > attack.combat.melee.reach)
+			enemy.global_position.distance_to(spawn.global_position) > brain.combat.melee.reach)
 	for house: String in ["root_casa4", "root_casa10"]:
 		var door: Node3D = level.get_node("StaticBody3D/Nivel/RootNivel/%s/casa/Door_Frame" % house) as Node3D
 		for side: float in [-1.0, 1.0]:
@@ -95,6 +101,7 @@ func _verify_level_1_layout(level: Node) -> void:
 			walls.to_global(Vector3(3.45, 0.05, -7.9)), walls.global_basis * Vector3(0, 0, -2)))
 
 
+## Devuelve [code]true[/code] si algo frena al jugador al cruzar [param door].
 func _doorway_blocks(player: Player, door: Node3D, side: float, offset: float) -> bool:
 	var normal: Vector3 = door.global_basis.z.normalized()
 	var across: Vector3 = door.global_basis.x.normalized()
@@ -102,6 +109,7 @@ func _doorway_blocks(player: Player, door: Node3D, side: float, offset: float) -
 	return _body_motion_blocks(player, start, -normal * side * 2.0)
 
 
+## Devuelve [code]true[/code] si algo frena al jugador en el movimiento [param motion].
 func _body_motion_blocks(player: Player, start: Vector3, motion: Vector3) -> bool:
 	var query: PhysicsTestMotionParameters3D = PhysicsTestMotionParameters3D.new()
 	query.from = Transform3D(Basis.IDENTITY, start)
@@ -109,6 +117,7 @@ func _body_motion_blocks(player: Player, start: Vector3, motion: Vector3) -> boo
 	return PhysicsServer3D.body_test_motion(player.get_rid(), query)
 
 
+## Recoge las evidencias, va a la extracción y comprueba que da la victoria.
 func _complete_mission(report_count: int) -> void:
 	var director: MissionDirector = MissionDirector.instance
 	var spawner: PlayerSpawner = PlayerSpawner.instance
@@ -147,6 +156,7 @@ func _complete_mission(report_count: int) -> void:
 	_check("reunir las evidencias en la extracción da la victoria", director.has_ended and director.won)
 
 
+## Devuelve [code]true[/code] si el jugador cabe en [param position].
 func _has_clearance(player: Player, position: Vector3) -> bool:
 	var query: PhysicsShapeQueryParameters3D = PhysicsShapeQueryParameters3D.new()
 	query.shape = player.collision.shape
@@ -155,6 +165,7 @@ func _has_clearance(player: Player, position: Vector3) -> bool:
 	return player.get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty()
 
 
+## Imprime el resultado de una comprobación y cuenta los fallos.
 func _check(label: String, condition: bool) -> void:
 	print("%s %s" % ["ok" if condition else "FALLO", label])
 	if not condition:

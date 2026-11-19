@@ -1,27 +1,8 @@
 extends Node3D
 
-## Escena de prueba del golpe, el agarre y la reacción al daño de la pesadilla: ábrela y pulsa
-## F6. Genera sin lobby un jugador local (militar, con arma) delante de la pesadilla y un maniquí
-## con arma a su costado izquierdo, y añade teclas de depuración leídas como [InputEventKey], sin
-## tocar el mapa de input:
-## - [code]F1[/code]: la pesadilla ataca al jugador más cercano con la regla del remate: golpe si
-##   le sobra vida (se encara con él y suena su clip), agarre si el golpe lo dejaría a 0 o menos.
-## - [code]F2[/code]: fuerza el agarre sobre el jugador más cercano, esté donde esté.
-## - [code]F3[/code]: disparo de rescate: un rayo real del maniquí hacia la posición global de
-##   [code]canilla_1.L[/code], por la ruta de resolución del servidor del arma. Rescata si llega
-##   durante el mordisco.
-## - [code]F4[/code]: revive al jugador local o le llena la vida.
-## - [code]F5[/code]: deja al jugador local con 15 de vida, para ver el agarre con [code]F1[/code].
-## Son F1–F5 y no 1–5 porque 1–4 cambian de item. [code]F9[/code] (de [code]Debug[/code], vale en
-## cualquier escena) enciende el modo debug de combate: hitboxes, rayo de apuntado y disparos.
-## Para ver la reacción al daño basta con disparar a la pesadilla con el clic izquierdo: cualquier
-## zona la hace reaccionar (la cabeza y las rodillas, con la del cuerpo mientras no tengan la
-## suya), como mucho una vez cada [code]min_interval[/code] y nunca durante el agarre.
-## El resto de controles son los del jugador (ver CLAUDE.md). Todo se anuncia con
-## [code]Debug.log[/code]: los eventos del golpe y del agarre y cada reacción.
+## Escena de prueba del golpe, el agarre y la reacción al daño de la pesadilla.
 
 const FIREARM_SCENE: String = "res://equipment/firearm.tscn"
-## Hueso al que apunta el disparo de rescate: nace en la rodilla izquierda.
 const RESCUE_BONE: StringName = &"canilla_1.L"
 const LOW_HEALTH: float = 15.0
 
@@ -34,11 +15,11 @@ var _grab: GrabAttack
 var _reaction: HitReaction
 
 
-## Busca los componentes de ataque y de reacción, arma a los maniquíes y anuncia las teclas. El
-## spawner, hijo de esta escena, ya generó a los jugadores en su propio [code]_ready()[/code].
+## Busca los componentes de ataque y reacción, arma a los maniquíes y anuncia las teclas.
 func _ready() -> void:
-	# Esta escena dispara los ataques a mano con F1 y F2.
-	pesadilla.get_node("StationaryAttack").set_physics_process(false)
+	var brain: EnemyBrain = pesadilla.get_node_or_null("Brain") as EnemyBrain
+	if brain:
+		brain.active = false
 	_combat = pesadilla.get_node_or_null("Combat") as EnemyCombat
 	_melee = pesadilla.get_node_or_null("Melee") as MeleeAttack
 	_grab = pesadilla.get_node_or_null("Grab") as GrabAttack
@@ -64,8 +45,7 @@ func _ready() -> void:
 		+ " | F9 debug de combate | clic: disparar (reacciona)", 8.0)
 
 
-## Atiende las teclas de depuración. Solo en el servidor: es quien decide los ataques.
-## Recibe: [param event] — evento de input no consumido.
+## Atiende las teclas de depuración.
 func _unhandled_input(event: InputEvent) -> void:
 	var key: InputEventKey = event as InputEventKey
 	if not key or not key.pressed or key.echo or not multiplayer.is_server():
@@ -83,7 +63,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_set_local_health(LOW_HEALTH)
 
 
-## La pesadilla ataca al jugador vivo más cercano con [code]EnemyCombat.attack()[/code].
+## Hace que la pesadilla ataque al jugador vivo más cercano.
 func _attack_nearest() -> void:
 	var target: Player = _get_nearest_player()
 	if not target:
@@ -96,18 +76,14 @@ func _attack_nearest() -> void:
 		Debug.log("Le toca %s, pero no puede: lejos, ocupada o en enfriamiento" % kind)
 
 
-## Fuerza el agarre sobre el jugador vivo más cercano, sin mirar la regla ni el alcance.
+## Fuerza el agarre sobre el jugador vivo más cercano.
 func _force_grab() -> void:
 	var target: Player = _get_nearest_player()
 	if not target or not _grab.start(target, true):
 		Debug.log("No puede agarrar ahora (ocupada, en enfriamiento o retirada)")
 
 
-## Corrutina: el primer jugador libre con un arma empuñada que no sea la víctima dispara un rayo
-## real hacia la posición global de [constant RESCUE_BONE], resuelto en un frame de física por
-## [code]Firearm._resolve_and_broadcast()[/code], que además difunde sus efectos (el trazo del
-## modo debug de combate, F9). No pasa por [code]_request_fire()[/code]: el maniquí no tiene
-## peer y la validación del emisor lo rechazaría.
+## Dispara un rayo real al hueso de rescate con el primer jugador libre que tenga un arma.
 func _rescue_shot() -> void:
 	var rig: GrabRig = pesadilla.grab_rig
 	var shooter: Player = _get_free_shooter()
@@ -126,7 +102,7 @@ func _rescue_shot() -> void:
 	Debug.log("Disparo de rescate de %s" % _describe(shooter))
 
 
-## Revive al jugador local si está muerto o, si no, le llena la vida.
+## Revive al jugador local o le llena la vida.
 func _restore_local_player() -> void:
 	var player: Player = spawner.get_player(multiplayer.get_unique_id())
 	if not player:
@@ -138,7 +114,7 @@ func _restore_local_player() -> void:
 	Debug.log("Jugador local: %d de vida" % int(player.health.current_health))
 
 
-## Deja la vida del jugador local en [param value], si está vivo.
+## Deja la vida del jugador local en [param value].
 func _set_local_health(value: float) -> void:
 	var player: Player = spawner.get_player(multiplayer.get_unique_id())
 	if not player or player.health.is_dead:
@@ -148,7 +124,7 @@ func _set_local_health(value: float) -> void:
 	Debug.log("Jugador local: %d de vida" % int(player.health.current_health))
 
 
-## Da un arma empuñada a cada maniquí que no la tenga: alguien tiene que poder rescatar.
+## Da un arma empuñada a cada maniquí que no la tenga.
 func _arm_dummies() -> void:
 	for player: Player in _get_players():
 		if player.data.id == multiplayer.get_unique_id() \
@@ -173,8 +149,7 @@ func _get_nearest_player() -> Player:
 	return nearest
 
 
-## Devuelve un jugador vivo, libre y con un arma empuñada que no sea la víctima del agarre, o
-## [code]null[/code]. Prefiere a los maniquíes, que no tienen a nadie a los mandos.
+## Devuelve un jugador vivo y libre con un arma empuñada, o [code]null[/code].
 func _get_free_shooter() -> Player:
 	var fallback: Player = null
 	for player: Player in _get_players():
@@ -188,8 +163,7 @@ func _get_free_shooter() -> Player:
 	return fallback
 
 
-## Devuelve los jugadores de [PlayerSpawner] que siguen existiendo: el spawner no quita las
-## entradas ya liberadas.
+## Devuelve los jugadores del spawner que siguen existiendo.
 func _get_players() -> Array[Player]:
 	var found: Array[Player] = []
 	for value: Variant in spawner.players.values():

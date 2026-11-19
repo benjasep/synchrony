@@ -1,29 +1,24 @@
 extends Node
 
-## Autoload de depuración (sin [code]class_name[/code]; se usa directamente como
-## [code]Debug[/code]): mensajes en pantalla replicados a todos los peers, título de la
-## ventana marcado con Server / Client N y el modo debug de combate (F9). En builds de release
-## casi todo es no-op.
+## Autoload de depuración: mensajes en pantalla, título de la ventana por peer y las vistas de
+## depuración de combate (F9) y de la IA (F10).
 
-## Se emite en este peer al encender o apagar el modo debug de combate.
 signal combat_debug_toggled(enabled: bool)
+signal ai_debug_toggled(enabled: bool)
 
-## Acción de input (F9) que enciende y apaga el modo debug de combate.
 const COMBAT_DEBUG_ACTION: StringName = &"debug_combat"
+const AI_DEBUG_ACTION: StringName = &"debug_ai"
 
 @onready var canvas_layer: CanvasLayer  = CanvasLayer.new()
 @onready var container: VBoxContainer = VBoxContainer.new()
 
 var index: int = 0
 var window_title: String = ""
-## Visuales del modo debug de combate mientras está encendido; [code]null[/code] si está
-## apagado. Solo lectura: se cambia con [code]set_combat_debug()[/code].
 var combat_debug: CombatDebugOverlay = null
+var ai_debug: AIDebugOverlay = null
 
 
-## Monta la capa de mensajes en pantalla (por encima de todo y sin capturar el ratón) y guarda
-## el título original de la ventana. En builds de release no hace nada y ni siquiera escucha
-## la tecla del modo debug de combate.
+## Monta la capa de mensajes en pantalla y guarda el título original de la ventana.
 func _ready() -> void:
 	if not OS.is_debug_build():
 		set_process_unhandled_input(false)
@@ -35,11 +30,7 @@ func _ready() -> void:
 	window_title = get_window().title
 
 
-## Muestra un mensaje en pantalla y lo imprime en consola. Con sesión de red conectada le
-## antepone Server / Client N y lo envía a todos los peers; si no, solo en local.
-## No hace nada en builds de release.
-## Recibe: [param message] — cualquier valor, se convierte a texto; [param seconds] — tiempo
-## en pantalla, en segundos.
+## Muestra un mensaje en pantalla en todos los peers y lo imprime en consola.
 func log(message: Variant, seconds: float = 2) -> void:
 	if not OS.is_debug_build():
 		return
@@ -52,10 +43,7 @@ func log(message: Variant, seconds: float = 2) -> void:
 		print(message)
 
 
-## Añade una etiqueta arriba de la pila de mensajes y la borra al cabo de [param seconds]
-## segundos. [code]log()[/code] la llama como RPC para que salga en todos los peers, incluido
-## el emisor.
-## Recibe: [param message] — texto ya formateado; [param seconds] — duración en pantalla.
+## Añade un mensaje arriba de la pila y lo borra pasados [param seconds] segundos.
 @rpc("any_peer", "reliable", "call_local")
 func add_message(message: String, seconds: float) -> void:
 	var label: Label = Label.new()
@@ -69,17 +57,14 @@ func add_message(message: String, seconds: float) -> void:
 	label.queue_free()
 
 
-## Pone [param text] como sufijo del título original de la ventana; no se acumula entre
-## llamadas. No hace nada en builds de release.
-## Recibe: [param text] — p. ej. "Server" o "Client 2".
+## Añade [param text] al título original de la ventana.
 func add_to_window_title(text: String) -> void:
 	if not OS.is_debug_build():
 		return
 	get_window().title = "%s - %s" % [window_title, text]
 
 
-## Restaura el título original de la ventana guardado en [code]_ready()[/code]. No comprueba
-## si la build es de depuración.
+## Restaura el título original de la ventana.
 func reset_window_title() -> void:
 	get_window().title = window_title
 
@@ -89,10 +74,7 @@ func is_combat_debug_enabled() -> bool:
 	return combat_debug != null
 
 
-## Enciende o apaga el modo debug de combate solo en este peer (no se replica): crea o libera
-## el [CombatDebugOverlay], emite [code]combat_debug_toggled[/code] y lo anuncia con
-## [code]log()[/code]. No hace nada si ya estaba así o en builds de release.
-## Recibe: [param enabled] — [code]true[/code] para encenderlo.
+## Enciende o apaga el modo debug de combate en este peer.
 func set_combat_debug(enabled: bool) -> void:
 	if not OS.is_debug_build() or enabled == is_combat_debug_enabled():
 		return
@@ -101,34 +83,52 @@ func set_combat_debug(enabled: bool) -> void:
 		combat_debug.name = "CombatDebug"
 		add_child(combat_debug)
 	else:
-		# Sacarlo del árbol ya dispara su _exit_tree(), que manda borrar los visuales
-		# de las hitboxes: todo desaparece al final de este frame.
 		remove_child(combat_debug)
 		combat_debug.queue_free()
 		combat_debug = null
 	combat_debug_toggled.emit(enabled)
-	# self. obligatorio: sin él, log() es la función matemática global.
 	self.log("Debug de combate %s (F9)" % ("activado" if enabled else "desactivado"))
 
 
-## Alterna el modo debug de combate con [constant COMBAT_DEBUG_ACTION].
-## Recibe: [param event] — evento de input no consumido.
+## Devuelve [code]true[/code] si la vista de depuración de la IA está encendida en este peer.
+func is_ai_debug_enabled() -> bool:
+	return ai_debug != null
+
+
+## Enciende o apaga la vista de depuración de la IA en este peer.
+func set_ai_debug(enabled: bool) -> void:
+	if not OS.is_debug_build() or enabled == is_ai_debug_enabled():
+		return
+	if enabled:
+		ai_debug = AIDebugOverlay.new()
+		ai_debug.name = "AIDebug"
+		add_child(ai_debug)
+	else:
+		remove_child(ai_debug)
+		ai_debug.queue_free()
+		ai_debug = null
+	ai_debug_toggled.emit(enabled)
+	self.log("Debug de IA %s (F10)" % ("activado" if enabled else "desactivado"))
+
+
+## Alterna las vistas de depuración con sus teclas.
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(COMBAT_DEBUG_ACTION):
 		set_combat_debug(not is_combat_debug_enabled())
 		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed(AI_DEBUG_ACTION):
+		set_ai_debug(not is_ai_debug_enabled())
+		get_viewport().set_input_as_handled()
 
 
-## Devuelve [code]true[/code] si hay un peer de red real (no [OfflineMultiplayerPeer]) y ya
-## está conectado.
+## Devuelve [code]true[/code] si hay un peer de red real conectado.
 func is_online() -> bool:
 	return multiplayer.multiplayer_peer and \
 		not multiplayer.multiplayer_peer is OfflineMultiplayerPeer and \
 		multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
 
 
-## Devuelve la etiqueta del peer local para los mensajes: "Server", "Client N" si ya tiene
-## índice asignado, o "Client" mientras no lo tenga.
+## Devuelve la etiqueta del peer local para los mensajes.
 func _get_prefix() -> String:
 	if multiplayer.is_server():
 		return "Server"

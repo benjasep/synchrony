@@ -7,6 +7,14 @@
 [ext_resource type="Script" path="res://enemies/components/melee_attack.gd" id="5_melee"]
 [ext_resource type="Script" path="res://enemies/components/hit_reaction.gd" id="6_reaction"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_enemy"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_body"]
 size = Vector3(0.8, 1.8, 0.8)
 
@@ -16,7 +24,7 @@ size = Vector3(0.8, 1.8, 0.8)
 [sub_resource type="BoxShape3D" id="BoxShape3D_hitbox"]
 size = Vector3(0.8, 1.8, 0.8)
 
-[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "collision", "health")]
+[node name="Enemy" type="CharacterBody3D" node_paths=PackedStringArray("model", "model_placeholder", "collision", "health", "synchronizer")]
 collision_layer = 8
 collision_mask = 1
 script = ExtResource("1_enemy")
@@ -24,6 +32,7 @@ model = NodePath("Model")
 model_placeholder = NodePath("Model/Placeholder")
 collision = NodePath("Collision")
 health = NodePath("Health")
+synchronizer = NodePath("Synchronizer")
 
 [node name="Collision" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
@@ -60,3 +69,6 @@ enemy = NodePath("..")
 [node name="HitReaction" type="Node" parent="." node_paths=PackedStringArray("enemy")]
 script = ExtResource("6_reaction")
 enemy = NodePath("..")
+
+[node name="Synchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_enemy")
