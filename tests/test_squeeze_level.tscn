@@ -1,9 +1,33 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://72pjuka6mxio"]
 
 [ext_resource type="PackedScene" path="res://levels/level_base.tscn" id="1_base"]
-[ext_resource type="Script" path="res://levels/greybox/passage_wall.gd" id="2_wall"]
-[ext_resource type="Script" path="res://scripts/passage.gd" id="3_passage"]
+[ext_resource type="Script" uid="uid://dusr6rebfe0hj" path="res://levels/greybox/passage_wall.gd" id="2_wall"]
+[ext_resource type="Script" uid="uid://d1tvolhnbqthp" path="res://scripts/passage.gd" id="3_passage"]
 [ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="4_pesadilla"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_ajhss"]
+resource_local_to_scene = true
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.2
+cell_height = 0.1
+agent_height = 1.1
+agent_radius = 0.4
+agent_max_climb = 0.1
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_jky48"]
+resource_local_to_scene = true
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.2
+cell_height = 0.1
+agent_height = 1.8
+agent_radius = 1.0
+agent_max_climb = 0.1
 
 [sub_resource type="Environment" id="Environment_squeeze"]
 background_mode = 1
@@ -22,164 +46,168 @@ albedo_color = Color(0.3, 0.32, 0.28, 1)
 material = SubResource("StandardMaterial3D_ground")
 size = Vector3(52, 1, 28)
 
-[node name="TestSqueezeLevel" instance=ExtResource("1_base")]
+[node name="TestSqueezeLevel" unique_id=1933520357 instance=ExtResource("1_base")]
 
-[node name="PlayerSpawner" parent="." node_paths=PackedStringArray("spawn_points")]
+[node name="PlayerSpawner" parent="." index="0" node_paths=PackedStringArray("spawn_points")]
 spawn_points = [NodePath("../SpawnPoints/A"), NodePath("../SpawnPoints/B"), NodePath("../SpawnPoints/C")]
-debug_role = 3
 
-[node name="MissionDirector" parent="."]
+[node name="MissionDirector" parent="." index="1"]
 mission = null
 
-[node name="Environment" type="WorldEnvironment" parent="."]
+[node name="Navigation" parent="." index="2"]
+navigation_mesh = SubResource("NavigationMesh_ajhss")
+
+[node name="EnemyNavigation" parent="." index="4"]
+navigation_mesh = SubResource("NavigationMesh_jky48")
+
+[node name="Environment" type="WorldEnvironment" parent="." index="5" unique_id=334798470]
 environment = SubResource("Environment_squeeze")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="." index="6" unique_id=899675257]
 transform = Transform3D(0.8192, -0.4394, 0.3687, 0, 0.6428, 0.766, -0.5736, -0.6275, 0.5266, 0, 10, 0)
 light_energy = 0.9
 shadow_enabled = true
 
-[node name="Fill" type="DirectionalLight3D" parent="."]
+[node name="Fill" type="DirectionalLight3D" parent="." index="7" unique_id=524417786]
 transform = Transform3D(-0.8192, 0.4394, -0.3687, 0, 0.6428, 0.766, 0.5736, 0.6275, -0.5266, 0, 10, 0)
 light_energy = 0.6
 
-[node name="Map" type="Node3D" parent="." groups=["navigation_source"]]
+[node name="Map" type="Node3D" parent="." index="8" unique_id=1840199253 groups=["navigation_source"]]
 
-[node name="Ground" type="StaticBody3D" parent="Map"]
+[node name="Ground" type="StaticBody3D" parent="Map" index="0" unique_id=1739498858]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="Collision" type="CollisionShape3D" parent="Map/Ground"]
+[node name="Collision" type="CollisionShape3D" parent="Map/Ground" index="0" unique_id=245627685]
 shape = SubResource("BoxShape3D_ground")
 
-[node name="Mesh" type="MeshInstance3D" parent="Map/Ground"]
+[node name="Mesh" type="MeshInstance3D" parent="Map/Ground" index="1" unique_id=1333758193]
 mesh = SubResource("BoxMesh_ground")
 
-[node name="WallNorth" type="Node3D" parent="Map"]
+[node name="WallNorth" type="Node3D" parent="Map" index="1" unique_id=369408226]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 script = ExtResource("2_wall")
 length = 48.3
 
-[node name="WallSouth" type="Node3D" parent="Map"]
+[node name="WallSouth" type="Node3D" parent="Map" index="2" unique_id=453826332]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
 script = ExtResource("2_wall")
 length = 48.3
 
-[node name="WallWest" type="Node3D" parent="Map"]
+[node name="WallWest" type="Node3D" parent="Map" index="3" unique_id=770900213]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -24, 0, 0)
 script = ExtResource("2_wall")
 length = 24.3
 
-[node name="WallEast" type="Node3D" parent="Map"]
+[node name="WallEast" type="Node3D" parent="Map" index="4" unique_id=646586108]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 24, 0, 0)
 script = ExtResource("2_wall")
 length = 24.3
 
-[node name="WallMiddle" type="Node3D" parent="Map"]
+[node name="WallMiddle" type="Node3D" parent="Map" index="5" unique_id=2087541587]
 script = ExtResource("2_wall")
 length = 48.0
 player_doors = PackedFloat32Array(-2.5, 14.5)
 
-[node name="Portón" type="Node3D" parent="Map/WallMiddle"]
+[node name="Portón" type="Node3D" parent="Map/WallMiddle" index="0" unique_id=1588508296]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(3, 2.4)
 
-[node name="Demasiado chico" type="Node3D" parent="Map/WallMiddle"]
+[node name="Demasiado chico" type="Node3D" parent="Map/WallMiddle" index="1" unique_id=1869629418]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(1, 1.3)
 
-[node name="Media" type="Node3D" parent="Map/WallMiddle"]
+[node name="Media" type="Node3D" parent="Map/WallMiddle" index="2" unique_id=1593385152]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(1.2, 1.5)
 
-[node name="WallAB" type="Node3D" parent="Map"]
+[node name="WallAB" type="Node3D" parent="Map" index="6" unique_id=2006200835]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -12, 0, 0)
 script = ExtResource("2_wall")
 length = 24.0
 player_doors = PackedFloat32Array(-9.5)
 
-[node name="Puerta" type="Node3D" parent="Map/WallAB"]
+[node name="Puerta" type="Node3D" parent="Map/WallAB" index="0" unique_id=1538539450]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(2, 2.4)
 
-[node name="Mínima" type="Node3D" parent="Map/WallAB"]
+[node name="Mínima" type="Node3D" parent="Map/WallAB" index="1" unique_id=166361108]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(1.6, 0.9)
 
-[node name="WallBC" type="Node3D" parent="Map"]
+[node name="WallBC" type="Node3D" parent="Map" index="7" unique_id=285051625]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, 0)
 script = ExtResource("2_wall")
 length = 24.0
 player_doors = PackedFloat32Array(-9.5)
 
-[node name="Puerta estrecha" type="Node3D" parent="Map/WallBC"]
+[node name="Puerta estrecha" type="Node3D" parent="Map/WallBC" index="0" unique_id=614528244]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 script = ExtResource("3_passage")
-size = Vector2(1, 2)
 
-[node name="Baja" type="Node3D" parent="Map/WallBC"]
+[node name="Baja" type="Node3D" parent="Map/WallBC" index="1" unique_id=999160899]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(1.6, 1.15)
 
-[node name="WallCD" type="Node3D" parent="Map"]
+[node name="WallCD" type="Node3D" parent="Map" index="8" unique_id=1162771287]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, 0)
 script = ExtResource("2_wall")
 length = 24.0
 player_doors = PackedFloat32Array(-9.5, 9.5)
 
-[node name="Rendija" type="Node3D" parent="Map/WallCD"]
+[node name="Rendija" type="Node3D" parent="Map/WallCD" index="0" unique_id=1677067768]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(0.7, 2)
 
-[node name="Estrecha y baja" type="Node3D" parent="Map/WallCD"]
+[node name="Estrecha y baja" type="Node3D" parent="Map/WallCD" index="1" unique_id=29996639]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 0)
 script = ExtResource("3_passage")
 size = Vector2(0.9, 1.6)
 
-[node name="SpawnPoints" type="Node3D" parent="."]
+[node name="SpawnPoints" type="Node3D" parent="." index="9" unique_id=1299347217]
 
-[node name="A" type="Marker3D" parent="SpawnPoints"]
+[node name="A" type="Marker3D" parent="SpawnPoints" index="0" unique_id=825905844]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -20, 0, -7.5)
 
-[node name="B" type="Marker3D" parent="SpawnPoints"]
+[node name="B" type="Marker3D" parent="SpawnPoints" index="1" unique_id=30312289]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -20, 0, -6)
 
-[node name="C" type="Marker3D" parent="SpawnPoints"]
+[node name="C" type="Marker3D" parent="SpawnPoints" index="2" unique_id=514354760]
 transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, -20, 0, -4.5)
 
-[node name="EnemySpawns" type="Node3D" parent="."]
+[node name="EnemySpawns" type="Node3D" parent="." index="10" unique_id=914536656]
 
-[node name="A" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="A" type="Marker3D" parent="EnemySpawns" index="0" unique_id=772648737 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, -6)
 
-[node name="B" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="B" type="Marker3D" parent="EnemySpawns" index="1" unique_id=953454239 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -6)
 
-[node name="C" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="C" type="Marker3D" parent="EnemySpawns" index="2" unique_id=55876215 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6)
 
-[node name="D" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="D" type="Marker3D" parent="EnemySpawns" index="3" unique_id=678411266 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, -6)
 
-[node name="E" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="E" type="Marker3D" parent="EnemySpawns" index="4" unique_id=692292002 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18, 0, 6)
 
-[node name="F" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="F" type="Marker3D" parent="EnemySpawns" index="5" unique_id=463744806 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, 6)
 
-[node name="G" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="G" type="Marker3D" parent="EnemySpawns" index="6" unique_id=1292783580 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 6)
 
-[node name="H" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
+[node name="H" type="Marker3D" parent="EnemySpawns" index="7" unique_id=294629704 groups=["enemy_spawn"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 6)
 
-[node name="Enemies" type="Node3D" parent="."]
+[node name="Enemies" type="Node3D" parent="." index="11" unique_id=1793869743]
 
-[node name="Pesadilla" parent="Enemies" instance=ExtResource("4_pesadilla")]
+[node name="Pesadilla" parent="Enemies" index="0" unique_id=435428787 instance=ExtResource("4_pesadilla")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -6)

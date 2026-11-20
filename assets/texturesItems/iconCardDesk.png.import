@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vwcc2he5ogfu"
-path="res://.godot/imported/iconCardDeck.svg-8091219fd8b4bae0afaf97dcc44b169d.ctex"
+uid="uid://bdqwef61ht0tn"
+path="res://.godot/imported/iconCardDesk.png-5d0aadd0fb5a8684bc02e504b19251ed.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/texturesItems/iconCardDeck.svg"
-dest_files=["res://.godot/imported/iconCardDeck.svg-8091219fd8b4bae0afaf97dcc44b169d.ctex"]
+source_file="res://assets/texturesItems/iconCardDesk.png"
+dest_files=["res://.godot/imported/iconCardDesk.png-5d0aadd0fb5a8684bc02e504b19251ed.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
