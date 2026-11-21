@@ -10,6 +10,9 @@ signal interacted(player: Player)
 
 ## Es una máscara: 4 = capa 3, la única que mira el rayo de [InteractionComponent].
 const INTERACTION_LAYER: int = 4
+const GRAVITY := 9.8
+var velocity_y := 0.0
+
 
 @export var prompt: String = "Interactuar"
 @export var enabled: bool = true
@@ -36,3 +39,12 @@ func can_interact(player: Player) -> bool:
 ## Recibe: [param player] — quien interactúa.
 func perform(player: Player) -> void:
 	interacted.emit(player)
+	
+func _physics_process(delta: float) -> void:
+	# Aplicar gravedad
+	velocity_y -= GRAVITY * delta
+	position.y += velocity_y * delta
+	# Límite: no bajar de 0
+	if position.y <= 0.0:
+		position.y = 0.0
+		velocity_y = 0.0

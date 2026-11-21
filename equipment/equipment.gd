@@ -18,6 +18,9 @@ signal charge_changed(ratio: float)
 
 var wielder: Player = null
 var proficiency: ProficiencyProfile = null
+const GRAVITY := 9.8
+var velocity_y := 0.0
+
 
 
 ## Comprueba si el rol de [param player] puede empuñar este item según su competencia.
@@ -126,3 +129,13 @@ func _on_equipped() -> void:
 ## asignado, para poder quitarle los modificadores que le aplicó el item.
 func _on_unequipped() -> void:
 	pass
+	
+
+func _physics_process(delta: float) -> void:
+	# Aplicar gravedad
+	velocity_y -= GRAVITY * delta
+	position.y += velocity_y * delta
+	# Límite: no bajar de 0
+	if position.y <= 0.0:
+		position.y = 0.0
+		velocity_y = 0.0

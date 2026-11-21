@@ -15,3 +15,6 @@ extends Equipment
 ## script no tiene que acordarse de ponerlo.
 func _init() -> void:
 	tag = Statics.EquipmentTag.EVIDENCE
+
+func _physics_process(delta: float) -> void:
+	super(delta)
