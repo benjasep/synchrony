@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://cfx8hkonokxi4"]
+
+[ext_resource type="PackedScene" uid="uid://383haujkov83" path="res://assets/otroavanceGato.glb" id="1_ojy8o"]
+
+[node name="otroavanceGato" unique_id=1144258748 instance=ExtResource("1_ojy8o")]
