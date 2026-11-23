@@ -61,6 +61,8 @@ func _exit_tree() -> void:
 func _ready() -> void:
 	players_spawner.spawn_function = _spawn_player
 	pickups_spawner.spawn_function = _spawn_pickup
+	if Game.instance.start_local_multiplayer_preview(self):
+		return
 	if not multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	if multiplayer.is_server():

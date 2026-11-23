@@ -5,11 +5,13 @@ extends Node
 ## [code]Game.test_players[/code] y se salta directamente al mapa del anfitrión.
 
 const LOOPBACK_ADDRESS: String = "127.0.0.1"
+const HOST_ELECTION_PORT: int = Statics.PORT + 1
 
 ## Mapa del laboratorio cuando este arnés se ejecuta desde su escena de prueba.
 @export var test_scene: PackedScene
 
 var player_index: int = 1
+var _expected_player_count: int = 1
 
 @onready var start_game_timer: Timer = $StartGameTimer
 
@@ -17,6 +19,11 @@ var player_index: int = 1
 ## id 1), escucha las conexiones e intenta hospedar; si no puede, se une. Después desactiva
 ## [code]multiplayer_test[/code] para que el menú principal vuelva a ser accesible.
 func _ready() -> void:
+	start_game_timer.stop()
+	_expected_player_count = Game.instance.get_local_multiplayer_instance_count()
+	if not Game.instance.local_multiplayer_scene_path.is_empty():
+		test_scene = load(Game.instance.local_multiplayer_scene_path) as PackedScene
+		Game.instance.local_multiplayer_scene_path = ""
 	for i: int in Game.instance.test_players.size():
 		var test_player: PlayerDataResource = Game.instance.test_players[i]
 		var player: Statics.PlayerData = Statics.PlayerData.new(
@@ -44,20 +51,28 @@ func _ready() -> void:
 ## primera celda y conecta el temporizador de arranque.
 ## Devuelve: [code]true[/code] si se creó el servidor (el puerto estaba libre).
 func _try_host() -> bool:
+	# Reserva la elección mientras comprueba y abre el puerto de la partida.
+	var election: PacketPeerUDP = PacketPeerUDP.new()
+	if election.bind(HOST_ELECTION_PORT, LOOPBACK_ADDRESS) != OK:
+		return false
 	# Si ya hay un anfitrión, pasa directo al cliente sin provocar un error de ENet.
 	var port_probe: PacketPeerUDP = PacketPeerUDP.new()
 	if port_probe.bind(Statics.PORT, LOOPBACK_ADDRESS) != OK:
+		election.close()
 		return false
 	port_probe.close()
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
 	peer.set_bind_ip(LOOPBACK_ADDRESS)
 	var err: Error = peer.create_server(Statics.PORT, Statics.MAX_CLIENTS)
+	election.close()
 	if err == OK:
 		multiplayer.multiplayer_peer = peer
 		Debug.add_to_window_title("Server")
 		Game.instance.update_player_id()
 		_update_window_placement(0)
 		start_game_timer.timeout.connect(_on_start_game_timeout)
+		if player_index >= _expected_player_count:
+			start_game_timer.start()
 	return err == OK
 
 
@@ -84,7 +99,8 @@ func _on_peer_connected(id: int) -> void:
 		for i: int in Game.instance.players.size():
 			_send_player_data_id.rpc(i, Game.instance.players[i].id)
 		player_index += 1
-		start_game_timer.start()
+		if player_index >= _expected_player_count:
+			start_game_timer.start()
 
 
 ## Registra el id de peer de un jugador de prueba. Si es el propio y aún no lo tenía, marca la

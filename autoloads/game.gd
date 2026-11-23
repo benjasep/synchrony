@@ -23,6 +23,7 @@ static var instance: Game
 
 var players: Array[Statics.PlayerData] = []
 var selected_level: StringName = &""
+var local_multiplayer_scene_path: String = ""
 var change_window_scale : bool = true :
 	set(value):
 		var last_value: bool = change_window_scale
@@ -64,6 +65,42 @@ func get_level_scene(level: StringName) -> PackedScene:
 	if level.is_empty():
 		return main_scene
 	return playable_levels.get(level) as PackedScene
+
+
+## Cantidad de ventanas configuradas en el editor para la prueba local.
+func get_local_multiplayer_instance_count() -> int:
+	if not OS.has_feature("editor"):
+		return 1
+	# Godot consume --editor-pid; --scene sí permanece al ejecutar desde el editor.
+	var editor_launch: bool = OS.get_cmdline_args().has("--scene")
+	var explicit_launch: bool = OS.get_cmdline_user_args().has("--local-multiplayer")
+	if not editor_launch and not explicit_launch:
+		return 1
+	var settings: ConfigFile = ConfigFile.new()
+	if settings.load("res://.godot/editor/project_metadata.cfg") != OK:
+		return 1
+	if not settings.get_value("debug_options", "multiple_instances_enabled", false):
+		return 1
+	return clampi(int(settings.get_value("debug_options", "run_instance_count", 1)),
+		1, maxi(test_players.size(), 1))
+
+
+## Al ejecutar un nivel directamente con varias ventanas, conecta la sesión antes de generarlo.
+func start_local_multiplayer_preview(spawner: Node) -> bool:
+	if not players.is_empty() or get_local_multiplayer_instance_count() < 2:
+		return false
+	if multiplayer.multiplayer_peer and not multiplayer.multiplayer_peer is OfflineMultiplayerPeer:
+		return false
+	var tree: SceneTree = get_tree()
+	var level: Node = spawner
+	while level.get_parent() != tree.root:
+		level = level.get_parent()
+	if level.scene_file_path.is_empty() or (tree.current_scene and tree.current_scene != level):
+		return false
+	if local_multiplayer_scene_path.is_empty():
+		local_multiplayer_scene_path = level.scene_file_path
+		tree.change_scene_to_file.call_deferred("res://lobby/lobby_test.tscn")
+	return true
 
 
 ## Ordena [code]players[/code] por [code]index[/code] ascendente.
