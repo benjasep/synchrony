@@ -1,0 +1,98 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://assets/baseCat_extra.glb" id="1_model"]
+[ext_resource type="Script" uid="uid://6ai0s1xwniqe" path="res://scripts/locomotion_animator.gd" id="2_animator"]
+[ext_resource type="AnimationLibrary" uid="uid://dfxuh3r88lytt" path="res://player/bodies/cat_animations.tres" id="3_animations"]
+[ext_resource type="Script" uid="uid://cnih30bdw25q7" path="res://player/bodies/player_body.gd" id="4_body"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_forcejeo"]
+animation = &"forcejeo"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_idle"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_caminar"]
+animation = &"caminar"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_correr"]
+animation = &"correr"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_locomotion"]
+min_space = 0.0
+max_space = 8.0
+value_label = "m/s"
+blend_point_0/node = SubResource("AnimationNodeAnimation_idle")
+blend_point_0/pos = 0.0
+blend_point_0/name = &"0"
+blend_point_1/node = SubResource("AnimationNodeAnimation_caminar")
+blend_point_1/pos = 1.3
+blend_point_1/name = &"1"
+blend_point_2/node = SubResource("AnimationNodeAnimation_correr")
+blend_point_2/pos = 2.6
+blend_point_2/name = &"2"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_start"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_locomotion_forcejeo"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_forcejeo_locomotion"]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_root"]
+states/forcejeo/node = SubResource("AnimationNodeAnimation_forcejeo")
+states/forcejeo/position = Vector2(600, 100)
+states/locomotion/node = SubResource("AnimationNodeBlendSpace1D_locomotion")
+states/locomotion/position = Vector2(360, 100)
+transitions = ["Start", "locomotion", SubResource("AnimationNodeStateMachineTransition_start"), "locomotion", "forcejeo", SubResource("AnimationNodeStateMachineTransition_locomotion_forcejeo"), "forcejeo", "locomotion", SubResource("AnimationNodeStateMachineTransition_forcejeo_locomotion")]
+
+[node name="CatBody" type="Node3D" unique_id=1 node_paths=PackedStringArray("skeleton", "skinned_mesh", "animation_tree")]
+script = ExtResource("4_body")
+skeleton = NodePath("Model/Armature/Skeleton3D")
+skinned_mesh = NodePath("Model/Armature/Skeleton3D/Torso")
+animation_tree = NodePath("AnimationTree")
+
+[node name="Model" parent="." unique_id=2071890739 instance=ExtResource("1_model")]
+transform = Transform3D(-0.237, 0, 0, 0, 0.237, 0, 0, 0, -0.237, 0, 0, 0)
+
+[node name="Skeleton3D" parent="Model/Armature" parent_id_path=PackedInt32Array(2071890739, 1726512333) index="0" unique_id=188479150]
+bones/0/position = Vector3(0, -0.016822927, -0.70522)
+bones/2/rotation = Quaternion(-0.4628951, -0.47176623, 0.5263656, 0.5348871)
+bones/3/rotation = Quaternion(-0.18208711, 0.00091187604, 0.010338993, 0.98322767)
+bones/5/rotation = Quaternion(-0.45887586, 0.47251433, -0.52605087, 0.53799033)
+bones/6/rotation = Quaternion(-0.19293171, -4.982464e-07, 4.6228405e-07, 0.98121226)
+bones/8/rotation = Quaternion(-0.54053134, -0.0027819267, -0.0017873337, 0.8413174)
+bones/9/rotation = Quaternion(0.038734194, 0.00036174987, 0.01164057, 0.99918175)
+bones/10/rotation = Quaternion(0.03488964, 0.00082871685, 0.023731375, 0.999109)
+bones/11/rotation = Quaternion(0.03488375, 0.0010480603, 0.03001253, 0.99894017)
+bones/12/rotation = Quaternion(0.034884837, 0.0010108582, 0.028947212, 0.9989716)
+bones/13/rotation = Quaternion(0.03489194, 0.00072620134, 0.020795695, 0.9991745)
+bones/14/rotation = Quaternion(0.0348985, 0.00026369235, 0.007551186, 0.99936235)
+bones/15/rotation = Quaternion(0.03489848, -0.0002634227, -0.0075434227, 0.99936235)
+bones/16/rotation = Quaternion(0.03489195, -0.0007259974, -0.020789836, 0.99917465)
+bones/17/rotation = Quaternion(-0.0104378415, 1.2478206e-07, -1.188351e-09, 0.9999455)
+bones/19/rotation = Quaternion(-0.0011851576, -0.0014717714, 0.50859964, 0.8610011)
+bones/20/rotation = Quaternion(0.104526184, -0.0007066552, 0.016950795, 0.9943775)
+bones/23/rotation = Quaternion(0.0012046451, -0.0014554657, -0.49710444, 0.8676887)
+bones/24/rotation = Quaternion(0.104526184, 0.0007066713, -0.016950816, 0.9943775)
+bones/27/rotation = Quaternion(-0.00023784969, -0.006608922, -0.031504102, 0.9994818)
+bones/28/rotation = Quaternion(-1.8805832e-07, 4.1438582e-08, 0.5866137, 0.80986696)
+bones/29/rotation = Quaternion(1.1458721e-07, -2.1623835e-08, 0.0038798735, 0.9999925)
+bones/30/rotation = Quaternion(-1.8000443e-07, -5.143636e-08, -0.58807784, 0.8088043)
+bones/31/rotation = Quaternion(1.1459459e-07, 2.164023e-08, -0.003879882, 0.9999925)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1583920471]
+libraries/ = ExtResource("3_animations")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1583920472]
+tree_root = SubResource("AnimationNodeStateMachine_root")
+anim_player = NodePath("../AnimationPlayer")
+parameters/locomotion/blend_position = 0.0
+
+[node name="LocomotionAnimator" type="Node" parent="." unique_id=1583920473 node_paths=PackedStringArray("tree", "tracked")]
+script = ExtResource("2_animator")
+tree = NodePath("../AnimationTree")
+tracked = NodePath("..")
+
+[editable path="Model"]

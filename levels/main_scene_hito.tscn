@@ -1,12 +1,9 @@
 [gd_scene format=3 uid="uid://svx2ku33lt87"]
 
-[ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_be8to"]
-[ext_resource type="PackedScene" path="res://mission/mission_director.tscn" id="2_7o5rg"]
+[ext_resource type="PackedScene" path="res://levels/level_base.tscn" id="1_base"]
 [ext_resource type="Resource" uid="uid://bemeltrjajfrd" path="res://mission/missions/test_mission.tres" id="3_2l8bg"]
-[ext_resource type="Script" uid="uid://cksuh3td5r85c" path="res://levels/level_navigation.gd" id="4_ddr62"]
 [ext_resource type="PackedScene" path="res://mission/extraction_zone.tscn" id="5_kq5aj"]
 [ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="6_fokma"]
-[ext_resource type="Script" uid="uid://dwvfkb6sfqqmj" path="res://enemies/components/stationary_attack.gd" id="7_xhxeo"]
 [ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="8_rawr6"]
 [ext_resource type="PackedScene" uid="uid://bfwdd6qlbx4jt" path="res://mapaScene/nivel1.tscn" id="9_wbiyl"]
 [ext_resource type="Script" uid="uid://q1p0lrr3yh86" path="res://mission/objective_zone.gd" id="10_1j2af"]
@@ -30,17 +27,16 @@ ambient_light_source = 2
 ambient_light_color = Color(0.45, 0.5, 0.6, 1)
 ambient_light_energy = 0.4
 
-[node name="mainSceneHIto" type="Node3D" unique_id=1023385024]
+[node name="mainSceneHIto" instance=ExtResource("1_base")]
 
-[node name="PlayerSpawner" parent="." unique_id=1546021913 node_paths=PackedStringArray("spawn_points") instance=ExtResource("1_be8to")]
-spawn_points = [NodePath(""), NodePath(""), NodePath("")]
+[node name="PlayerSpawner" parent="." index="0" node_paths=PackedStringArray("spawn_points")]
+spawn_points = [NodePath("../SpawnPoints/A"), NodePath("../SpawnPoints/B"), NodePath("../SpawnPoints/C")]
 
-[node name="MissionDirector" parent="." unique_id=933939165 instance=ExtResource("2_7o5rg")]
+[node name="MissionDirector" parent="." index="1"]
 mission = ExtResource("3_2l8bg")
 
-[node name="Navigation" type="NavigationRegion3D" parent="." unique_id=887514344]
+[node name="Navigation" parent="." index="2"]
 navigation_mesh = SubResource("NavigationMesh_l45d2")
-script = ExtResource("4_ddr62")
 
 [node name="Environment" type="WorldEnvironment" parent="." unique_id=959304488]
 environment = SubResource("Environment_st1md")
@@ -85,15 +81,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 8)
 [node name="Pesadilla" parent="Enemies" unique_id=100506601 instance=ExtResource("6_fokma")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 6.4961624)
 
-[node name="StationaryAttack" type="Node" parent="Enemies/Pesadilla" unique_id=891137600 node_paths=PackedStringArray("combat", "player_spawner")]
-script = ExtResource("7_xhxeo")
-combat = NodePath("../Combat")
-player_spawner = NodePath("../../../PlayerSpawner")
-
 [node name="Ghost" parent="Enemies" unique_id=741734640 instance=ExtResource("8_rawr6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -12)
 
-[node name="StaticBody3D" parent="." unique_id=494792580 instance=ExtResource("9_wbiyl")]
+[node name="StaticBody3D" parent="." unique_id=494792580 groups=["navigation_source"] instance=ExtResource("9_wbiyl")]
 
 [node name="ObjectiveZone" type="Node3D" parent="." unique_id=423610157]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7538896, 0, -3.3934038)

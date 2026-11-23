@@ -6,6 +6,9 @@ extends Node
 
 const LOOPBACK_ADDRESS: String = "127.0.0.1"
 
+## Mapa del laboratorio cuando este arnés se ejecuta desde su escena de prueba.
+@export var test_scene: PackedScene
+
 var player_index: int = 1
 
 @onready var start_game_timer: Timer = $StartGameTimer
@@ -106,7 +109,7 @@ func _on_start_game_timeout() -> void:
 ## él incluido.
 @rpc("reliable", "call_local")
 func _start_game(level: StringName) -> void:
-	var scene: PackedScene = Game.instance.get_level_scene(level)
+	var scene: PackedScene = test_scene if test_scene else Game.instance.get_level_scene(level)
 	if not scene:
 		push_error("Prueba local: mapa desconocido: %s" % level)
 		return
