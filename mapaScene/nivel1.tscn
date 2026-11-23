@@ -22,8 +22,7 @@ uv1_scale = Vector3(50, 50, 50)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_yf5fn"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
-size = Vector3(400, 1, 400)
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_57qmd"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a1n5f"]
 size = Vector3(123.92224, 0.30273438, 0.33288574)
@@ -403,8 +402,8 @@ skeleton = NodePath("../../..")
 metadata/_edit_lock_ = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Nivel/suelo" unique_id=917933284]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_ground")
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_57qmd")
 metadata/_edit_lock_ = true
 
 [node name="letreros" type="Node3D" parent="Nivel" unique_id=1479516025]

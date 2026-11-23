@@ -4,28 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_spawner"]
 [ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="2_enemy"]
 [ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="3_pesadilla"]
-[ext_resource type="Script" path="res://levels/level_navigation.gd" id="4_navigation"]
-[ext_resource type="Script" path="res://scripts/stimulus_bus.gd" id="5_stimuli"]
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_player"]
-resource_local_to_scene = true
-geometry_parsed_geometry_type = 1
-geometry_collision_mask = 1
-cell_size = 0.2
-cell_height = 0.1
-agent_height = 1.1
-agent_radius = 0.4
-agent_max_climb = 0.1
-
-[sub_resource type="NavigationMesh" id="NavigationMesh_enemy"]
-resource_local_to_scene = true
-geometry_parsed_geometry_type = 1
-geometry_collision_mask = 1
-cell_size = 0.2
-cell_height = 0.1
-agent_height = 1.8
-agent_radius = 1.0
-agent_max_climb = 0.1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_peldano"]
 size = Vector3(0.6, 0.3, 0.5)
@@ -39,7 +17,7 @@ size = Vector3(0.6, 0.3, 0.5)
 
 [node name="TestLevel" type="Node3D" unique_id=548314514]
 
-[node name="StaticBody3D" parent="." unique_id=494792580 groups=["navigation_source"] instance=ExtResource("1_exgmp")]
+[node name="StaticBody3D" parent="." unique_id=494792580 instance=ExtResource("1_exgmp")]
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=183609652]
 transform = Transform3D(1, 0, 0, 0, 0.6, 0.8, 0, -0.8, 0.6, 0, 8, 0)
@@ -77,29 +55,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 3)
 [node name="PlayerSpawner" parent="." unique_id=1283289774 node_paths=PackedStringArray("spawn_points") instance=ExtResource("1_spawner")]
 spawn_points = [NodePath("../SpawnPoints/A"), NodePath("../SpawnPoints/B"), NodePath("../SpawnPoints/C")]
 debug_player_count = 3
-
-[node name="Navigation" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_player")
-script = ExtResource("4_navigation")
-
-[node name="EnemyNavigation" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_enemy")
-script = ExtResource("4_navigation")
-agent = &"pesadilla"
-dedicated_map = true
-uses_passages = true
-passage_fits = Array[Vector2]([Vector2(0.7, 1.4), Vector2(1.6, 0.9)])
-
-[node name="Stimuli" type="Node" parent="."]
-script = ExtResource("5_stimuli")
-
-[node name="EnemySpawns" type="Node3D" parent="."]
-
-[node name="SouthStreet" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
-position = Vector3(8, 0, 14)
-
-[node name="Crossing" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
-position = Vector3(12, 0, 17)
-
-[node name="WestStreet" type="Marker3D" parent="EnemySpawns" groups=["enemy_spawn"]]
-position = Vector3(-8, 0, 15)
