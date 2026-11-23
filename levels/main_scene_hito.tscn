@@ -1,0 +1,138 @@
+[gd_scene format=3 uid="uid://svx2ku33lt87"]
+
+[ext_resource type="PackedScene" uid="uid://bkgvvuovx6w4t" path="res://player/player_spawner.tscn" id="1_be8to"]
+[ext_resource type="PackedScene" path="res://mission/mission_director.tscn" id="2_7o5rg"]
+[ext_resource type="Resource" uid="uid://bemeltrjajfrd" path="res://mission/missions/test_mission.tres" id="3_2l8bg"]
+[ext_resource type="Script" uid="uid://cksuh3td5r85c" path="res://levels/level_navigation.gd" id="4_ddr62"]
+[ext_resource type="PackedScene" path="res://mission/extraction_zone.tscn" id="5_kq5aj"]
+[ext_resource type="PackedScene" path="res://enemies/pesadilla/pesadilla.tscn" id="6_fokma"]
+[ext_resource type="Script" uid="uid://dwvfkb6sfqqmj" path="res://enemies/components/stationary_attack.gd" id="7_xhxeo"]
+[ext_resource type="PackedScene" path="res://enemies/ethereal_entity.tscn" id="8_rawr6"]
+[ext_resource type="PackedScene" uid="uid://bfwdd6qlbx4jt" path="res://mapaScene/nivel1.tscn" id="9_wbiyl"]
+[ext_resource type="Script" uid="uid://q1p0lrr3yh86" path="res://mission/objective_zone.gd" id="10_1j2af"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_l45d2"]
+resource_local_to_scene = true
+geometry_parsed_geometry_type = 1
+geometry_collision_mask = 1
+geometry_source_geometry_mode = 1
+geometry_source_group_name = &"navigation_source"
+cell_size = 0.2
+cell_height = 0.1
+agent_height = 1.1
+agent_radius = 0.4
+agent_max_climb = 0.1
+
+[sub_resource type="Environment" id="Environment_st1md"]
+background_mode = 1
+background_color = Color(0.05, 0.06, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.5, 0.6, 1)
+ambient_light_energy = 0.4
+
+[node name="mainSceneHIto" type="Node3D" unique_id=1023385024]
+
+[node name="PlayerSpawner" parent="." unique_id=1546021913 node_paths=PackedStringArray("spawn_points") instance=ExtResource("1_be8to")]
+spawn_points = [NodePath(""), NodePath(""), NodePath("")]
+
+[node name="MissionDirector" parent="." unique_id=933939165 instance=ExtResource("2_7o5rg")]
+mission = ExtResource("3_2l8bg")
+
+[node name="Navigation" type="NavigationRegion3D" parent="." unique_id=887514344]
+navigation_mesh = SubResource("NavigationMesh_l45d2")
+script = ExtResource("4_ddr62")
+
+[node name="Environment" type="WorldEnvironment" parent="." unique_id=959304488]
+environment = SubResource("Environment_st1md")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1555651868]
+transform = Transform3D(0.8192, -0.4394, 0.3687, 0, 0.6428, 0.766, -0.5736, -0.6275, 0.5266, 0, 10, 0)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="Extraction" type="Node3D" parent="." unique_id=279363713]
+
+[node name="NorthEast" parent="Extraction" unique_id=983830541 instance=ExtResource("5_kq5aj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.136612, 0, 1.6529198)
+
+[node name="SouthWest" parent="Extraction" unique_id=1892454079 instance=ExtResource("5_kq5aj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, 0, 6.2816505)
+
+[node name="SpawnPoints" type="Node3D" parent="." unique_id=535909005]
+
+[node name="A" type="Marker3D" parent="SpawnPoints" unique_id=341592397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 4)
+
+[node name="B" type="Marker3D" parent="SpawnPoints" unique_id=220802897]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="C" type="Marker3D" parent="SpawnPoints" unique_id=1666972802]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 4)
+
+[node name="EnemySpawns" type="Node3D" parent="." unique_id=1860425925]
+
+[node name="SouthEast" type="Marker3D" parent="EnemySpawns" unique_id=100374353 groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, 24)
+
+[node name="NorthWest" type="Marker3D" parent="EnemySpawns" unique_id=1824059061 groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24, 0, -24)
+
+[node name="East" type="Marker3D" parent="EnemySpawns" unique_id=1079051989 groups=["enemy_spawn"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 8)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=498029204]
+
+[node name="Pesadilla" parent="Enemies" unique_id=100506601 instance=ExtResource("6_fokma")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 6.4961624)
+
+[node name="StationaryAttack" type="Node" parent="Enemies/Pesadilla" unique_id=891137600 node_paths=PackedStringArray("combat", "player_spawner")]
+script = ExtResource("7_xhxeo")
+combat = NodePath("../Combat")
+player_spawner = NodePath("../../../PlayerSpawner")
+
+[node name="Ghost" parent="Enemies" unique_id=741734640 instance=ExtResource("8_rawr6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 0, -12)
+
+[node name="StaticBody3D" parent="." unique_id=494792580 instance=ExtResource("9_wbiyl")]
+
+[node name="ObjectiveZone" type="Node3D" parent="." unique_id=423610157]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7538896, 0, -3.3934038)
+script = ExtResource("10_1j2af")
+tag = &"casa"
+
+[node name="SiteA" type="Marker3D" parent="ObjectiveZone" unique_id=1225352504]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="SiteB" type="Marker3D" parent="ObjectiveZone" unique_id=346182970]
+transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 2, 0, -2)
+
+[node name="SiteC" type="Marker3D" parent="ObjectiveZone" unique_id=1504174759]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)
+
+[node name="ObjectiveZone2" type="Node3D" parent="." unique_id=1700290647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.455341, 0, 3.9428322)
+script = ExtResource("10_1j2af")
+tag = &"casa"
+
+[node name="SiteA" type="Marker3D" parent="ObjectiveZone2" unique_id=1344237209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="SiteB" type="Marker3D" parent="ObjectiveZone2" unique_id=1582902591]
+transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 2, 0, -2)
+
+[node name="SiteC" type="Marker3D" parent="ObjectiveZone2" unique_id=1002456502]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)
+
+[node name="ObjectiveZone3" type="Node3D" parent="." unique_id=767251122]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.7841916, 0, 12.910675)
+script = ExtResource("10_1j2af")
+tag = &"casa"
+
+[node name="SiteA" type="Marker3D" parent="ObjectiveZone3" unique_id=381274671]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -2)
+
+[node name="SiteB" type="Marker3D" parent="ObjectiveZone3" unique_id=874313455]
+transform = Transform3D(0.7071068, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.7071068, 2, 0, -2)
+
+[node name="SiteC" type="Marker3D" parent="ObjectiveZone3" unique_id=1219773354]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1.5)

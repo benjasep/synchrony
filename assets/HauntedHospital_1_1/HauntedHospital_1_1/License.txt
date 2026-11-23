@@ -1,0 +1,47 @@
+Free Asset Pack License (No Standalone Redistribution)
+
+Copyright © 2026, Creepy Stork Games 
+All rights reserved.
+
+
+This asset pack (Haunted Hospital) is provided free of charge under the following terms:
+
+
+1. Grant of License
+
+You are granted a non-exclusive, worldwide, royalty-free license to:
+
+- Use the assets in personal and commercial projects.
+
+- Modify, edit, and adapt the assets.
+
+- Incorporate the assets into games, applications, films, software, and other media.
+
+- Distribute compiled projects that include the assets as part of a larger work.
+
+- No attribution is required, but it is appreciated.
+
+
+2. Restrictions
+
+You may NOT:
+
+- Redistribute, resell, sublicense, share, or publish the assets as standalone files.
+
+- Include the assets in another asset pack (free or paid), whether modified or unmodified.
+
+- Upload the assets to marketplaces, repositories, or file-sharing platforms.
+
+- Make the original files available in a way that allows others to extract or download them as assets.
+
+- The assets must be embedded within a larger project and must not be the primary value of the distributed product.
+
+
+3. Ownership
+
+All intellectual property rights remain with the original author. This license grants usage rights only and does not transfer ownership.
+
+
+4. Disclaimer
+
+The assets are provided “as is,” without warranty of any kind. The author is not liable for any damages arising from their use.

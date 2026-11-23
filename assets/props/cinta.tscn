@@ -1,0 +1,46 @@
+[gd_scene format=4 uid="uid://bifd0q06ji8fn"]
+
+[ext_resource type="Texture2D" uid="uid://do0mah8b2dvfo" path="res://assets/props/SM_Motel_CassetteTape_cassette_tape_atlas_ps1.png" id="1_rtj1s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_000w3"]
+resource_name = "M_Motel_CassetteTape_PS1"
+albedo_texture = ExtResource("1_rtj1s")
+texture_filter = 2
+texture_repeat = false
+metadata/_gltf_primary_texture_coord = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2y7a6"]
+_surfaces = [{
+"aabb": AABB(-0.0502, 0, -0.0319, 0.1004, 0.012, 0.0638),
+"format": 34896613377,
+"index_count": 66,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYACAAJAAoACgAJAAsACgALAAwACAAKAAwACQANAAsACAAMAA4ACQAPAA0ACAAPAAkADwAOAA0ADwAIAA4A"),
+"name": "M_Motel_CassetteTape_PS1",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 16,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAO3uAAAAAAAA7e7//wAAAAAAAAAAAAD//+3uAAAAAP//AAD//wAA///t7v//AAD//wAAAAAAAOQg/////wAAQc3//6bQAAAa3/////8AAArP7e7XzQAA4+Dt7v//AAD0MO3u180AABsf7e7//wAAvTL//6bQAAA=")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_3rjym"]
+resource_name = "SM_Motel_CassetteTape_SM_Motel_CassetteTape"
+_surfaces = [{
+"aabb": AABB(-0.0502, 0, -0.0319, 0.1004, 0.012, 0.0638),
+"attribute_data": PackedByteArray("/0Kw8/8BHtj/Qh7Y/wGw8//TTcz/bLyw/9O8sP9sTcz/h7Dz/0Ye2P+HHtj/RrDz/2hNzP8BvLD/aLyw/wFNzP/T7AT/bOuk/2zsBP/T66T/aOwE/wHrpP8B7AT/aOukOw/rpJVUVIfDW+ukahZUhzsPxK57XLywhA68sMNbxK7DW+ukTVWShXtc66SVVFSHaYHErkzAvLCxgLywlL/ErmoWVIeEDuukshWShTsP66Q="),
+"format": 34896613399,
+"index_count": 66,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUAGAAZABoAGAAbABkAHAAdAB4AHAAfAB0AIAAhACIAIAAjACEAJAAlACYAJAAnACUAKAApACoAKAArACkA"),
+"material": SubResource("StandardMaterial3D_000w3"),
+"name": "M_Motel_CassetteTape_PS1",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 44,
+"vertex_data": PackedByteArray("AAAAAP///78AAO3uAAD/vwAA7e7///+/AAAAAAAA/78AAAAAAAD/////7e4AAP//AADt7gAA/////wAAAAD/////AAAAAP+////t7v///7///+3uAAD/v///AAD///+///8AAP//AIAAAO3u//8AgP//7e7//wCAAAAAAP//AIAAAAAAAAD/////AAD///////8AAAAA//8AAAAA////////7e4AAP+/AADt7v///78AAO3uAAD/v///7e7///+/5CD//////79Bzf//ptD/vxrf//////+/vTL//6bQ/7/kIP////8AgOPg7e7//wCAGx/t7v//AIAa3/////8AgBrf/////xbSCs/t7tfNzNLj4O3u//8N0kHN//+m0NfSQc3//6bQ///0MO3u183//wrP7e7Xzf//vTL//6bQ//+9Mv//ptDG0hsf7e7//xrS9DDt7tfNztLkIP////8N0v9/////f////3////9/////f////3////9/////f////38AAP9/AAD/fwAA/38AAP9/////f////3////9/////f/8//3//P/9//z//f/8/////f////3////9/////f////3////9/////f////3//f////3////9/////f///c828YG7OrWNmzZZgfc7ZY/9/Cd3/fwnd/38J3f9/Cd2U45ixzuCEsrTjjbGV4Jey")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_2y7a6")
+
+[node name="SM_Motel_CassetteTape" type="MeshInstance3D" unique_id=731590252]
+mesh = SubResource("ArrayMesh_3rjym")
+skeleton = NodePath("")

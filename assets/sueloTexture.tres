@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cjfgi6ppn80jh"]
+
+[ext_resource type="Texture2D" uid="uid://dp68ker5hvwi5" path="res://assets/suelo.jpg" id="1_gr1dq"]
+
+[resource]
+albedo_texture = ExtResource("1_gr1dq")
+metallic = 0.4
+metallic_specular = 0.37
+uv1_scale = Vector3(50, 50, 50)
